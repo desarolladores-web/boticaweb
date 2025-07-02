@@ -54,7 +54,7 @@
                     <div class="left">
                         <h1 class="logo">
                             <a href="{{ url('/') }}">
-                                <img src="{{ asset('storage/imagenes_productos/botica2.png') }}" class="img-fluid" alt="Logo">
+                                <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo">
                             </a>
                         </h1>
 
@@ -165,32 +165,50 @@
             <h5 class="mb-0">Mi carrito</h5>
             <button id="closeCartBtn" class="btn btn-sm btn-outline-secondary d-grid aling-items-center">&times;</button>
         </div>
-        <div class="cart-body p-3" id="cart-items">
-            @php $carrito = session('carrito', []); @endphp
+      <div class="cart-body p-3" id="cart-items">
+    @php $carrito = session('carrito', []); @endphp
 
-            @if(count($carrito) > 0)
-            @foreach($carrito as $id => $item)
-            <div class="d-flex justify-content-between align-items-start mb-3 border-bottom pb-2">
-                <div class="d-flex align-items-center">
-                    @if($item['imagen'])
-                    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" width="50" class="me-2 rounded">
-                    @endif
-                    <div>
-                        <strong>{{ $item['nombre'] }}</strong><br>
-                        <small>Cantidad: {{ $item['cantidad'] }}</small><br>
-                        <small class="text-muted">Precio: S/. {{ number_format($item['precio'], 2) }}</small>
+    @if(count($carrito) > 0)
+        @foreach($carrito as $id => $item)
+        <div class="mb-3 border-bottom pb-3">
+            <div class="d-flex">
+                @if($item['imagen'])
+                <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" width="70" class="me-3 rounded">
+                @endif
+
+                <div class="flex-grow-1">
+                    <div class="fw-bold">{{ $item['nombre'] }}</div>
+                    <div class="text-danger fw-semibold mb-2">s/ {{ number_format($item['precio'], 2) }}</div>
+
+                    <div class="d-flex align-items-center mb-2" style="width: fit-content;">
+                        <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center">
+                            @csrf
+                            <input type="hidden" name="tipo" value="restar">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm px-2">−</button>
+                        </form>
+
+                        <div class="px-3">{{ $item['cantidad'] }}</div>
+
+                        <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center">
+                            @csrf
+                            <input type="hidden" name="tipo" value="sumar">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
+                        </form>
                     </div>
+
+                    <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger btn-sm mt-1">Eliminar Producto</button>
+                    </form>
                 </div>
-                <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-sm btn-link text-danger p-0">Eliminar</button>
-                </form>
             </div>
-            @endforeach
-            @else
-            <p>Tu carrito está vacío.</p>
-            @endif
         </div>
+        @endforeach
+    @else
+        <p class="text-muted">Tu carrito está vacío.</p>
+    @endif
+</div>
+
 
         <div class="cart-footer p-3 border-top">
             <div class="d-flex justify-content-between">
@@ -237,6 +255,13 @@
         .cart-backdrop.show {
             display: block;
         }
+
+
+        .btn-sm {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+}
+
     </style>
 
 

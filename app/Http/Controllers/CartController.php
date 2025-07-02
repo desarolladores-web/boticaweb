@@ -51,4 +51,23 @@ class CartController extends Controller
             ->with('success', 'Producto eliminado del carrito')
             ->with('abrir_sidebar', true);
     }
+
+
+        public function actualizar(Request $request, $id)
+{
+    $tipo = $request->input('tipo');
+    $carrito = session()->get('carrito', []);
+
+    if (isset($carrito[$id])) {
+        if ($tipo === 'sumar') {
+            $carrito[$id]['cantidad'] += 1;
+        } elseif ($tipo === 'restar' && $carrito[$id]['cantidad'] > 1) {
+            $carrito[$id]['cantidad'] -= 1;
+        }
+        session()->put('carrito', $carrito);
+    }
+
+    return back()->with('abrir_sidebar', true);
+}
+
 }

@@ -54,7 +54,7 @@
                     <div class="left">
                         <h1 class="logo">
                             <a href="{{ url('/') }}">
-                                <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo">
+                                <img src="{{ asset('storage/imagenes_productos/botica2.png') }}" class="img-fluid" alt="Logo">
                             </a>
                         </h1>
 
@@ -165,7 +165,7 @@
             <h5 class="mb-0">Mi carrito</h5>
             <button id="closeCartBtn" class="btn btn-sm btn-outline-secondary d-grid aling-items-center">&times;</button>
         </div>
-      <div class="cart-body p-3" id="cart-items">
+       <div class="cart-body p-3" id="cart-items">
     @php $carrito = session('carrito', []); @endphp
 
     @if(count($carrito) > 0)
@@ -208,7 +208,6 @@
         <p class="text-muted">Tu carrito está vacío.</p>
     @endif
 </div>
-
 
         <div class="cart-footer p-3 border-top">
             <div class="d-flex justify-content-between">
@@ -257,7 +256,8 @@
         }
 
 
-        .btn-sm {
+
+                .btn-sm {
     font-size: 0.85rem;
     padding: 4px 8px;
 }

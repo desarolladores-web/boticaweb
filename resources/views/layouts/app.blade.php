@@ -220,7 +220,7 @@
                 @endphp
                 <span id="cart-total">S/. {{ number_format($total, 2) }}</span>
             </div>
-            <a href="#" class="btn btn-success mt-3 w-100">Comprar ahora</a>
+            <a href="{{ route('ventas.create', ['total' => $total]) }}" class="btn btn-success mt-3 w-100">Comprar ahora</a>
         </div>
     </div>
 

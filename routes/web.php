@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WelcomeController;
 
 use App\Http\Controllers\CartController;
-
+use App\Http\Controllers\VentaController;
 
 use App\Http\Controllers\ProductoController;
 
@@ -47,3 +47,5 @@ Route::post('/carrito/eliminar/{id}', [CartController::class, 'eliminar'])->name
 
 
 Route::post('/carrito/actualizar/{id}', [CartController::class, 'actualizar'])->name('carrito.actualizar');
+
+Route::resource('ventas', VentaController::class);

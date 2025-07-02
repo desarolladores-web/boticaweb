@@ -65,7 +65,7 @@ class VentaController extends Controller
             'venta_id' => $venta->id,
             'producto_id' => $item['id'],
             'cantidad' => $item['cantidad'],
-            'precio_venta' => $item['precio'],
+            'precio_venta' => $item['precio'],  
             'descuento' => 0,
             'id_sucursal' => 1, // ajustar si es necesario
             'id_usuario' => null // dejar nulo si no hay sesión

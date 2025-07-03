@@ -21,6 +21,7 @@ class Cliente extends Model
         'direccion',
         'telefono',
         'email',
+        'imagen', // ✅ Añadir esto
     ];
     
     public function usuario()

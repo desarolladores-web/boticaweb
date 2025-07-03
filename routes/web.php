@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\VentaController;
 
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,3 +55,14 @@ Route::resource('ventas', VentaController::class);
 
 
 Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito.ver');
+
+
+// Perfil del usuario (restringido a usuarios autenticados)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/account/edit', [ProfileController::class, 'edit'])->name('account.edit');
+    Route::put('/account/update', [ProfileController::class, 'update'])->name('account.update');
+    Route::delete('/account/image/{cliente}', [ProfileController::class, 'eliminarImagen'])->name('account.image.delete');
+
+  
+
+});

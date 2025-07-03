@@ -8,6 +8,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -54,7 +56,7 @@
                     <div class="left">
                         <h1 class="logo">
                             <a href="{{ url('/') }}">
-                                <img src="{{ asset('storage/imagenes_productos/botica2.png') }}" class="img-fluid" alt="Logo">
+                                <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo">
                             </a>
                         </h1>
 
@@ -156,6 +158,7 @@
     <main class="py-4">
         @yield('content')
     </main>
+    @include('layouts.whatsapp')
     @include('layouts.footer')
     </div>
 
@@ -165,52 +168,54 @@
             <h5 class="mb-0">Mi carrito</h5>
             <button id="closeCartBtn" class="btn btn-sm btn-outline-secondary d-grid aling-items-center">&times;</button>
         </div>
-       <div class="cart-body p-3" id="cart-items">
-    @php $carrito = session('carrito', []); @endphp
+        <div class="cart-body p-3" id="cart-items">
+            @php $carrito = session('carrito', []); @endphp
 
-    @if(count($carrito) > 0)
-        @foreach($carrito as $id => $item)
-        <div class="mb-3 border-bottom pb-3">
-            <div class="d-flex">
-                @if($item['imagen'])
-                <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" width="70" class="me-3 rounded">
-                @endif
+            @if(count($carrito) > 0)
+            @foreach($carrito as $id => $item)
+            <div class="mb-3 border-bottom pb-3">
+                <div class="d-flex">
+                    @if($item['imagen'])
+                    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" width="70" class="me-3 rounded">
+                    @endif
 
-                <div class="flex-grow-1">
-                    <div class="fw-bold">{{ $item['nombre'] }}</div>
-                    <div class="text-danger fw-semibold mb-2">s/ {{ number_format($item['precio'], 2) }}</div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">{{ $item['nombre'] }}</div>
+                        @php $subtotal = $item['precio'] * $item['cantidad']; @endphp
+                        <div class="text-danger fw-semibold mb-2">S/ {{ number_format($subtotal, 2) }}</div>
 
-                    <div class="d-flex align-items-center mb-2" style="width: fit-content;">
-                        <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center">
+
+                        <div class="d-flex align-items-center mb-2" style="width: fit-content;">
+                            <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center">
+                                @csrf
+                                <input type="hidden" name="tipo" value="restar">
+                                <button type="submit" class="btn btn-outline-secondary btn-sm px-2">−</button>
+                            </form>
+
+                            <div class="px-3">{{ $item['cantidad'] }}</div>
+
+                            <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center">
+                                @csrf
+                                <input type="hidden" name="tipo" value="sumar">
+                                <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
+                            </form>
+                        </div>
+
+                        <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
                             @csrf
-                            <input type="hidden" name="tipo" value="restar">
-                            <button type="submit" class="btn btn-outline-secondary btn-sm px-2">−</button>
-                        </form>
-
-                        <div class="px-3">{{ $item['cantidad'] }}</div>
-
-                        <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center">
-                            @csrf
-                            <input type="hidden" name="tipo" value="sumar">
-                            <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
+                            <button type="submit" class="btn btn-danger btn-sm mt-1">Eliminar Producto</button>
                         </form>
                     </div>
-
-                    <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger btn-sm mt-1">Eliminar Producto</button>
-                    </form>
                 </div>
             </div>
+            @endforeach
+            @else
+            <p class="text-muted">Tu carrito está vacío.</p>
+            @endif
         </div>
-        @endforeach
-    @else
-        <p class="text-muted">Tu carrito está vacío.</p>
-    @endif
-</div>
 
         <div class="cart-footer p-3 border-top">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between ">
                 <strong>Total:</strong>
                 @php
                 $total = 0;
@@ -218,10 +223,18 @@
                 $total += $item['precio'] * $item['cantidad'];
                 }
                 @endphp
-                <span id="cart-total">S/. {{ number_format($total, 2) }}</span>
+                <span class="text-success" id="cart-total">S/. {{ number_format($total, 2) }}</span>
             </div>
-            <a href="{{ route('ventas.create', ['total' => $total]) }}" class="btn btn-success mt-3 w-100">Comprar ahora</a>
+            <a href="{{ route('ventas.create', ['total' => $total]) }}" class="btn btn-danger mt-3 w-100">Comprar ahora</a>
         </div>
+
+        <a href="{{ route('carrito.ver') }}"
+            class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
+            style="font-size: 12px; font-weight: 100; padding: 25px;">
+            Ver carrito
+            <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 20px;"></span>
+        </a>
+
     </div>
 
     <!-- BACKDROP -->
@@ -257,11 +270,10 @@
 
 
 
-                .btn-sm {
-    font-size: 0.85rem;
-    padding: 4px 8px;
-}
-
+        .btn-sm {
+            font-size: 0.85rem;
+            padding: 4px 8px;
+        }
     </style>
 
 

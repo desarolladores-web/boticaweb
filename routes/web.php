@@ -49,3 +49,8 @@ Route::post('/carrito/eliminar/{id}', [CartController::class, 'eliminar'])->name
 Route::post('/carrito/actualizar/{id}', [CartController::class, 'actualizar'])->name('carrito.actualizar');
 
 Route::resource('ventas', VentaController::class);
+
+
+
+
+Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito.ver');

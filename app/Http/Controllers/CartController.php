@@ -19,7 +19,8 @@ class CartController extends Controller
                 "nombre" => $producto->nombre,
                 "cantidad" => $request->input('cantidad', 1),
                 "precio" => $producto->pvp1,
-                "imagen" => $producto->imagen ? asset('storage/' . $producto->imagen) : null
+                "imagen" => $producto->imagen ? asset('storage/' . $producto->imagen) : null,
+                "presentacion" => optional($producto->presentacion)->tipo_presentacion ?? '—'
             ];
         }
 
@@ -53,21 +54,33 @@ class CartController extends Controller
     }
 
 
-        public function actualizar(Request $request, $id)
-{
-    $tipo = $request->input('tipo');
-    $carrito = session()->get('carrito', []);
+    public function actualizar(Request $request, $id)
+    {
+        $tipo = $request->input('tipo');
+        $carrito = session()->get('carrito', []);
 
-    if (isset($carrito[$id])) {
-        if ($tipo === 'sumar') {
-            $carrito[$id]['cantidad'] += 1;
-        } elseif ($tipo === 'restar' && $carrito[$id]['cantidad'] > 1) {
-            $carrito[$id]['cantidad'] -= 1;
+        if (isset($carrito[$id])) {
+            if ($tipo === 'sumar') {
+                $carrito[$id]['cantidad'] += 1;
+            } elseif ($tipo === 'restar' && $carrito[$id]['cantidad'] > 1) {
+                $carrito[$id]['cantidad'] -= 1;
+            }
+            session()->put('carrito', $carrito);
         }
-        session()->put('carrito', $carrito);
+
+        return back()->with('abrir_sidebar', true);
     }
 
-    return back()->with('abrir_sidebar', true);
-}
 
+    public function verCarrito()
+    {
+        $carrito = session()->get('carrito', []);
+        $total = 0;
+
+        foreach ($carrito as $item) {
+            $total += $item['precio'] * $item['cantidad'];
+        }
+
+        return view('carrito.vercarrito', compact('carrito', 'total'));
+    }
 }

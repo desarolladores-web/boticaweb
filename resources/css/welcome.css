@@ -1,195 +1,210 @@
 /* Ajusta el contenedor de los productos (banner-blocks) */
 .banner-blocks {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);  /* 12 columnas en total */
-  grid-template-rows: repeat(2, 1fr);
-  grid-gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr); /* 12 columnas en total */
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 2rem;
 }
 
 /* Puedes especificar el tamaño de las tarjetas dentro de cada columna ajustando su área */
-.block-1 { 
-  grid-area: 1 / 1 / 3 / 8;  /* Tarjeta más ancha */
+.block-1 {
+    grid-area: 1 / 1 / 3 / 8; /* Tarjeta más ancha */
 }
 
-.block-2 { 
-  grid-area: 1 / 8 / 2 / 13;  /* Tarjeta de tamaño intermedio */
+.block-2 {
+    grid-area: 1 / 8 / 2 / 13; /* Tarjeta de tamaño intermedio */
 }
 
-.block-3 { 
-  grid-area: 2 / 8 / 3 / 13;  /* Tarjeta de tamaño intermedio */
+.block-3 {
+    grid-area: 2 / 8 / 3 / 13; /* Tarjeta de tamaño intermedio */
 }
 
 /* Media query para pantallas pequeñas */
 @media screen and (max-width: 1140px) {
-  .banner-blocks {
-    grid-template-columns: 1fr;  /* En pantallas pequeñas, una sola columna */
-    grid-template-rows: repeat(4, 1fr);
-  }
+    .banner-blocks {
+        grid-template-columns: 1fr; /* En pantallas pequeñas, una sola columna */
+        grid-template-rows: repeat(4, 1fr);
+    }
 
-  .block-1 { 
-    grid-area: 1 / 1 / 3 / 2;  /* Ajusta la ubicación para una sola columna */
-  }
-  
-  .block-2 { 
-    grid-area: 3 / 1 / 4 / 2; 
-  }
+    .block-1 {
+        grid-area: 1 / 1 / 3 / 2; /* Ajusta la ubicación para una sola columna */
+    }
 
-  .block-3 { 
-    grid-area: 4 / 1 / 5 / 2; 
-  }
+    .block-2 {
+        grid-area: 3 / 1 / 4 / 2;
+    }
+
+    .block-3 {
+        grid-area: 4 / 1 / 5 / 2;
+    }
 }
 
 /* Estilos para las tarjetas de productos */
 .product-item {
-  position: relative;
-  padding: 16px;
-  background: #FFFFFF;
-  border: 1px solid #FBFBFB;
-  box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.04);
-  border-radius: 16px;
-  margin-bottom: 30px;
-  transition: box-shadow 0.3s ease-out;
-  height: 100%;
-  width: 85%; /* Hace que ocupe todo el ancho disponible */
+    position: relative;
+    padding: 16px;
+    background: #ffffff;
+    border: 1px solid #fbfbfb;
+    box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.04);
+    border-radius: 16px;
+    margin-bottom: 30px;
+    transition: box-shadow 0.3s ease-out;
+    height: 100%;
+    width: 85%; /* Hace que ocupe todo el ancho disponible */
 }
 
 .product-item:hover {
-  box-shadow: 0px 21px 44px rgba(165, 46, 46, 0.363);
+    box-shadow: 0px 21px 44px rgba(165, 46, 46, 0.363);
 }
 
 .product-item h3 {
-  display: block;
-  width: 100%;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 25px;
-  text-transform: capitalize;
-  color: #030303;
-  margin: 0;
+    display: block;
+    width: 100%;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 25px;
+    text-transform: capitalize;
+    color: #030303;
+    margin: 0;
 }
 
 .product-item figure {
-  background: #F9F9F9;
-  border-radius: 12px;
-  text-align: center;
-  overflow: hidden; /* Previene desbordamientos */
+    background: #f9f9f9;
+    border-radius: 12px;
+    text-align: center;
+    overflow: hidden; /* Previene desbordamientos */
 }
 
 .product-item figure img {
-  width: 100%;        /* Asegura que la imagen no sea más ancha que el contenedor */
-  height: auto;       /* Mantiene la proporción */
-  object-fit: contain; /* Asegura que la imagen se mantenga dentro del contenedor sin recortarse */
-  height: 150px;  /* Ya lo tienes, puedes mantenerlo si quieres limitar altura */
-  display: block;     /* Elimina espacio debajo si es inline */
+    width: 100%; /* Asegura que la imagen no sea más ancha que el contenedor */
+    height: auto; /* Mantiene la proporción */
+    object-fit: contain; /* Asegura que la imagen se mantenga dentro del contenedor sin recortarse */
+    height: 150px; /* Ya lo tienes, puedes mantenerlo si quieres limitar altura */
+    display: block; /* Elimina espacio debajo si es inline */
 }
 
-
 .product-item .btn-wishlist {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  border: 1px solid #d8d8d8;
-  transition: all 0.3s ease-out;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #d8d8d8;
+    transition: all 0.3s ease-out;
 }
 
 .product-item .btn-wishlist:hover {
-  background: rgb(0, 0, 0);
-  color: #fff;
+    background: rgb(0, 0, 0);
+    color: #fff;
 }
 
 .product-item .qty {
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 18px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: #000000;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #000000;
 }
 
 .product-item .rating {
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 18px;
-  text-transform: capitalize;
-  color: rgb(238, 9, 9);
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 18px;
+    text-transform: capitalize;
+    color: rgb(238, 9, 9);
 }
 
 .product-item .price {
-  display: block;
-  width: 100%;
-  font-weight: 800;
-  font-size: 22px;
-  line-height: 30px;
-  text-transform: capitalize;
-  color: #222222;
+    display: block;
+    width: 100%;
+    font-weight: 800;
+    font-size: 22px;
+    line-height: 30px;
+    text-transform: capitalize;
+    color: #222222;
 }
 
 .product-item .product-qty {
-  width: 85px;
+    width: 85px;
 }
 
 .product-item .btn-link {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .product-item #quantity {
-  height: auto;
-  width: 20px;
-  text-align: center;
-  border: none;
-  margin: 0;
-  padding: 0;
+    height: auto;
+    width: 20px;
+    text-align: center;
+    border: none;
+    margin: 0;
+    padding: 0;
 }
 
 .product-item .btn-number {
-  width: 26px;
-  height: 26px;
-  line-height: 1;
-  text-align: center;
-  background: #FFFFFF;
-  border: 1px solid #E2E2E2;
-  border-radius: 6px;
-  color: #222;
-  padding: 0;
+    width: 26px;
+    height: 26px;
+    line-height: 1;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e2e2e2;
+    border-radius: 6px;
+    color: #222;
+    padding: 0;
 }
-/* From Uiverse.io by niat786 */ 
+/* From Uiverse.io by niat786 */
 /* Estilo del botón */
 .button {
-  border-radius: .25rem;
-  text-transform: uppercase;
-  font-style: normal;
-  font-weight: 400;
-  padding-left: 1px;
-  padding-right: 1px;
-  color: #050505;
-  -webkit-clip-path: polygon(0 0, 0 0, 100% 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 100%);
-  clip-path: polygon(0 0, 0 0, 100% 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 100%);
-  height: 40px;
-  font-size: 0.7rem;
-  line-height: 14px;
-  letter-spacing: 1.2px;
-  transition: .2s .1s;
-  background-image: linear-gradient(90deg, #ffffff, #ffffff);
-  border: 0 solid;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-style: normal;
+    font-weight: 400;
+    padding-left: 1px;
+    padding-right: 1px;
+    color: #050505;
+    -webkit-clip-path: polygon(
+        0 0,
+        0 0,
+        100% 0,
+        100% 0,
+        100% calc(100% - 15px),
+        calc(100% - 15px) 100%,
+        15px 100%,
+        0 100%
+    );
+    clip-path: polygon(
+        0 0,
+        0 0,
+        100% 0,
+        100% 0,
+        100% calc(100% - 15px),
+        calc(100% - 15px) 100%,
+        15px 100%,
+        0 100%
+    );
+    height: 40px;
+    font-size: 0.7rem;
+    line-height: 14px;
+    letter-spacing: 1.2px;
+    transition: 0.2s 0.1s;
+    background-image: linear-gradient(90deg, #ffffff, #ffffff);
+    border: 0 solid;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .button:hover {
-  color: #ff0404c0;
-  cursor: pointer;
-  transition: all .3s ease-in;
-  padding-right: 10px;
-  padding-left: 10px;
+    color: #ff0404c0;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+    padding-right: 10px;
+    padding-left: 10px;
 }
-
-

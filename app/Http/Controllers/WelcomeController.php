@@ -9,7 +9,8 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        $productos = Producto::with('presentacion')->get(); // o ->paginate(6)
-        return view('welcome', compact('productos'));
+        $productos = Producto::with('presentacion')->get();
+        $carrito = session('carrito', []); // 👈 Añadir esta línea
+        return view('welcome', compact('productos', 'carrito'));
     }
 }

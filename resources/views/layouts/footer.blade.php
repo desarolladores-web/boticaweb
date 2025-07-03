@@ -97,11 +97,11 @@
           </div>
           <div class="col-md-6">
             <div class="payment-icon">
-              <img src="public/imagenes/paymen/1.png" class="img-fluid" alt="Payment Icon">
-              <img src="public/imagenes/paymen/2.png" class="img-fluid" alt="Payment Icon">
-              <img src="public/imagenes/paymen/3.png" class="img-fluid" alt="Payment Icon">
-              <img src="public/imagenes/paymen/4.png" class="img-fluid" alt="Payment Icon">
-              <img src="public/imagenes/payment/5.png" class="img-fluid" alt="Payment Icon">
+              <img src="imagenes/payment/1.png" class="img-fluid" alt="Payment Icon">
+              <img src="imagenes/payment/2.png" class="img-fluid" alt="Payment Icon">
+              <img src="imagenes/payment/3.png" class="img-fluid" alt="Payment Icon">
+              <img src="imagenes/payment/4.png" class="img-fluid" alt="Payment Icon">
+              <img src="imagenes/payment/5.png" class="img-fluid" alt="Payment Icon">
             </div>
           </div>
         </div>

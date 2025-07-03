@@ -106,7 +106,11 @@
                                         <a class="dropdown-item" href="{{ route('register') }}">{{ __('Registrarse') }}</a>
                                         @endif
                                         @else
-                                        <a class="dropdown-item" href="{{ ('profile') }}">Mi Cuenta</a>
+                                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                                Hola 👋 {{ Auth::user()->name }}</a>
+                                        <a class="dropdown-item" href="{{ route('account.edit') }}">Mi Cuenta</a>
+
                                         <a class="dropdown-item" href="{{ ('orders') }}">Pedidos</a>
                                         <a class="dropdown-item" href="{{ ('favorites') }}">Favoritos</a>
                                         <a class="dropdown-item" href="{{ ('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

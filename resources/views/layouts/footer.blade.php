@@ -16,12 +16,12 @@
           <div class="col-12 col-md-4 footer-item">
             <div class="about">
               <div class="footer-link-title">
-                <span>About Us</span>
+                <span>SOBRE NOSOTROS</span>
                 <div class="footer-link-icon"><i class="bi bi-plus-lg"></i></div>
               </div>
               <div class="about-text footer-item-content">
                 <p>
-                  <b>Description of the company goes here.</b>
+                  <b>En Botica Myryan, creemos que la salud es el tesoro más valioso. Desde nuestros inicios, nos propusimos ofrecer algo más que una simple farmacia: un espacio donde cada persona reciba atención personalizada, orientación confiable y productos de la más alta calidad</b>
                 </p>
               </div>
             </div>
@@ -97,11 +97,11 @@
           </div>
           <div class="col-md-6">
             <div class="payment-icon">
-              <img src="storage/imagenes_productos/payment/1.png" class="img-fluid" alt="Payment Icon">
-              <img src="storage/imagenes_productos/payment/2.png" class="img-fluid" alt="Payment Icon">
-              <img src="storage/imagenes_productos/payment/3.png" class="img-fluid" alt="Payment Icon">
-              <img src="storage/imagenes_productos/payment/4.png" class="img-fluid" alt="Payment Icon">
-              <img src="storage/imagenes_productos/payment/5.png" class="img-fluid" alt="Payment Icon">
+              <img src="public/imagenes/paymen/1.png" class="img-fluid" alt="Payment Icon">
+              <img src="public/imagenes/paymen/2.png" class="img-fluid" alt="Payment Icon">
+              <img src="public/imagenes/paymen/3.png" class="img-fluid" alt="Payment Icon">
+              <img src="public/imagenes/paymen/4.png" class="img-fluid" alt="Payment Icon">
+              <img src="public/imagenes/payment/5.png" class="img-fluid" alt="Payment Icon">
             </div>
           </div>
         </div>

@@ -10,7 +10,7 @@ use App\Models\Cliente;
 class ProfileController extends Controller
 {
     // Mostrar el formulario de edición del perfil
-    public function edit()
+    public function edit($section = 'profile')
     {
         $cliente = Auth::user()->cliente;
 
@@ -18,7 +18,8 @@ class ProfileController extends Controller
             return redirect()->back()->with('error', 'No se encontró el cliente relacionado al usuario.');
         }
 
-        return view('account.edit', compact('cliente'));
+        // Pasar la variable 'section' y 'cliente' a la vista para mostrar el formulario adecuado (perfil o contraseña)
+        return view('account.edit', compact('cliente', 'section'));
     }
 
     // Actualizar perfil del cliente
@@ -47,6 +48,7 @@ class ProfileController extends Controller
 
             if ($imagen->isValid()) {
                 try {
+                    // Leer la imagen y almacenarla
                     $contenido = file_get_contents($imagen->getPathname());
 
                     if ($contenido !== false) {
@@ -64,9 +66,11 @@ class ProfileController extends Controller
             }
         }
 
+        // Guardar los cambios del cliente
         $cliente->save();
 
-        return redirect()->route('account.edit')->with('success', 'Perfil actualizado correctamente.');
+        // Redirigir con éxito al perfil
+        return redirect()->route('account.edit', ['section' => 'profile'])->with('success', 'Perfil actualizado correctamente.');
     }
 
     // Eliminar imagen del cliente
@@ -74,17 +78,50 @@ class ProfileController extends Controller
     {
         // Verificar si el cliente tiene una imagen
         if ($cliente->imagen) {
-            // Eliminar la imagen del sistema de archivos
+            // Eliminar la imagen del cliente
             $cliente->imagen = null;
-$cliente->save();
-
-            // Eliminar la imagen en la base de datos
-           
+            $cliente->save();
 
             return response()->json(['success' => 'Imagen eliminada correctamente.']);
         }
 
+        // Si no tiene imagen, devolver error
         return response()->json(['error' => 'No se encontró una imagen para eliminar.'], 404);
     }
 
+    // Mostrar el formulario de edición de la contraseña
+    public function editPassword()
+    {
+        $cliente = auth()->user()->cliente; // Obtener el cliente autenticado
+        
+        // Establecer que la sección es 'password'
+        $section = 'password';  
+
+        // Pasar 'cliente' y 'section' a la vista
+        return view('account.edit', compact('cliente', 'section'));
+    }
+
+    // Método para actualizar la contraseña
+    public function updatePassword(Request $request)
+    {
+        // Validar la entrada del formulario de contraseña
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|confirmed|min:8',
+        ]);
+
+        $user = auth()->user();
+
+        // Verificar la contraseña actual
+        if (!\Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'La contraseña actual no es correcta']);
+        }
+
+        // Actualizar la contraseña
+        $user->password = \Hash::make($request->new_password);
+        $user->save();
+
+        // Redirigir con la sección de perfil y los datos del cliente
+        return redirect()->route('account.edit', ['section' => 'profile'])->with('success', 'Contraseña actualizada correctamente');
+    }
 }

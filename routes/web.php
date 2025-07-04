@@ -59,10 +59,15 @@ Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito
 
 // Perfil del usuario (restringido a usuarios autenticados)
 Route::middleware(['auth'])->group(function () {
+   
     Route::get('/account/edit', [ProfileController::class, 'edit'])->name('account.edit');
     Route::put('/account/update', [ProfileController::class, 'update'])->name('account.update');
     Route::delete('/account/image/{cliente}', [ProfileController::class, 'eliminarImagen'])->name('account.image.delete');
+    // Ruta para editar la contraseña
+    Route::get('/account/password/edit', [ProfileController::class, 'editPassword'])->name('account.password.edit');
 
+    // Ruta para actualizar la contraseña
+    Route::put('/account/password/update', [ProfileController::class, 'updatePassword'])->name('account.password.update');
   
 
 });

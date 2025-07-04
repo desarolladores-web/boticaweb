@@ -90,40 +90,52 @@
                         </form>
 
                         <div class="icons">
-                            <div class="item">
-                                <div class="dropdown account-icon">
-                                    <a class="btn dropdown-toggle px-0">
-                                        <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
-                                    </a>
+    <div class="item">
+        <div class="dropdown account-icon">
+            <!-- Ícono de usuario y nombre del cliente al lado -->
+            <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <!-- Ícono de perfil -->
+                <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                <!-- Nombre del cliente al lado del ícono -->
+                <span class="ms-2"></span>
 
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        @guest
-                                        @if (Route::has('login'))
-                                        <a class="dropdown-item" href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
-                                        @endif
+            </a>
 
-                                        @if (Route::has('register'))
-                                        <a class="dropdown-item" href="{{ route('register') }}">{{ __('Registrarse') }}</a>
-                                        @endif
-                                        @else
-                                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                                Hola 👋 {{ Auth::user()->name }}</a>
-                                        <a class="dropdown-item" href="{{ route('account.edit') }}">Mi Cuenta</a>
+            <!-- Menú desplegable -->
+            <div class="dropdown-menu dropdown-menu-end">
+                @guest
+                    @if (Route::has('login'))
+                        <a class="dropdown-item" href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
+                    @endif
 
-                                        <a class="dropdown-item" href="{{ ('orders') }}">Pedidos</a>
-                                        <a class="dropdown-item" href="{{ ('favorites') }}">Favoritos</a>
-                                        <a class="dropdown-item" href="{{ ('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            {{ __('Cerrar sesión') }}
-                                        </a>
+                    @if (Route::has('register'))
+                        <a class="dropdown-item" href="{{ route('register') }}">{{ __('Registrarse') }}</a>
+                    @endif
+                @else
+                    <!-- Mi cuenta con ícono -->
+                    <a class="dropdown-item" href="{{ route('account.edit') }}">
+                        <i class="bi bi-person me-2"></i> Mi Cuenta
+                    </a>
+                    <!-- Pedidos -->
+                    <a class="dropdown-item" href="">Pedidos</a>
+                    <!-- Favoritos -->
+                    <a class="dropdown-item" href="">Favoritos</a>
+                    <!-- Cerrar sesión -->
+                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="bi bi-box-arrow-right" ></i>  {{ __('Cerrar sesión') }}
+                    </a>
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form>
-                                        @endguest
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Formulario de cierre de sesión -->
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                @endguest
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
                             @php
@@ -131,7 +143,7 @@
                             $cantidadTotal = count($carrito);
                             @endphp
 
-                            <div class="item">
+                            <div class="item ms-4">
                                 <a href="#" class="header-cart-icon position-relative">
                                     <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
                                     <span class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

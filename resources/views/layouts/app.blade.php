@@ -91,24 +91,13 @@
 
                         <div class="icons">
                         <div class="item">
-    <div class="dropdown account-icon">
-        <!-- Ícono de usuario y nombre del cliente al lado -->
-        <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <!-- Verifica si el cliente tiene una imagen -->
-            @if($cliente->imagen)
-                <!-- Imagen de perfil desde Base64 -->
-                <img src="data:image/jpeg;base64,{{ base64_encode($cliente->imagen) }}" alt="Foto de perfil" class="rounded-circle" style="width: 2rem; height: 2rem;">
-            @else
-                <!-- Avatar vacío con iniciales si no hay imagen -->
-                <div class="rounded-circle" style="width: 2rem; height: 2rem; background-color: #ccc; display: flex; justify-content: center; align-items: center; font-size: 1rem; color: white;">
-                    <!-- Primera letra del nombre del cliente como inicial -->
-                    {{ strtoupper(substr($cliente->nombre, 0, 1)) }}
-                </div>
-            @endif
-            <!-- Nombre del cliente al lado de la foto -->
-            <span class="ms-2">{{ $cliente->nombre }}</span>
-        </a>
-
+        <div class="dropdown account-icon">
+            <!-- Ícono de usuario y nombre del cliente al lado -->
+            <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <!-- Ícono de perfil -->
+                <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                <!-- Nombre del cliente al lado del ícono -->
+                <span class="ms-2"></span>
             <!-- Menú desplegable -->
             <div class="dropdown-menu dropdown-menu-end">
                 @guest

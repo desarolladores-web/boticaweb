@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -13,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth');  // Asegura que el usuario esté autenticado
     }
 
     /**
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        // Verificar si el usuario está autenticado
+        $cliente = Auth::check() ? Auth::user()->cliente : null;
+
+        // Pasar la variable $cliente a la vista
+        return view('home', compact('cliente'));  // Pasa la variable 'cliente' a la vista 'home'
     }
 }
+

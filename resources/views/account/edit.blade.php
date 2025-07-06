@@ -5,27 +5,27 @@
 @section('content')
   <div class="container">
     @vite(['resources/css/edit.css'])
-
     <div class="row">
-      <!-- Sidebar principal -->
-      <div class="col-12 col-lg-3">
-        <div class="sidebar"> 
-          <!-- Imagen del avatar -->
-          <div class="avatar text-center">
-            @if($cliente && $cliente->imagen)
-              <img src="data:image/jpeg;base64,{{ base64_encode($cliente->imagen) }}"
-                alt="Avatar"
-                class="rounded-circle"
-                style="width: 60px; height: 60px; object-fit: cover;">
-            @else
-              <img src="{{ asset('default-avatar.png') }}"
-                alt="Avatar por defecto"
-                class="rounded-circle"
-                style="width: 60px; height: 60px; object-fit: cover;">
-            @endif
-            <h5 class="mt-2">Hola <span class="ms-2">{{ $cliente->nombre }}</span></h5>
-            <p class="text-muted" style="font-size: 14px;">{{ $cliente->email }}</p>
+  <!-- Sidebar principal -->
+  <div class="col-12 col-lg-3">
+    <div class="sidebar"> 
+      <!-- Imagen del avatar -->
+      <div class="avatar text-center">
+        @if($user && $user->imagen)
+          <!-- Si el usuario tiene una imagen -->
+          <img src="data:image/jpeg;base64,{{ base64_encode($user->imagen) }}"
+            alt="Avatar"
+            class="rounded-circle"
+            style="width: 60px; height: 60px; object-fit: cover;">
+        @else
+          <!-- Si no tiene imagen, mostramos la inicial del nombre en un círculo con el mismo estilo -->
+          <div class="rounded-circle" style="width: 60px; height: 60px; background-color: #0cb1b1; color: white; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; margin: 0 auto;">
+            {{ strtoupper(substr($user->name, 0, 1)) }} <!-- Mostramos la inicial del nombre -->
           </div>
+        @endif
+        <h5 class="mt-2">Hola <span class="ms-2">{{ $user->name }}</span></h5> <!-- Nombre del usuario -->
+        <p class="text-muted" style="font-size: 14px;">{{ $user->email }}</p> <!-- Correo electrónico del usuario -->
+      </div>
 
           <!-- Menú de navegación -->
           <ul class="list-unstyled">

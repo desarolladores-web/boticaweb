@@ -7,8 +7,8 @@
     <label for="imagen" class="form-label">Imagen</label>
     <label for="imagen" class="d-block" style="width: 120px; height: 120px; border: 2px dashed #d63384; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: #f8f9fa; overflow: hidden; border-radius: 10px; position: relative;">
       <input type="file" name="imagen" id="imagen" accept="image/*" style="display: none;" onchange="previewImagen(event)">
-      @if($cliente->imagen)
-        <img id="imagen-preview" src="data:image/jpeg;base64,{{ base64_encode($cliente->imagen) }}" alt="Imagen" style="width: 100%; height: 100%; object-fit: cover;">
+      @if($user->imagen)
+        <img id="imagen-preview" src="data:image/jpeg;base64,{{ base64_encode($user->imagen) }}" alt="Imagen" style="width: 100%; height: 100%; object-fit: cover;">
       @else
         <span id="placeholder" style="font-size: 36px; color: #6c757d;">+</span>
       @endif
@@ -19,7 +19,7 @@
         </button>
 
         <!-- Botón de eliminar imagen -->
-        <button class="icon-box" type="button" onclick="eliminarImagen({{ $cliente->id }})" style="background: none; border: none; padding: 0;" aria-label="Eliminar imagen">
+        <button class="icon-box" type="button" onclick="eliminarImagen({{ $user->id }})" style="background: none; border: none; padding: 0;" aria-label="Eliminar imagen">
           <i class="bi bi-trash"></i>
         </button>
       </div>
@@ -29,54 +29,54 @@
   <!-- Nombre -->
   <div class="mb-3">
     <label for="name" class="form-label"><i class="bi bi-person"></i> {{ __('Nombre') }}</label>
-    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre', $cliente->nombre) }}" required>
+    <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
   </div>
 
   <!-- Email -->
   <div class="mb-3">
     <label for="email" class="form-label"><i class="bi bi-envelope"></i> {{ __('Correo Electronico') }}</label>
-    <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $cliente->email) }}" required>
+    <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
   </div>
 
   <button type="submit" class="btn btn-pink btn-lg w-50">Editar</button>
 </form>
+
 <script>
   // Mostrar vista previa de la imagen seleccionada
   function previewImagen(event) {
-    const input = event.target;
-    const reader = new FileReader();
+  const input = event.target;
+  const reader = new FileReader();
 
-    reader.onload = function () {
-      let container = input.parentElement;
-      let existingPreview = document.getElementById('imagen-preview');
+  reader.onload = function () {
+    let container = input.parentElement;
+    let existingPreview = document.getElementById('imagen-preview');
 
-      if (!existingPreview) {
-        const img = document.createElement('img');
-        img.id = 'imagen-preview';
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'cover';
-        img.style.borderRadius = '0';
+    if (!existingPreview) {
+      const img = document.createElement('img');
+      img.id = 'imagen-preview';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '0';
 
-        // Insertar la imagen antes del input
-        container.insertBefore(img, input);
-      }
+      // Insertar la imagen antes del input
+      container.insertBefore(img, input);
+    }
 
-      // Actualizar la fuente de la imagen
-      document.getElementById('imagen-preview').src = reader.result;
+    // Actualizar la fuente de la imagen
+    document.getElementById('imagen-preview').src = reader.result;
 
-      // Mostrar el botón eliminar (lo hacemos visible)
-      const deleteBtn = container.querySelector('.icon-box');
-      if (deleteBtn) {
-        deleteBtn.style.display = 'inline-block';
-      }
-    };
+    // Mostrar el botón eliminar (lo hacemos visible)
+    const deleteBtn = container.querySelector('.icon-box');
+    if (deleteBtn) {
+      deleteBtn.style.display = 'inline-block';
+    }
+  };
 
-    reader.readAsDataURL(input.files[0]);
-  }
-
-  function eliminarImagen(clienteId) {
-  fetch(`/account/image/${clienteId}`, { // Asegúrate de usar comillas invertidas (backticks) para interpolación de variables
+  reader.readAsDataURL(input.files[0]);
+}
+  function eliminarImagen(UserId) {
+  fetch(`/account/image/${UserId}`, { // Asegúrate de usar comillas invertidas (backticks) para interpolación de variables
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

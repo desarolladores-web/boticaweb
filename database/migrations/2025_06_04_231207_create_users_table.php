@@ -24,6 +24,7 @@ return new class extends Migration
     $table->boolean('estado')->default(true);
     $table->dateTime('fecha_ingreso')->nullable();
     $table->dateTime('fecha_salida')->nullable();
+    $table->binary('imagen')->nullable(); // 👈 Campo binario para imagen
     $table->rememberToken();
     $table->timestamps();
 

@@ -20,7 +20,6 @@ return new class extends Migration
     $table->string('direccion', 100)->nullable();
     $table->string('telefono', 100)->nullable();
     $table->string('email', 100)->nullable();
-    $table->binary('imagen')->nullable(); // 👈 Campo binario para imagen
     $table->timestamps();
 });
     }

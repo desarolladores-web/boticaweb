@@ -5,42 +5,44 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Models\Cliente;
+use App\Models\User; // Cambiado de Cliente a User
 
 class ProfileController extends Controller
 {
     // Mostrar el formulario de edición del perfil
     public function edit($section = 'profile')
     {
-        $cliente = Auth::user()->cliente;
+        $user = Auth::user(); // Ahora obtenemos al usuario directamente
 
-        if (!$cliente) {
-            return redirect()->back()->with('error', 'No se encontró el cliente relacionado al usuario.');
+        // Verificar si el usuario está autenticado
+        if (!$user) {
+            return redirect()->back()->with('error', 'No se encontró el usuario autenticado.');
         }
 
-        // Pasar la variable 'section' y 'cliente' a la vista para mostrar el formulario adecuado (perfil o contraseña)
-        return view('account.edit', compact('cliente', 'section'));
+        // Pasar la variable 'section' y 'user' a la vista para mostrar el formulario adecuado (perfil o contraseña)
+        return view('account.edit', compact('user', 'section'));
     }
 
-    // Actualizar perfil del cliente
+    // Actualizar perfil del usuario
     public function update(Request $request)
     {
-        $cliente = Auth::user()->cliente;
+        $user = Auth::user(); // Obtener el usuario autenticado
 
-        if (!$cliente) {
-            return redirect()->back()->with('error', 'No se encontró el cliente relacionado.');
+        // Verificar si el usuario está autenticado
+        if (!$user) {
+            return redirect()->back()->with('error', 'No se encontró el usuario autenticado.');
         }
 
         // Validar datos
         $request->validate([
-            'nombre' => 'required|string|max:100',
-            'email' => 'required|string|email|max:100|unique:clientes,email,' . $cliente->id,
+            'name' => 'required|string|max:100',
+            'email' => 'required|string|email|max:100|unique:users,email,' . $user->id,
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Actualizar datos
-        $cliente->nombre = $request->input('nombre');
-        $cliente->email = $request->input('email');
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
 
         // Procesar imagen si se envió y es válida
         if ($request->hasFile('imagen')) {
@@ -52,7 +54,7 @@ class ProfileController extends Controller
                     $contenido = file_get_contents($imagen->getPathname());
 
                     if ($contenido !== false) {
-                        $cliente->imagen = $contenido;
+                        $user->imagen = $contenido;
                     } else {
                         Log::error('[ProfileController] No se pudo leer el contenido binario de la imagen.');
                         return redirect()->back()->with('error', 'La imagen no se pudo leer.');
@@ -66,21 +68,21 @@ class ProfileController extends Controller
             }
         }
 
-        // Guardar los cambios del cliente
-        $cliente->save();
+        // Guardar los cambios del usuario
+        $user->save();
 
         // Redirigir con éxito al perfil
         return redirect()->route('account.edit', ['section' => 'profile'])->with('success', 'Perfil actualizado correctamente.');
     }
 
-    // Eliminar imagen del cliente
-    public function eliminarImagen(Cliente $cliente)
+    // Eliminar imagen del usuario
+    public function eliminarImagen(User $user) // Cambiado de Cliente a User
     {
-        // Verificar si el cliente tiene una imagen
-        if ($cliente->imagen) {
-            // Eliminar la imagen del cliente
-            $cliente->imagen = null;
-            $cliente->save();
+        // Verificar si el usuario tiene una imagen
+        if ($user->imagen) {
+            // Eliminar la imagen del usuario
+            $user->imagen = null;
+            $user->save();
 
             return response()->json(['success' => 'Imagen eliminada correctamente.']);
         }
@@ -92,13 +94,13 @@ class ProfileController extends Controller
     // Mostrar el formulario de edición de la contraseña
     public function editPassword()
     {
-        $cliente = auth()->user()->cliente; // Obtener el cliente autenticado
+        $user = auth()->user(); // Obtener el usuario autenticado
         
         // Establecer que la sección es 'password'
         $section = 'password';  
 
-        // Pasar 'cliente' y 'section' a la vista
-        return view('account.edit', compact('cliente', 'section'));
+        // Pasar 'user' y 'section' a la vista
+        return view('account.edit', compact('user', 'section'));
     }
 
     // Método para actualizar la contraseña
@@ -110,7 +112,7 @@ class ProfileController extends Controller
             'new_password' => 'required|confirmed|min:8',
         ]);
 
-        $user = auth()->user();
+        $user = auth()->user(); // Obtener el usuario autenticado
 
         // Verificar la contraseña actual
         if (!\Hash::check($request->current_password, $user->password)) {
@@ -121,7 +123,7 @@ class ProfileController extends Controller
         $user->password = \Hash::make($request->new_password);
         $user->save();
 
-        // Redirigir con la sección de perfil y los datos del cliente
+        // Redirigir con la sección de perfil y los datos del usuario
         return redirect()->route('account.edit', ['section' => 'profile'])->with('success', 'Contraseña actualizada correctamente');
     }
 }

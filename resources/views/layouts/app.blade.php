@@ -91,13 +91,28 @@
 
                         <div class="icons">
                         <div class="item">
-        <div class="dropdown account-icon">
-            <!-- Ícono de usuario y nombre del cliente al lado -->
-            <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <!-- Ícono de perfil -->
+    <div class="dropdown account-icon">
+        <!-- Ícono de usuario y nombre del cliente al lado -->
+        <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!-- Si el usuario está autenticado, mostramos la imagen de perfil -->
+            @auth
+                @if(Auth::user()->imagen)
+                    <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}" alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                @else
+                    <i class="bi bi-person" style="font-size: 1.5rem;"></i> <!-- Icono por defecto si no tiene imagen -->
+                @endif
+                <span class="ms-2">{{ Auth::user()->name }}</span> <!-- Nombre del usuario autenticado -->
+            @else
+                <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
                 <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                <!-- Nombre del cliente al lado del ícono -->
-                <span class="ms-2"></span>
+                <span class="ms-4">Invitado</span>
+            @endauth
+        </a>
+    
+
+
+
+
             <!-- Menú desplegable -->
             <div class="dropdown-menu dropdown-menu-end">
                 @guest

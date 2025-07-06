@@ -27,6 +27,7 @@ class User extends Authenticatable
     'estado',
     'fecha_ingreso',
     'fecha_salida',
+    'imagen', // 
 ];
 
     /**

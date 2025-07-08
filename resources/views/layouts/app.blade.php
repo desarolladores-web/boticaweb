@@ -105,7 +105,7 @@
             @else
                 <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
                 <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                <span class="ms-4">Invitado</span>
+                
             @endauth
         </a>
     

@@ -204,12 +204,12 @@
             @if(count($carrito) > 0)
             @foreach($carrito as $id => $item)
             <div class="mb-3 border-bottom pb-3">
-                <div class="d-flex">
-                    @if($item['imagen'])
-                    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" width="70" class="me-3 rounded">
-                    @endif
+                <div class="d-flex align-items-center">
+    @if($item['imagen'])
+    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img">
+    @endif
 
-                    <div class="flex-grow-1">
+                    <div class="flex-grow-1 ps-2">
                         <div class="fw-bold">{{ $item['nombre'] }}</div>
                         @php $subtotal = $item['precio'] * $item['cantidad']; @endphp
                         <div class="text-danger fw-semibold mb-2">S/ {{ number_format($subtotal, 2) }}</div>
@@ -297,6 +297,13 @@
         .cart-backdrop.show {
             display: block;
         }
+
+        .cart-img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 8px;
+}
 
 
 

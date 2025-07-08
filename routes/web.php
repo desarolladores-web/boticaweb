@@ -8,6 +8,7 @@ use App\Http\Controllers\VentaController;
 
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminController;
 
 /*
 |---------------------------------------------------------------------------
@@ -45,6 +46,9 @@ Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito
 
 // Perfil del usuario (restringido a usuarios autenticados)
 Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+   });
    
     Route::get('/account/edit', [ProfileController::class, 'edit'])->name('account.edit'); // Cambié 'cliente' por 'user'
     Route::put('/account/update', [ProfileController::class, 'update'])->name('account.update'); // Cambié 'cliente' por 'user'
@@ -56,4 +60,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Ruta para actualizar la contraseña
     Route::put('/account/password/update', [ProfileController::class, 'updatePassword'])->name('account.password.update');
+    
+
 });

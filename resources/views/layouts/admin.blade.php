@@ -18,11 +18,11 @@
     <header>
       <div class="image-text">
         <span class="image">
-          <!-- <img src="logo.png" alt=""> -->
+           <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> 
         </span>
         <div class="text logo-text">
-          <span class="name">Codinglab</span>
-          <span class="profession">Web developer</span>
+          <span class="name">Botica</span>
+          <span class="profession">Mirian</span>
         </div>
       </div>
       <i class='bx bx-chevron-right toggle'></i>
@@ -38,7 +38,7 @@
           <li class="nav-link">
   <a href="{{ route('productos.index') }}">
     <i class='bx bx-package icon'></i>
-    <span class="text nav-text">Gestión de Productos</span>
+    <span class="text nav-text">Productos</span>
   </a>
 </li>
           <li class="nav-link"><a href="#"><i class='bx bx-bell icon'></i><span class="text nav-text">Notificaciones</span></a></li>
@@ -48,7 +48,16 @@
         </ul>
       </div>
       <div class="bottom-content">
-        <li><a href="#"><i class='bx bx-log-out icon'></i><span class="text nav-text">Logout</span></a></li>
+        <li>
+  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+  </form>
+  <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <i class='bx bx-log-out icon'></i>
+    <span class="text nav-text">Logout</span>
+  </a>
+</li>
+
         <li class="mode">
           <div class="sun-moon">
             <i class='bx bx-moon icon moon'></i>
@@ -66,12 +75,7 @@
   <!-- Navbar al costado del sidebar -->
   <div class="top-navbar">
     <span>Panel de Administración</span>
-    <form action="{{ route('logout') }}" method="POST" class="d-inline">
-    @csrf
-    <button type="submit" class="btn btn-outline-light btn-sm">
-        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-    </button>
-</form>
+
   </div>
 
   <!-- Contenido -->

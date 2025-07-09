@@ -8,19 +8,17 @@
   @vite(['resources/css/admin.css'])
 
   <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
-  <title>Panel de Administración</title>
-
 </head>
 <body>
 
   <!-- Sidebar -->
   <nav class="sidebar close">
     <header>
-      <div class="image-text ">
+      <div class="image-text">
         <span class="image">
-           <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> 
+          <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> 
         </span>
-        <div class="text logo-text" style="margin-left: 30px;">
+       <div class="text logo-text" style="position: absolute; left: 100px;">
   <span class="name">Botica</span>
   <span class="profession">Mirian</span>
 </div>
@@ -28,36 +26,46 @@
       </div>
       <i class='bx bx-chevron-right toggle'></i>
     </header>
+
     <div class="menu-bar">
       <div class="menu">
         <li class="search-box">
           <i class='bx bx-search icon'></i>
           <input type="text" placeholder="Search..." />
         </li>
+
         <ul class="menu-links">
-          <li class="nav-link"><a href="#"><i class='bx bx-home-alt icon'></i><span class="text nav-text">Dashboard</span></a></li>
           <li class="nav-link">
-  <a href="{{ route('productos.index') }}">
-    <i class='bx bx-package icon'></i>
-    <span class="text nav-text">Productos</span>
-  </a>
-</li>
-          <li class="nav-link"><a href="#"><i class='bx bx-bell icon'></i><span class="text nav-text">Notificaciones</span></a></li>
-          <li class="nav-link"><a href="#"><i class='bx bx-pie-chart-alt icon'></i><span class="text nav-text">Analytics</span></a></li>
-          <li class="nav-link"><a href="#"><i class='bx bx-heart icon'></i><span class="text nav-text">Likes</span></a></li>
-          <li class="nav-link"><a href="#"><i class='bx bx-wallet icon'></i><span class="text nav-text">Wallets</span></a></li>
+            <a href="#"><i class='bx bx-home-alt icon'></i><span class="text nav-text">Dashboard</span></a>
+          </li>
+          <li class="nav-link">
+            <a href="{{ route('productos.index') }}"><i class='bx bx-package icon'></i><span class="text nav-text">Productos</span></a>
+          </li>
+          <li class="nav-link">
+            <a href="#"><i class='bx bx-bell icon'></i><span class="text nav-text">Notificaciones</span></a>
+          </li>
+          <li class="nav-link">
+            <a href="#"><i class='bx bx-pie-chart-alt icon'></i><span class="text nav-text">Analytics</span></a>
+          </li>
+          <li class="nav-link">
+            <a href="#"><i class='bx bx-heart icon'></i><span class="text nav-text">Likes</span></a>
+          </li>
+          <li class="nav-link">
+            <a href="#"><i class='bx bx-wallet icon'></i><span class="text nav-text">Wallets</span></a>
+          </li>
         </ul>
       </div>
+
       <div class="bottom-content">
         <li>
-  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-    @csrf
-  </form>
-  <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    <i class='bx bx-log-out icon'></i>
-    <span class="text nav-text">Logout</span>
-  </a>
-</li>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class='bx bx-log-out icon'></i>
+            <span class="text nav-text">Logout</span>
+          </a>
+        </li>
 
         <li class="mode">
           <div class="sun-moon">
@@ -73,19 +81,16 @@
 
   <!-- Main container: navbar + content -->
   <div class="main-container">
-  <!-- Navbar al costado del sidebar -->
-  <div class="top-navbar">
-    
+    <!-- Navbar -->
+    <div class="top-navbar">
+      <!-- Puedes agregar aquí el contenido del navbar si deseas -->
+    </div>
 
+    <!-- Contenido principal -->
+    <div class="content">
+      @yield('content')
+    </div>
   </div>
-
-  <!-- Contenido -->
-  <div class="content">
-    <h1>Contenido principal</h1>
-    
-  </div>
-</div>
-
 
   <!-- Script -->
   <script>
@@ -112,6 +117,6 @@
       modeText.innerText = body.classList.contains("dark") ? "Light mode" : "Dark mode";
     });
   </script>
-@yield('content')
+
 </body>
 </html>

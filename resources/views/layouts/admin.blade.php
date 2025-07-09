@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
   @vite(['resources/css/admin.css'])
-
+ 
   <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -33,7 +33,7 @@
           <i class='bx bx-search icon'></i>
           <input type="text" placeholder="Search..." />
         </li>
-
+  
         <ul class="menu-links">
           <li class="nav-link">
             <a href="#"><i class='bx bx-home-alt icon'></i><span class="text nav-text">Dashboard</span></a>
@@ -41,9 +41,18 @@
           <li class="nav-link">
             <a href="{{ route('productos.index') }}"><i class='bx bx-package icon'></i><span class="text nav-text">Productos</span></a>
           </li>
-          <li class="nav-link">
-            <a href="#"><i class='bx bx-bell icon'></i><span class="text nav-text">Notificaciones</span></a>
-          </li>
+            <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                            <span class="text nav-text">Revenue</span>
+                        </a>
+                    </li>
+                      <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                            <span class="text nav-text">Revenue</span>
+                        </a>
+                    </li>
           <li class="nav-link">
             <a href="#"><i class='bx bx-pie-chart-alt icon'></i><span class="text nav-text">Analytics</span></a>
           </li>
@@ -87,9 +96,9 @@
     </div>
 
     <!-- Contenido principal -->
-    <div class="content">
-      @yield('content')
-    </div>
+    <div class="content p-4">
+  @yield('content')
+</div>
   </div>
 
   <!-- Script -->

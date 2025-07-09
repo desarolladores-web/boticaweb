@@ -16,14 +16,15 @@
   <!-- Sidebar -->
   <nav class="sidebar close">
     <header>
-      <div class="image-text">
+      <div class="image-text ">
         <span class="image">
            <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> 
         </span>
-        <div class="text logo-text">
-          <span class="name">Botica</span>
-          <span class="profession">Mirian</span>
-        </div>
+        <div class="text logo-text" style="margin-left: 30px;">
+  <span class="name">Botica</span>
+  <span class="profession">Mirian</span>
+</div>
+
       </div>
       <i class='bx bx-chevron-right toggle'></i>
     </header>
@@ -74,14 +75,14 @@
   <div class="main-container">
   <!-- Navbar al costado del sidebar -->
   <div class="top-navbar">
-    <span>Panel de Administración</span>
+    
 
   </div>
 
   <!-- Contenido -->
   <div class="content">
     <h1>Contenido principal</h1>
-    <p>Este es el contenido que se muestra al costado del sidebar con la navbar incluida.</p>
+    
   </div>
 </div>
 

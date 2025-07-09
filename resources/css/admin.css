@@ -48,7 +48,7 @@ body.dark{
     top: 0;
     left: 0;
     height: 100%;
-    width: 270px;
+    width: 250px;
     padding: 10px 14px;
     background: var(--sidebar-color);
     transition: var(--tran-05);
@@ -85,7 +85,7 @@ body.dark{
     transition: var(--tran-04);
 }
 .sidebar .text{
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
     white-space: nowrap;
     opacity: 1;
@@ -106,12 +106,12 @@ body.dark{
     flex-direction: column;
 }
 header .image-text .name {
-    margin-top: 2px;
-    font-size: 18px;
+    margin-top: 5px;
+    font-size: 20px;
     font-weight: 600;
 }
 header .image-text .profession{
-    font-size: 16px;
+    font-size: 20px;
     margin-top: -2px;
     display: block;
 }
@@ -122,7 +122,7 @@ header .image-text .profession{
 }
 .sidebar header .image img{
     width: 55px;
-    border-radius: 6px;
+    border-radius: 7px;
 }
 .sidebar header .toggle{
     position: absolute;

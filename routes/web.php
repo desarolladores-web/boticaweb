@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\WelcomeController;
 
 use App\Http\Controllers\CartController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\VentaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
+
 
 /*
 |---------------------------------------------------------------------------

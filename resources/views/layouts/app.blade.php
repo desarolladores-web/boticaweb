@@ -26,8 +26,11 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    
-@stack('styles')
+
+    @stack('styles')
+
+
+
 </head>
 
 <body>
@@ -90,97 +93,97 @@
                         </form>
 
                         <div class="icons">
-                        <div class="item">
-    <div class="dropdown account-icon">
-        <!-- Ícono de usuario y nombre del cliente al lado -->
-        <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <!-- Si el usuario está autenticado, mostramos la imagen de perfil -->
-            @auth
-                @if(Auth::user()->imagen)
-                    <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}" alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
-                @else
-                    <i class="bi bi-person" style="font-size: 1.5rem;"></i> <!-- Icono por defecto si no tiene imagen -->
-                @endif
-                <span class="ms-2">{{ Auth::user()->name }}</span> <!-- Nombre del usuario autenticado -->
-            @else
-                <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
-                <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                
-            @endauth
-        </a>
-    
+                            <div class="item">
+                                <div class="dropdown account-icon">
+                                    <!-- Ícono de usuario y nombre del cliente al lado -->
+                                    <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <!-- Si el usuario está autenticado, mostramos la imagen de perfil -->
+                                        @auth
+                                        @if(Auth::user()->imagen)
+                                        <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}" alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                                        @else
+                                        <i class="bi bi-person" style="font-size: 1.5rem;"></i> <!-- Icono por defecto si no tiene imagen -->
+                                        @endif
+                                        <span class="ms-2">{{ Auth::user()->name }}</span> <!-- Nombre del usuario autenticado -->
+                                        @else
+                                        <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
+                                        <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+
+                                        @endauth
+                                    </a>
 
 
 
 
-            <!-- Menú desplegable -->
-            <div class="dropdown-menu dropdown-menu-end">
-                @guest
-                    @if (Route::has('login'))
-                        <a class="dropdown-item" href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
-                    @endif
 
-                    @if (Route::has('register'))
-                        <a class="dropdown-item" href="{{ route('register') }}">{{ __('Registrarse') }}</a>
-                    @endif
-                @else
-                    <!-- Mi cuenta con ícono -->
-                    <a class="dropdown-item" href="{{ route('account.edit') }}">
-                        <i class="bi bi-person me-2"></i> Mi Cuenta
-                    </a>
-                    <!-- Pedidos -->
-                    <a class="dropdown-item" href="">Pedidos</a>
-                    <!-- Favoritos -->
-                    <a class="dropdown-item" href="">Favoritos</a>
-                    <!-- Cerrar sesión -->
-                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="bi bi-box-arrow-right" ></i>  {{ __('Cerrar sesión') }}
-                    </a>
+                                    <!-- Menú desplegable -->
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        @guest
+                                        @if (Route::has('login'))
+                                        <a class="dropdown-item" href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
+                                        @endif
 
-                    <!-- Formulario de cierre de sesión -->
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                @endguest
-            </div>
-        </div>
-    </div>
-</div>
+                                        @if (Route::has('register'))
+                                        <a class="dropdown-item" href="{{ route('register') }}">{{ __('Registrarse') }}</a>
+                                        @endif
+                                        @else
+                                        <!-- Mi cuenta con ícono -->
+                                        <a class="dropdown-item" href="{{ route('account.edit') }}">
+                                            <i class="bi bi-person me-2"></i> Mi Cuenta
+                                        </a>
+                                        <!-- Pedidos -->
+                                        <a class="dropdown-item" href="">Pedidos</a>
+                                        <!-- Favoritos -->
+                                        <a class="dropdown-item" href="">Favoritos</a>
+                                        <!-- Cerrar sesión -->
+                                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar sesión') }}
+                                        </a>
 
-
-
-
-                            @php
-                            $carrito = session('carrito', []);
-                            $cantidadTotal = count($carrito);
-                            @endphp
-
-                            <div class="item ms-4">
-                                <a href="#" class="header-cart-icon position-relative">
-                                    <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
-                                    <span class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ $cantidadTotal }}
-                                    </span>
-                                </a>
+                                        <!-- Formulario de cierre de sesión -->
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                        @endguest
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
+
+
+
+
+                        @php
+                        $carrito = session('carrito', []);
+                        $cantidadTotal = count($carrito);
+                        @endphp
+
+                        <div class="item ms-4">
+                            <a href="#" class="header-cart-icon position-relative">
+                                <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
+                                <span class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ $cantidadTotal }}
+                                </span>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </header>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                {{ __('Logout') }}
-            </a>
+    </div>
+    </header>
+    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            {{ __('Logout') }}
+        </a>
 
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
-        </div>
-        </li>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+    </div>
+    </li>
 
-        </ul>
+    </ul>
     </div>
     </div>
     </nav>
@@ -205,34 +208,39 @@
             @foreach($carrito as $id => $item)
             <div class="mb-3 border-bottom pb-3">
                 <div class="d-flex align-items-center">
-    @if($item['imagen'])
-    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img">
-    @endif
+                    @if($item['imagen'])
+                    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img">
+                    @endif
 
                     <div class="flex-grow-1 ps-2">
                         <div class="fw-bold">{{ $item['nombre'] }}</div>
                         @php $subtotal = $item['precio'] * $item['cantidad']; @endphp
                         <div class="text-danger fw-semibold mb-2">S/ {{ number_format($subtotal, 2) }}</div>
 
-
                         <div class="d-flex align-items-center mb-2" style="width: fit-content;">
-                            <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center">
+                            <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center me-1">
                                 @csrf
                                 <input type="hidden" name="tipo" value="restar">
+                                <input type="hidden" name="desde_sidebar" value="1">
+                                <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
                                 <button type="submit" class="btn btn-outline-secondary btn-sm px-2">−</button>
                             </form>
 
                             <div class="px-3">{{ $item['cantidad'] }}</div>
 
-                            <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center">
+                            <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center ms-1">
                                 @csrf
                                 <input type="hidden" name="tipo" value="sumar">
+                                <input type="hidden" name="desde_sidebar" value="1">
+                                <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
                                 <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
                             </form>
                         </div>
 
                         <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
                             @csrf
+                            <input type="hidden" name="desde_sidebar" value="1">
+                            <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
                             <button type="submit" class="btn btn-danger btn-sm mt-1">Eliminar Producto</button>
                         </form>
                     </div>
@@ -245,7 +253,7 @@
         </div>
 
         <div class="cart-footer p-3 border-top">
-            <div class="d-flex justify-content-between ">
+            <div class="d-flex justify-content-between">
                 <strong>Total:</strong>
                 @php
                 $total = 0;
@@ -264,11 +272,11 @@
             Ver carrito
             <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 20px;"></span>
         </a>
-
     </div>
 
     <!-- BACKDROP -->
     <div id="cartBackdrop" class="cart-backdrop {{ session('abrir_sidebar') ? 'show' : '' }}"></div>
+
 
     <style>
         .cart-sidebar {
@@ -299,11 +307,11 @@
         }
 
         .cart-img {
-    width: 130px;
-    height: 130px;
-    object-fit: cover;
-    border-radius: 8px;
-}
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
 
 
 
@@ -318,8 +326,9 @@
 
 
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.iconify.design/2/2.0.0/iconify.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>

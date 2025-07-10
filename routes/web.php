@@ -50,18 +50,16 @@ Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-   });
-   
+    });
+
     Route::get('/account/edit', [ProfileController::class, 'edit'])->name('account.edit'); // Cambié 'cliente' por 'user'
     Route::put('/account/update', [ProfileController::class, 'update'])->name('account.update'); // Cambié 'cliente' por 'user'
     Route::delete('/account/image/{user}', [ProfileController::class, 'eliminarImagen'])->name('account.image.delete');
 
-    
+
     // Ruta para editar la contraseña
     Route::get('/account/password/edit', [ProfileController::class, 'editPassword'])->name('account.password.edit');
 
     // Ruta para actualizar la contraseña
     Route::put('/account/password/update', [ProfileController::class, 'updatePassword'])->name('account.password.update');
-    
-
 });

@@ -44,14 +44,20 @@ class CartController extends Controller
             session()->put('carrito', $carrito);
         }
 
-        // Usamos redirect()->back() o lo que venga como parámetro
-        $redirect = $request->input('redirect_back', url('/'));
+        $redirect = $request->input('redirect_back', url()->previous());
+        $desdeSidebar = $request->input('desde_sidebar', false);
 
-        // Al eliminar, también activamos el flag para abrir el sidebar
-        return redirect($redirect)
-            ->with('success', 'Producto eliminado del carrito')
-            ->with('abrir_sidebar', true);
+        $response = redirect($redirect)->with('success', 'Producto eliminado del carrito');
+
+        if ($desdeSidebar) {
+            $response->with('abrir_sidebar', true);
+        }
+
+        return $response;
     }
+
+
+
 
 
     public function actualizar(Request $request, $id)
@@ -68,8 +74,19 @@ class CartController extends Controller
             session()->put('carrito', $carrito);
         }
 
-        return back()->with('abrir_sidebar', true);
+        $redirect = $request->input('redirect_back', url()->previous());
+        $desdeSidebar = $request->input('desde_sidebar', false);
+
+        $response = redirect($redirect);
+
+        if ($desdeSidebar) {
+            $response->with('abrir_sidebar', true);
+        }
+
+        return $response;
     }
+
+
 
 
     public function verCarrito()

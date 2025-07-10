@@ -1,429 +1,255 @@
-<style>
-.checkout {
-	padding-top: 80px;
-	padding-bottom: 70px;
-}
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+    <meta charset="UTF-8">
+    <title>Finalizar compra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-.checkout__form h5 {
-	color: #111111;
-	font-weight: 600;
-	text-transform: uppercase;
-	border-bottom: 1px solid #e1e1e1;
-	padding-bottom: 20px;
-	margin-bottom: 25px;
-}
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-.checkout__form .checkout__form__input p {
-	color: #444444;
-	font-weight: 500;
-	margin-bottom: 10px;
-}
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
 
-.checkout__form .checkout__form__input p span {
-	color: #ca1515;
-}
+        .form-control::placeholder {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
 
-.checkout__form .checkout__form__input input {
-	height: 50px;
-	width: 100%;
-	border: 1px solid #e1e1e1;
-	border-radius: 2px;
-	margin-bottom: 25px;
-	font-size: 14px;
-	padding-left: 20px;
-	color: #666666;
-}
+        .summary-box {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+        }
 
-.checkout__form .checkout__form__input input::-webkit-input-placeholder {
-	color: #666666;
-}
+        .summary-box h6 {
+            font-weight: 700;
+        }
 
-.checkout__form .checkout__form__input input::-moz-placeholder {
-	color: #666666;
-}
+        .discount-code {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+        }
 
-.checkout__form .checkout__form__input input:-ms-input-placeholder {
-	color: #666666;
-}
+        .btn-outline-dark {
+            font-size: 0.9rem;
+        }
 
-.checkout__form .checkout__form__input input::-ms-input-placeholder {
-	color: #666666;
-}
+        .total {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
 
-.checkout__form .checkout__form__input input::placeholder {
-	color: #666666;
-}
+        .form-section {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 25px;
+        }
+    </style>
+</head>
 
-.checkout__form .checkout__form__checkbox {
-	margin-bottom: 20px;
-}
+<body>
 
-.checkout__form .checkout__form__checkbox label {
-	display: block;
-	padding-left: 24px;
-	font-size: 14px;
-	color: #444444;
-	font-weight: 500;
-	position: relative;
-	cursor: pointer;
-	margin-bottom: 16px;
-}
+    <div class="container py-4">
+        <a href="{{ route('carrito.ver') }}" class="text-primary d-inline-block mb-3">
+            <i class="bi bi-arrow-left"></i> Volver al carrito
+        </a>
 
-.checkout__form .checkout__form__checkbox label input {
-	position: absolute;
-	visibility: hidden;
-}
+        <div class="row g-4">
+            <!-- Formulario -->
+            <div class="col-md-8">
+                <div class="form-section">
+                    <h5 class="mb-3">¡Ya falta poco para finalizar tu compra!</h5>
 
-.checkout__form .checkout__form__checkbox label input:checked~.checkmark {
-	border-color: #ca1515;
-}
+                    <p class="text-muted mb-4">
+                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a href="#">iniciar sesión</a>.
+                    </p>
 
-.checkout__form .checkout__form__checkbox label input:checked~.checkmark:after {
-	border-color: #ca1515;
-	opacity: 1;
-}
-
-.checkout__form .checkout__form__checkbox label .checkmark {
-	position: absolute;
-	left: 0;
-	top: 4px;
-	height: 10px;
-	width: 10px;
-	border: 1px solid #444444;
-	border-radius: 2px;
-}
-
-.checkout__form .checkout__form__checkbox label .checkmark:after {
-	position: absolute;
-	left: 0px;
-	top: -2px;
-	width: 11px;
-	height: 5px;
-	border: solid #ffffff;
-	border-width: 1.5px 1.5px 0px 0px;
-	-webkit-transform: rotate(127deg);
-	-ms-transform: rotate(127deg);
-	transform: rotate(127deg);
-	opacity: 0;
-	content: "";
-}
-
-.checkout__form .checkout__form__checkbox p {
-	margin-bottom: 0;
-}
-
-.checkout__order {
-	background: #f5f5f5;
-	padding: 30px;
-}
-
-.checkout__order h5 {
-	border-bottom: 1px solid #d7d7d7;
-	margin-bottom: 18px;
-}
-
-.checkout__order .site-btn {
-	width: 100%;
-}
-
-.checkout__order__product {
-	border-bottom: 1px solid #d7d7d7;
-	padding-bottom: 22px;
-}
-
-.checkout__order__product ul li {
-	list-style: none;
-	font-size: 14px;
-	color: #444444;
-	font-weight: 500;
-	overflow: hidden;
-	margin-bottom: 14px;
-	line-height: 24px;
-}
-
-.checkout__order__product ul li:last-child {
-	margin-bottom: 0;
-}
-
-.checkout__order__product ul li span {
-	font-size: 14px;
-	color: #111111;
-	font-weight: 600;
-	float: right;
-}
-
-.checkout__order__product ul li .top__text {
-	font-size: 16px;
-	color: #111111;
-	font-weight: 600;
-	float: left;
-}
-
-.checkout__order__product ul li .top__text__right {
-	font-size: 16px;
-	color: #111111;
-	font-weight: 600;
-	float: right;
-}
-
-.checkout__order__total {
-	padding-top: 12px;
-	border-bottom: 1px solid #d7d7d7;
-	padding-bottom: 10px;
-	margin-bottom: 25px;
-}
-
-.checkout__order__total ul li {
-	list-style: none;
-	font-size: 16px;
-	color: #111111;
-	font-weight: 600;
-	overflow: hidden;
-	line-height: 40px;
-}
-
-.checkout__order__total ul li span {
-	color: #ca1515;
-	float: right;
-}
-
-.checkout__order__widget {
-	padding-bottom: 10px;
-}
-
-.checkout__order__widget label {
-	display: block;
-	padding-left: 25px;
-	font-size: 14px;
-	font-weight: 500;
-	color: #111111;
-	position: relative;
-	cursor: pointer;
-	margin-bottom: 14px;
-}
-
-.checkout__order__widget label input {
-	position: absolute;
-	visibility: hidden;
-}
-
-.checkout__order__widget label input:checked~.checkmark {
-	border-color: #ca1515;
-}
-
-.checkout__order__widget label input:checked~.checkmark:after {
-	border-color: #ca1515;
-	opacity: 1;
-}
-
-.checkout__order__widget label .checkmark {
-	position: absolute;
-	left: 0;
-	top: 4px;
-	height: 10px;
-	width: 10px;
-	border: 1px solid #444444;
-	border-radius: 2px;
-}
-
-.checkout__order__widget label .checkmark:after {
-	position: absolute;
-	left: 0px;
-	top: -2px;
-	width: 11px;
-	height: 5px;
-	border: solid #ffffff;
-	border-width: 1.5px 1.5px 0px 0px;
-	-webkit-transform: rotate(127deg);
-	-ms-transform: rotate(127deg);
-	transform: rotate(127deg);
-	opacity: 0;
-	content: "";
-}
-   
-</style>
-
-
-<section class="checkout spad">
-    <div class="container">
-
-        <form action="#" class="checkout__form">
-            <div class="row">
-                <div class="col-lg-8">
-                    <h5>Detalle de facturación</h5>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Nombre <span>*</span></p>
-                                <input type="text">
-                            </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombres *</label>
+                            <input type="text" class="form-control" placeholder="Ej: Renato">
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Apellido <span>*</span></p>
-                                <input type="text">
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Apellido paterno *</label>
+                            <input type="text" class="form-control" placeholder="Ej: Salas">
                         </div>
-                        <div class="col-lg-12">
-                            <div class="checkout__form__input">
-                                <p>País <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Dirección <span>*</span></p>
-                                <input type="text" placeholder="Dirección de la calle">
-                                <input type="text" placeholder="Apartamento, suite, unidad, etc (opcional)">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Ciudad <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Provincia/Estado <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Código postal <span>*</span></p>
-                                <input type="text">
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Apellido materno *</label>
+                            <input type="text" class="form-control " placeholder="Ej: Salas">
+
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Teléfono <span>*</span></p>
-                                <input type="text">
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Correo electrónico *</label>
+                            <input type="email" class="form-control" placeholder="Ej: correo@dominio.com">
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Email <span>*</span></p>
-                                <input type="text">
-                            </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Tipo de documento</label>
+                            <select class="form-select">
+                                <option>DNI</option>
+                                <option>CE</option>
+                                <option>Pasaporte</option>
+                            </select>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="checkout__form__checkbox">
-                                <label for="acc">
-                                    ¿Crear una cuenta?
-                                    <input type="checkbox" id="acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <p>Crea una cuenta ingresando la información a continuación. Si ya eres cliente, inicia sesión en la parte superior de la página.</p>
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Contraseña de la cuenta <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__checkbox">
-                                <label for="note">
-                                    Nota sobre tu pedido, por ejemplo, instrucciones especiales de entrega
-                                    <input type="checkbox" id="note">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Notas del pedido <span>*</span></p>
-                                <input type="text" placeholder="Nota sobre tu pedido, por ejemplo, instrucciones especiales de entrega">
-                            </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Nro. de documento *</label>
+                            <input type="text" class="form-control" placeholder="Ej: 12345678">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Celular *</label>
+                            <input type="text" class="form-control" placeholder="Ej: 999 000 000">
                         </div>
                     </div>
-                </div>
 
-                <div class="col-lg-4">
-                    <div class="checkout__order">
-                        <h5>Tu pedido</h5>
-                        <div class="checkout__order__product">
-                            <ul>
-                                <li>
-                                    <span class="top__text">Producto</span>
-                                    <span class="top__text__right">Total</span>
-                                </li>
-                                <li>01. Bolso con cadena <span>$ 300.0</span></li>
-                                <li>02. Maletín con bolsillos con cierre <span>$ 170.0</span></li>
-                                <li>03. Jean negro <span>$ 170.0</span></li>
-                                <li>04. Camisa de algodón <span>$ 110.0</span></li>
-                            </ul>
+                    <div class="form-check mt-3">
+                        <input type="checkbox" class="form-check-input" id="termsCheck">
+                        <label for="termsCheck" class="form-check-label">
+                            He leído y acepto el <a href="#">tratamiento de mis datos personales</a> para finalidades adicionales.
+                        </label>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h6 class="d-flex align-items-center">
+                        <i class="bi bi-geo-alt-fill text-danger me-2"></i> Elige ubicación de recojo del producto
+                    </h6>
+                    <div class="mb-3">
+                        <select class="form-select">
+                            <option selected disabled>Elige la dirección más cercana a tu ubicación actual</option>
+                            <option>Av. Caracas 498, Ica 11002, La Tinguiña</option>
+                            <option>Av. México 156, Ica 11002, La Tinguiña</option>
+                        </select>
+                    </div>
+
+
+
+                    <h6 class="d-flex align-items-center">
+                        <i class="bi bi-receipt-cutoff text-primary me-2"></i> Solicita un comprobante de pago
+                    </h6>
+                    <p class="text-muted">Activa esta opción si deseas que te enviemos factura, de lo contrario te enviaremos boleta.</p>
+
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="toggleFactura">
+                        <label class="form-check-label" for="toggleFactura">Solicitar factura</label>
+                    </div>
+
+                    <div id="facturaFields" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="ruc" class="form-label">RUC (11 dígitos)</label>
+                                <input type="text" class="form-control" id="ruc" placeholder="Ingresa el RUC">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="razon" class="form-label">Razón social</label>
+                                <input type="text" class="form-control" id="razon" placeholder="Ingresa la razón social">
+                            </div>
                         </div>
-                        <div class="checkout__order__total">
-                            <ul>
-                                <li>Subtotal <span>$ 750.0</span></li>
-                                <li>Total <span>$ 750.0</span></li>
-                            </ul>
+                        <div class="mb-3">
+                            <label for="domicilio" class="form-label">Domicilio legal</label>
+                            <input type="text" class="form-control" id="domicilio" placeholder="Ingresa el domicilio legal">
                         </div>
-                        <div class="checkout__order__widget">
-                            <label for="o-acc">
-                                ¿Crear una cuenta?
-                                <input type="checkbox" id="o-acc">
-                                <span class="checkmark"></span>
-                            </label>
-                            <p>Crea una cuenta ingresando la información a continuación. Si ya eres cliente, inicia sesión en la parte superior de la página.</p>
-                            <label for="check-payment">
-                                Pago con cheque
-                                <input type="checkbox" id="check-payment">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="paypal">
-                                PayPal
-                                <input type="checkbox" id="paypal">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <button type="submit" class="site-btn">Realizar pedido</button>
+                    </div>
+
+
+                    <div class="alert alert-light border mt-4 text-center">
+                        <img src="https://images.ctfassets.net/l9x8e72nkkav/494Fyn6il5sHcMjjd0928N/59a8b7ea6202d5d6a06277a935955079/PagaSeguro-mifarma-bx2beneficos-web__1_.jpg" alt="Banner Confianza" class="img-fluid">
+                    </div>
+
+                    <h6 class="mt-4">Comprueba tus datos antes de finalizar tu compra</h6>
+                    <ul class="list-unstyled small">
+                        <li>📄 Datos personales: -</li>
+                        <li>🏥 Despachado por: BoticaMyryan</li>
+                        <li>🚚 Tipo de entrega: -</li>
+                        <li>🕒 Fecha y hora de entrega: -</li>
+                        <li>💳 Comprobante de pago: </li>
+                        <li>🧾 Medio de pago: -</li>
+                    </ul>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="finalTermsCheck">
+                        <label for="finalTermsCheck" class="form-check-label">
+                            He leído y acepto los <a href="#">Términos y Condiciones</a> y las <a href="#">Políticas de Privacidad</a>
+                        </label>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
-</section>
+            <!-- Resumen de pedido -->
+            <div class="col-md-4">
+                <div class="summary-box">
+                    <h6>Resumen de pedido</h6>
+                    <hr>
 
-       
+                    @php
+                    $carrito = session('carrito', []);
+                    $total = 0;
+                    @endphp
+
+                    @forelse ($carrito as $item)
+                    @php
+                    $subtotal = $item['precio'] * $item['cantidad'];
+                    $total += $subtotal;
+                    @endphp
+                    <div class="d-flex mb-3">
+                        <img src="{{ $item['imagen'] ?? 'https://via.placeholder.com/60' }}" class="me-2" style="width: 60px; height: 60px; object-fit: contain;">
+                        <div>
+                            <strong class="d-block">{{ $item['nombre'] }}</strong>
+                            <small class="text-muted">{{ $item['presentacion'] ?? '' }}</small><br>
+                            <small class="text-muted">Cantidad: {{ $item['cantidad'] }}</small>
+                            <div class="text-danger fw-semibold">S/ {{ number_format($subtotal, 2) }}</div>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-muted">No hay productos en el carrito.</p>
+                    @endforelse
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <span>Subtotal</span>
+                        <span>S/ {{ number_format($total, 2) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total</strong>
+                        <span class="text-danger fw-bold">S/ {{ number_format($total, 2) }}</span>
+                    </div>
+
+                    <form action="#" method="POST" class="mt-3">
+                        @csrf
+                        <button type="submit" class="btn btn-danger w-100">Comprar ahora</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Bootstrap Icons (opcional si ya los usas) -->
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 
-<div class="row padding-1 p-1">
-    <div class="col-md-12">
-        
-        <div class="form-group mb-2 mb20">
-            <label for="cliente_id" class="form-label">{{ __('Cliente Id') }}</label>
-            <input type="text" name="cliente_id" class="form-control @error('cliente_id') is-invalid @enderror" value="{{ old('cliente_id', $venta?->cliente_id) }}" id="cliente_id" placeholder="Cliente Id">
-            {!! $errors->first('cliente_id', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="fecha" class="form-label">{{ __('Fecha') }}</label>
-            <input type="text" name="fecha" class="form-control @error('fecha') is-invalid @enderror" value="{{ old('fecha', $venta?->fecha) }}" id="fecha" placeholder="Fecha">
-            {!! $errors->first('fecha', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="tipo_comprobante" class="form-label">{{ __('Tipo Comprobante') }}</label>
-            <input type="text" name="tipo_comprobante" class="form-control @error('tipo_comprobante') is-invalid @enderror" value="{{ old('tipo_comprobante', $venta?->tipo_comprobante) }}" id="tipo_comprobante" placeholder="Tipo Comprobante">
-            {!! $errors->first('tipo_comprobante', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="igv" class="form-label">{{ __('Igv') }}</label>
-            <input type="text" name="igv" class="form-control @error('igv') is-invalid @enderror" value="{{ old('igv', $venta?->igv) }}" id="igv" placeholder="Igv">
-            {!! $errors->first('igv', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="subtotal" class="form-label">{{ __('Subtotal') }}</label>
-            <input type="text" name="subtotal" class="form-control @error('subtotal') is-invalid @enderror" value="{{ old('subtotal', $venta?->subtotal) }}" id="subtotal" placeholder="Subtotal">
-            {!! $errors->first('subtotal', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="total" class="form-label">{{ __('Total') }}</label>
-            <input type="text" name="total" class="form-control @error('total') is-invalid @enderror" value="{{ old('total', $venta?->total) }}" id="total" placeholder="Total">
-            {!! $errors->first('total', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="metodo_pago_id" class="form-label">{{ __('Metodo Pago Id') }}</label>
-            <input type="text" name="metodo_pago_id" class="form-control @error('metodo_pago_id') is-invalid @enderror" value="{{ old('metodo_pago_id', $venta?->metodo_pago_id) }}" id="metodo_pago_id" placeholder="Metodo Pago Id">
-            {!! $errors->first('metodo_pago_id', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="estado_venta_id" class="form-label">{{ __('Estado Venta Id') }}</label>
-            <input type="text" name="estado_venta_id" class="form-control @error('estado_venta_id') is-invalid @enderror" value="{{ old('estado_venta_id', $venta?->estado_venta_id) }}" id="estado_venta_id" placeholder="Estado Venta Id">
-            {!! $errors->first('estado_venta_id', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
 
-    </div>
-    <div class="col-md-12 mt20 mt-2">
-        <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
-    </div>
-</div>
+
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const toggle = document.getElementById('toggleFactura');
+                    const fields = document.getElementById('facturaFields');
+
+                    toggle.addEventListener('change', function() {
+                        fields.style.display = this.checked ? 'block' : 'none';
+                    });
+                });
+            </script>
+
+</body>
+
+</html>

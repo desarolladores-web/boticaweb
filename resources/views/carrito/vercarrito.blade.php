@@ -77,8 +77,10 @@
                     <div class="col-md-1 ">
                         <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
                             @csrf
+                            <input type="hidden" name="redirect_back" value="{{ route('carrito.ver') }}">
                             <button type="submit" class="btn btn-link text-danger text-decoration-none p-0">Eliminar</button>
                         </form>
+
                     </div>
                 </div>
 

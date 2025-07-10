@@ -188,7 +188,7 @@
     </div>
     </nav>
 
-    <main class="py-4">
+    <main>
         @yield('content')
     </main>
     @include('layouts.whatsapp')
@@ -320,7 +320,11 @@
             padding: 4px 8px;
         }
     </style>
-
+    <style>
+        .header-desktop {
+            margin-top: -10px;
+}
+    </style>
 
 
 

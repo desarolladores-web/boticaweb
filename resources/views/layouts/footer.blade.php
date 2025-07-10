@@ -60,8 +60,8 @@
                     <div class="footer-link-icon"><i class="bi bi-plus-lg"></i></div>
                   </div>
                   <ul class="footer-item-center social-icons">
-                    <li><a href="#"><i class="bi bi-facebook"></i></a></li>
-                    <li><a href="#"><i class="bi bi-instagram"></i></a></li>
+                    <li><a href="https://www.facebook.com/share/1C77FGP1bi/"><i class="bi bi-facebook"></i></a></li>
+                    
                   </ul>
                 </div>
               </div>

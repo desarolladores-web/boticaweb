@@ -2,29 +2,127 @@
 
 @section('content')
 
-<!DOCTYPE html>
-<html lang="es">
 
-<head>
-  <meta charset="UTF-8">
-  <title>Carta de Productos</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8">
+    <title>Carta de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  @vite(['resources/css/welcome.css'])
-</head>
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <defs>
+    @vite(['resources/css/welcome.css'])
+  </head>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <defs>
     <symbol xmlns="http://www.w3.org/2000/svg" id="plus" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19 11h-6V5a1 1 0 0 0-2 0v6H5a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2Z" />
     </symbol>
     <symbol xmlns="http://www.w3.org/2000/svg" id="minus" viewBox="0 0 24 24">
       <path fill="currentColor" d="M19 11H5a1 1 0 0 0 0 2h14a1 1 0 0 0 0-2Z" />
     </symbol>
-  </defs>
-</svg>
+    </defs>
+  </svg>
 
-<body class="bg-light">
-  <section class="py-5 container">
+  <body class="bg-light">
+    <!-- CARRUSEL CON IMAGEN OSCURA -->
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    <div class="carousel-inner">
+
+      <!-- Slide 1 -->
+      <div class="carousel-item active">
+      <section
+        class="hero-section position-relative d-flex align-items-center justify-content-center text-center text-white"
+        style="min-height: 80vh; background: url('{{ asset('imagenes/hero_bg.jpg') }}') no-repeat center center / cover;">
+        <div class="overlay"></div>
+        <div class="container px-3 position-relative">
+        <h1 class="display-5 fw-bold text-white">Tu salud, <span class="text-success">nuestra prioridad</span></h1>
+        <p class="lead text-white mb-4">Atención personalizada y medicamentos confiables <br
+          class="d-none d-md-block">para ti y tu familia, cada día.</p>
+        <a href="#productos" class="btn btn-light btn-lg px-4 fw-semibold">Ver productos</a>
+        </div>
+      </section>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="carousel-item">
+      <section
+        class="hero-section position-relative d-flex align-items-center justify-content-center text-center text-white"
+        style="min-height: 80vh; background: url('{{ asset('imagenes/hero_bg_2.jpg') }}') no-repeat center center / cover;">
+        <div class="overlay"></div>
+        <div class="container px-3 position-relative">
+        <h1 class="display-5 fw-bold text-white">Todo lo que necesitas <span class="text-success">al instante</span>
+        </h1>
+        <p class="lead text-white mb-4">Desde analgésicos hasta vitaminas,<br class="d-none d-md-block">encuéntralo
+          fácil, rápido y cerca de casa.</p>
+        <a href="#productos" class="btn btn-light btn-lg px-4 fw-semibold">Comprar ahora</a>
+        </div>
+      </section>
+      </div>
+
+    </div>
+
+    <!-- Botones de navegación -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+    </div>
+
+<!-- Features Section con Cards de farmacia con iconos -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Card 1: Entrega rápida -->
+      <div class="col-12 col-md-4">
+        <div class="card h-100 text-center text-dark shadow-sm border-0 rounded-4" style="background-color: #E8F5E9;">
+          <div class="card-body">
+            <div class="mb-3">
+              <i class="bi bi-truck fs-1 text-success"></i>
+            </div>
+            <h5 class="card-title fw-bold text-success">Entrega rápida</h5>
+            <p class="card-text">Recibe tus medicamentos directamente en tu hogar con rapidez y seguridad.</p>
+            <a href="#" class="text-success fw-medium text-decoration-underline">Más información →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Medicinas nuevas -->
+      <div class="col-12 col-md-4">
+        <div class="card h-100 text-center text-dark shadow-sm border-0 rounded-4" style="background-color: #E3F2FD;">
+          <div class="card-body">
+            <div class="mb-3">
+              <i class="bi bi-capsule fs-1 text-primary"></i>
+            </div>
+            <h5 class="card-title fw-bold text-primary">Nuevas medicinas</h5>
+            <p class="card-text">Actualizamos nuestro stock con productos modernos y certificados.</p>
+            <a href="#" class="text-primary fw-medium text-decoration-underline">Ver novedades →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Calidad garantizada -->
+      <div class="col-12 col-md-4">
+        <div class="card h-100 text-center text-dark shadow-sm border-0 rounded-4" style="background-color: #F1F8E9;">
+          <div class="card-body">
+            <div class="mb-3">
+              <i class="bi bi-shield-check fs-1 text-success"></i>
+            </div>
+            <h5 class="card-title fw-bold text-success">Calidad garantizada</h5>
+            <p class="card-text">Medicamentos seguros, con respaldo profesional y confianza total.</p>
+            <a href="#" class="text-success fw-medium text-decoration-underline">Ver detalles →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+    <section class="py-5 container">
     <div class="container-fluid">
       <div class="row justify-content-center"> <!-- Aquí añadimos 'justify-content-center' para centrar las tarjetas -->
         <div class="col-md-12">
@@ -165,17 +263,45 @@
     });
   </script>
 
-</body>
+  </body>
 
-<style>
-  .tab-image {
+  <style>
+    .tab-image {
     width: 100% !important;
     height: 250px !important;
     object-fit: cover !important;
     border-radius: 10px;
-  }
-</style>
+    }
 
-</html>
+    .title-section {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    }
+  </style>
+  <!-- carrucel style-->
+  <style>
+    .hero-section {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    }
+
+    .hero-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(73, 61, 61, 0.40);
+    /* Ajusta la opacidad aquí */
+    z-index: 1;
+    }
+
+    .hero-section .container {
+    z-index: 2;
+    }
+  </style>
+
+  </html>
 
 @endsection

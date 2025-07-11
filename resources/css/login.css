@@ -1,0 +1,139 @@
+ .login-container {
+        display: flex;
+        min-height: 80vh;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .login-left,
+    .login-right {
+        flex: 1;
+        padding: 50px;
+    }
+
+    .login-left {
+        background: #fff;
+    }
+
+    .login-right {
+        background: linear-gradient(to right, #20c997, #17a2b8);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .login-right h2 {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .login-right p {
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+    }
+
+    .login-right a.btn {
+        background: #fff;
+        color: #17a2b8;
+        font-weight: bold;
+        border-radius: 25px;
+        padding: 10px 30px;
+    }
+
+    .social-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .social-buttons a {
+        width: 50px;
+        height: 50px;
+        border-radius: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+    }
+
+    .btn-facebook {
+        background: #0164f8;
+    }
+
+    .btn-google {
+        background: #c62828;
+    }
+
+    .btn-linkedin {
+        background: #0164f8;
+    }
+
+    .divider {
+        text-align: center;
+        margin: 20px 0;
+        position: relative;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        height: 1px;
+        background: #ccc;
+        position: absolute;
+        top: 50%;
+        width: 40%;
+    }
+
+    .divider::before {
+        left: 0;
+    }
+
+    .divider::after {
+        right: 0;
+    }
+
+    .divider span {
+        background: #fff;
+        padding: 0 10px;
+        color: #666;
+    }
+
+
+    .social-buttons a {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        box-shadow: none;
+        border: none;
+        outline: none;
+        vertical-align: middle;
+    }
+
+    .social-buttons a i {
+        font-size: 18px;
+        line-height: 1;
+        vertical-align: middle;
+        margin: 0;
+        padding: 0;
+    }
+
+    input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: black;
+        border: 2px solid black;
+        margin-top: 2px;
+        /* Sube o baja el checkbox */
+        margin-right: 10px;
+        /* Espacio entre checkbox y texto */
+        padding: 2px;
+        /* Espaciado interno (compatibilidad limitada) */
+        cursor: pointer;
+    }
+    

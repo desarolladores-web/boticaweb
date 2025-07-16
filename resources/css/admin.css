@@ -10,11 +10,11 @@
 
 :root {
   --body-color: #ffffff;
-  --sidebar-color: #cfc8c89f;
-  --primary-color: #da0c0c!important;
-  --primary-color-light: #cfc8c89f;
+  --sidebar-color: #c0191f;
+  --primary-color: #e77070!important;
+  --primary-color-light:#282f32;
   --toggle-color: #0a0a0a;
-  --text-color: #000000;
+  --text-color: #ffffff;
 
   --tran-03: all 0.3s ease;
   --tran-04: all 0.3s ease;
@@ -22,7 +22,7 @@
 }
 
 .navbar-custom {
-  background-color: #b10000 !important;
+  background-color: #0c0c0c !important;
 }
 
 body {
@@ -322,7 +322,8 @@ nav.sidebar.close ~ .main-container {
 
 .top-navbar {
   height: 70px;
-  background-color: #b10000 !important;
+  background-color:  #ebebeb
+!important;
   color: #fff !important;
   display: flex;
   align-items: center;

@@ -50,6 +50,8 @@ Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+        Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
+    Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
     });
 
     Route::get('/account/edit', [ProfileController::class, 'edit'])->name('account.edit'); // Cambié 'cliente' por 'user'

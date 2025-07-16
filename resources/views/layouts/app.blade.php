@@ -117,35 +117,52 @@
 
 
                                     <!-- Menú desplegable -->
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        @guest
-                                        @if (Route::has('login'))
-                                        <a class="dropdown-item" href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
-                                        @endif
+                               <!-- Menú desplegable -->
+<div class="dropdown-menu dropdown-menu-end">
+    @guest
+        @if (Route::has('login'))
+            <a class="dropdown-item" href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
+        @endif
 
-                                        @if (Route::has('register'))
-                                        <a class="dropdown-item" href="{{ route('register') }}">{{ __('Registrarse') }}</a>
-                                        @endif
-                                        @else
-                                        <!-- Mi cuenta con ícono -->
-                                        <a class="dropdown-item" href="{{ route('account.edit') }}">
-                                            <i class="bi bi-person me-2"></i> Mi Cuenta
-                                        </a>
-                                        <!-- Pedidos -->
-                                        <a class="dropdown-item" href="">Pedidos</a>
-                                        <!-- Favoritos -->
-                                        <a class="dropdown-item" href="">Favoritos</a>
-                                        <!-- Cerrar sesión -->
-                                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar sesión') }}
-                                        </a>
+        @if (Route::has('register'))
+            <a class="dropdown-item" href="{{ route('register') }}">{{ __('Registrarse') }}</a>
+        @endif
+    @else
+        @php
+            $user = Auth::user();
+        @endphp
 
-                                        <!-- Formulario de cierre de sesión -->
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form>
-                                        @endguest
-                                    </div>
+        <!-- Mi cuenta con ícono -->
+        @if ($user->rol_id == 1)
+            <!-- Admin -->
+            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                <i class="bi bi-person me-2"></i> Panel Admin
+            </a>
+        @else
+            <!-- Usuario normal -->
+            <a class="dropdown-item" href="{{ route('account.edit') }}">
+                <i class="bi bi-person me-2"></i> Mi Cuenta
+            </a>
+        @endif
+
+        <!-- Pedidos -->
+        <a class="dropdown-item" href="#">Pedidos</a>
+
+        <!-- Favoritos -->
+        <a class="dropdown-item" href="#">Favoritos</a>
+
+        <!-- Cerrar sesión -->
+        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar sesión') }}
+        </a>
+
+        <!-- Formulario de cierre de sesión -->
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+    @endguest
+</div>
+
                                 </div>
                             </div>
                         </div>

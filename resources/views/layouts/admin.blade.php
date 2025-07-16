@@ -29,36 +29,28 @@
 
     <div class="menu-bar">
       <div class="menu">
-        <li class="search-box">
-          <i class='bx bx-search icon'></i>
-          <input type="text" placeholder="Search..." />
-        </li>
+       
   
         <ul class="menu-links">
           <li class="nav-link">
-            <a href="#"><i class='bx bx-home-alt icon'></i><span class="text nav-text">Dashboard</span></a>
+            <a href="{{ route('admin.dashboard') }}"><i class='bx bx-home-alt icon'></i><span class="text nav-text">Dashboard</span></a>
           </li>
           <li class="nav-link">
             <a href="{{ route('productos.index') }}"><i class='bx bx-package icon'></i><span class="text nav-text">Productos</span></a>
           </li>
-            <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-bar-chart-alt-2 icon' ></i>
-                            <span class="text nav-text">Revenue</span>
-                        </a>
-                    </li>
-                      <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-bar-chart-alt-2 icon' ></i>
-                            <span class="text nav-text">Revenue</span>
-                        </a>
-                    </li>
+          <li class="nav-link">
+            <a href="#"><i class='bx bx-bell icon'></i><span class="text nav-text">Notificaciones</span></a>
+          </li>
           <li class="nav-link">
             <a href="#"><i class='bx bx-pie-chart-alt icon'></i><span class="text nav-text">Analytics</span></a>
           </li>
-          <li class="nav-link">
-            <a href="#"><i class='bx bx-heart icon'></i><span class="text nav-text">Likes</span></a>
-          </li>
+        <li class="nav-link">
+  <a href="{{ route('empleados.create') }}">
+    <i class='bx bx-user-plus icon'></i>
+    <span class="text nav-text">Crear Empleados</span>
+  </a>
+</li>
+
           <li class="nav-link">
             <a href="#"><i class='bx bx-wallet icon'></i><span class="text nav-text">Wallets</span></a>
           </li>
@@ -92,6 +84,11 @@
   <div class="main-container">
     <!-- Navbar -->
     <div class="top-navbar">
+      <h5 class="mb-0 fw-bold text-dark">Panel de Administrador</h5>
+      <li class="search-box">
+          <i class='bx bx-search icon'></i>
+          <input type="text" placeholder="Search..." />
+        </li>
       <!-- Puedes agregar aquí el contenido del navbar si deseas -->
     </div>
 

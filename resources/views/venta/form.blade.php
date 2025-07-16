@@ -7,57 +7,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         body {
-            background-color: #f4f6f9;
+            background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .card {
-            border: none;
-            border-radius: 12px;
+        .top-banner {
+            background-color: #fff;
+            padding: 15px 30px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-banner img.logo {
+            height: 30px;
+        }
+
+        .top-banner .secure-text {
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .top-banner .secure-text i {
+            margin-left: 8px;
+            color: #198754;
+        }
+
+        .form-section,
+        .summary-box {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
         }
 
         .form-control::placeholder {
             font-size: 0.9rem;
-            color: #ccc;
+            color: #adb5bd;
         }
 
-        .summary-box {
-            background-color: #fff;
-            border-radius: 12px;
-            padding: 20px;
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-check-label a {
+            color: #0d6efd;
+            text-decoration: underline;
+        }
+
+        .form-check-label a:hover {
+            text-decoration: none;
         }
 
         .summary-box h6 {
             font-weight: 700;
         }
 
-        .discount-code {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        .btn-outline-dark {
-            font-size: 0.9rem;
-        }
-
         .total {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
         }
 
-        .form-section {
-            background-color: #fff;
+        .btn-danger {
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .divider-line {
+            height: 1px;
+            background-color: #dee2e6;
+            margin: 20px 0;
+        }
+
+        .alert img {
             border-radius: 12px;
-            padding: 25px;
+        }
+
+        ul.list-unstyled li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .top-banner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="top-banner">
+        <div class="d-flex align-items-center">
+            <img src="{{ asset('imagenes/botica2.png') }}" alt="Botica Mirian" class="logo me-2">
+            <strong class="fs-5">Botica Mirian</strong>
+        </div>
+        <div class="secure-text">
+            Su compra en Botica Mirian es 100% segura
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+    </div>
 
     <div class="container py-4">
         <a href="{{ route('carrito.ver') }}" class="text-primary d-inline-block mb-3">
@@ -68,8 +125,7 @@
             <!-- Formulario -->
             <div class="col-md-8">
                 <div class="form-section">
-                    <h5 class="mb-3">¡Ya falta poco para finalizar tu compra!</h5>
-
+                    <h4 class="mb-3 fw-bold">¡Ya falta poco para finalizar tu compra!</h4>
                     <p class="text-muted mb-4">
                         Estos datos no se guardarán para una próxima compra. Puedes continuar o <a href="#">iniciar sesión</a>.
                     </p>
@@ -86,13 +142,11 @@
                         <div class="col-md-6">
                             <label class="form-label">Apellido materno *</label>
                             <input type="text" class="form-control " placeholder="Ej: Salas">
-
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Correo electrónico *</label>
                             <input type="email" class="form-control" placeholder="Ej: correo@dominio.com">
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Tipo de documento</label>
                             <select class="form-select">
@@ -101,12 +155,10 @@
                                 <option>Pasaporte</option>
                             </select>
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Nro. de documento *</label>
                             <input type="text" class="form-control" placeholder="Ej: 12345678">
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Celular *</label>
                             <input type="text" class="form-control" placeholder="Ej: 999 000 000">
@@ -132,8 +184,6 @@
                             <option>Av. México 156, Ica 11002, La Tinguiña</option>
                         </select>
                     </div>
-
-
 
                     <h6 class="d-flex align-items-center">
                         <i class="bi bi-receipt-cutoff text-primary me-2"></i> Solicita un comprobante de pago
@@ -162,15 +212,15 @@
                         </div>
                     </div>
 
-
                     <div class="alert alert-light border mt-4 text-center">
-                        <img src="https://images.ctfassets.net/l9x8e72nkkav/494Fyn6il5sHcMjjd0928N/59a8b7ea6202d5d6a06277a935955079/PagaSeguro-mifarma-bx2beneficos-web__1_.jpg" alt="Banner Confianza" class="img-fluid">
+                        <img src="https://images.ctfassets.net/l9x8e72nkkav/494Fyn6il5sHcMjjd0928N/59a8b7ea6202d5d6a06277a935955079/PagaSeguro-mifarma-bx2beneficos-web__1_.jpg"
+                            alt="Banner Confianza" class="img-fluid">
                     </div>
 
                     <h6 class="mt-4">Comprueba tus datos antes de finalizar tu compra</h6>
                     <ul class="list-unstyled small">
                         <li>📄 Datos personales: -</li>
-                        <li>🏥 Despachado por: BoticaMyryan</li>
+                        <li>🏥 Despachado por: Botica Mirian</li>
                         <li>🚚 Tipo de entrega: -</li>
                         <li>🕒 Fecha y hora de entrega: -</li>
                         <li>💳 Comprobante de pago: </li>
@@ -185,6 +235,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Resumen de pedido -->
             <div class="col-md-4">
                 <div class="summary-box">
@@ -192,26 +243,26 @@
                     <hr>
 
                     @php
-                    $carrito = session('carrito', []);
-                    $total = 0;
+                        $carrito = session('carrito', []);
+                        $total = 0;
                     @endphp
 
                     @forelse ($carrito as $item)
-                    @php
-                    $subtotal = $item['precio'] * $item['cantidad'];
-                    $total += $subtotal;
-                    @endphp
-                    <div class="d-flex mb-3">
-                        <img src="{{ $item['imagen'] ?? 'https://via.placeholder.com/60' }}" class="me-2" style="width: 60px; height: 60px; object-fit: contain;">
-                        <div>
-                            <strong class="d-block">{{ $item['nombre'] }}</strong>
-                            <small class="text-muted">{{ $item['presentacion'] ?? '' }}</small><br>
-                            <small class="text-muted">Cantidad: {{ $item['cantidad'] }}</small>
-                            <div class="text-danger fw-semibold">S/ {{ number_format($subtotal, 2) }}</div>
+                        @php
+                            $subtotal = $item['precio'] * $item['cantidad'];
+                            $total += $subtotal;
+                        @endphp
+                        <div class="d-flex mb-3">
+                            <img src="{{ $item['imagen'] ?? 'https://via.placeholder.com/60' }}" class="me-2" style="width: 60px; height: 60px; object-fit: contain;">
+                            <div>
+                                <strong class="d-block">{{ $item['nombre'] }}</strong>
+                                <small class="text-muted">{{ $item['presentacion'] ?? '' }}</small><br>
+                                <small class="text-muted">Cantidad: {{ $item['cantidad'] }}</small>
+                                <div class="text-danger fw-semibold">S/ {{ number_format($subtotal, 2) }}</div>
+                            </div>
                         </div>
-                    </div>
                     @empty
-                    <p class="text-muted">No hay productos en el carrito.</p>
+                        <p class="text-muted">No hay productos en el carrito.</p>
                     @endforelse
 
                     <hr>
@@ -225,31 +276,25 @@
                         <span class="text-danger fw-bold">S/ {{ number_format($total, 2) }}</span>
                     </div>
 
-                    <form action="#" method="POST" class="mt-3">
+                    <form action="#" method="POST" class="mt-4">
                         @csrf
                         <button type="submit" class="btn btn-danger w-100">Comprar ahora</button>
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Bootstrap Icons (opcional si ya los usas) -->
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggle = document.getElementById('toggleFactura');
+            const fields = document.getElementById('facturaFields');
 
-
-
-
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    const toggle = document.getElementById('toggleFactura');
-                    const fields = document.getElementById('facturaFields');
-
-                    toggle.addEventListener('change', function() {
-                        fields.style.display = this.checked ? 'block' : 'none';
-                    });
-                });
-            </script>
-
+            toggle.addEventListener('change', function () {
+                fields.style.display = this.checked ? 'block' : 'none';
+            });
+        });
+    </script>
 </body>
 
 </html>

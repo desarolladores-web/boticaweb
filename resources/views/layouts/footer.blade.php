@@ -22,7 +22,8 @@
               </div>
               <div class="about-text footer-item-content text-white">
                 <p>
-                  <b>Botica Myryan ofrece atención personalizada, orientación confiable y productos de calidad, priorizando la salud como su mayor valor.</b>
+                  <b>Botica Myryan ofrece atención personalizada, orientación confiable y productos de calidad,
+                    priorizando la salud como su mayor valor.</b>
                 </p>
               </div>
             </div>
@@ -61,7 +62,7 @@
                   </div>
                   <ul class="footer-item-center social-icons">
                     <li><a href="https://www.facebook.com/share/1C77FGP1bi/"><i class="bi bi-facebook"></i></a></li>
-                    
+
                   </ul>
                 </div>
               </div>
@@ -76,17 +77,17 @@
               <a href="" target="_blank"></a>. - R.U.C. N° 20608430301
               <span class="copyright-text"> |
                 <a href="/" class="ms-2" target="_blank"></a>
-                &copy;2025 Botica Mirian Todos los derechos 
+                &copy;2025 Botica Mirian Todos los derechos
               </span>
             </div>
           </div>
           <div class="col-md-6">
             <div class="payment-icon">
-              <img src="imagenes/payment/1.png" class="img-fluid" alt="Payment Icon">
-              <img src="imagenes/payment/2.png" class="img-fluid" alt="Payment Icon">
-              <img src="imagenes/payment/3.png" class="img-fluid" alt="Payment Icon">
-              <img src="imagenes/payment/4.png" class="img-fluid" alt="Payment Icon">
-              <img src="imagenes/payment/5.png" class="img-fluid" alt="Payment Icon">
+              <img src="{{ asset('imagenes/payment/1.png') }}" class="img-fluid" alt="Payment Icon">
+              <img src="{{ asset('imagenes/payment/2.png') }}" class="img-fluid" alt="Payment Icon">
+              <img src="{{ asset('imagenes/payment/3.png') }}" class="img-fluid" alt="Payment Icon">
+              <img src="{{ asset('imagenes/payment/4.png') }}" class="img-fluid" alt="Payment Icon">
+              <img src="{{ asset('imagenes/payment/5.png') }}" class="img-fluid" alt="Payment Icon">
             </div>
           </div>
         </div>
@@ -121,19 +122,18 @@
   }
 
   .footer-item-content li {
-  list-style: none;
-}
+    list-style: none;
+  }
 
-.footer-item-content li a {
-  color: white;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: color 0.3s ease;
-}
+  .footer-item-content li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
 
-.footer-item-content li a:hover {
-  color: #cccccc;
-  text-decoration: none;
-}
-
+  .footer-item-content li a:hover {
+    color: #cccccc;
+    text-decoration: none;
+  }
 </style>

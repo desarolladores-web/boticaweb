@@ -44,6 +44,7 @@ Route::post('/carrito/actualizar/{id}', [CartController::class, 'actualizar'])->
 
 Route::resource('ventas', VentaController::class);
 
+
 Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito.ver');
 
 // Perfil del usuario (restringido a usuarios autenticados)

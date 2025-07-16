@@ -34,6 +34,7 @@
 </head>
 
 <body>
+
     <div id="app">
         <!-- Header Section -->
         <header id="appHeader">

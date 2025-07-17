@@ -62,11 +62,12 @@
       <div class="col-12 col-lg-9">
         <div class="account-card-box addresses-box">
           <!-- Mensajes de éxito y error -->
-          @if (session('success'))
+           
+          <!--@if (session('success'))
             <div class="alert alert-success mt-4">
               {{ session('success') }}
             </div>
-          @endif
+          @endif-->
           @if (session('error'))
             <div class="alert alert-danger mt-4">
               {{ session('error') }}

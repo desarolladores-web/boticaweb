@@ -174,25 +174,25 @@
                       </a>
 
 
-                      @else
-                      {{-- Mostrar controles de cantidad y botón agregar --}}
-                      <div class="input-group product-qty">
-                        <span class="input-group-btn">
-                          <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
-                            <svg width="13" height="13">
-                              <use xlink:href="#minus"></use>
-                            </svg>
-                          </button>
-                        </span>
-                        <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
-                        <span class="input-group-btn">
-                          <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
-                            <svg width="16" height="16">
-                              <use xlink:href="#plus"></use>
-                            </svg>
-                          </button>
-                        </span>
-                      </div>
+                        @else
+                        {{-- Mostrar controles de cantidad y botón agregar --}}
+                        <div class="input-group product-qty">
+                          <span class="input-group-btn">
+                            <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
+                              <svg width="13" height="13">
+                                <use xlink:href="#minus"></use>
+                              </svg>
+                            </button>
+                          </span>
+                          <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
+                          <span class="input-group-btn">
+                            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
+                              <svg width="16" height="16">
+                                <use xlink:href="#plus"></use>
+                              </svg>
+                            </button>
+                          </span>
+                        </div>
 
                       <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}" class="agregar-carrito-form">
                         @csrf

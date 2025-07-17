@@ -1,128 +1,236 @@
 <!DOCTYPE html>
+<!-- Coding by CodingNepal || www.codingnepalweb.com -->
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-  @vite(['resources/css/admin.css'])
- 
-  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <title>Side Navigation Bar in HTML CSS JavaScript</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Sidebar -->
-  <nav class="sidebar close">
-    <header>
-      <div class="image-text">
-        <span class="image">
-          <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> 
-        </span>
-       <div class="text logo-text" style="position: absolute; left: 100px;">
-  <span class="name">Botica</span>
-  <span class="profession">Mirian</span>
-</div>
+    @vite(['resources/css/admin.css'])
+  </head>
+  <body>
+    <!-- navbar -->
+    <nav class="navbar">
+      <div class="logo_item">
+        <i class="bx bx-menu" id="sidebarOpen"></i>
+        <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> Botica Myryan
+      </div>
+      <div class="search_bar">
+        <input type="text" placeholder="Search" />
+      </div>
+      <div class="navbar_content">
+        <i class="bi bi-grid"></i>
+        <i class='bx bx-sun' id="darkLight"></i>
+        <i class='bx bx-bell'></i>
+
+        @auth
+  @if(Auth::user()->imagen)
+    <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
+         alt="Avatar"
+         class="profile rounded-circle"
+         style="width: 40px; height: 40px; object-fit: cover; border-radius: 0%;" />
+  @else
+    <i class="bi bi-person-circle"
+       style="font-size: 1.8rem; color: #555; width: 50px; height: 50px; border-radius: 0%; display: inline-block;"></i>
+  @endif
+@endauth
 
       </div>
-      <i class='bx bx-chevron-right toggle'></i>
-    </header>
+    </nav>
 
-    <div class="menu-bar">
-      <div class="menu">
-       
-  
-        <ul class="menu-links">
-          <li class="nav-link">
-            <a href="{{ route('admin.dashboard') }}"><i class='bx bx-home-alt icon'></i><span class="text nav-text">Dashboard</span></a>
-          </li>
-          <li class="nav-link">
-            <a href="{{ route('productos.index') }}"><i class='bx bx-package icon'></i><span class="text nav-text">Productos</span></a>
-          </li>
-          <li class="nav-link">
-            <a href="#"><i class='bx bx-bell icon'></i><span class="text nav-text">Notificaciones</span></a>
-          </li>
-          <li class="nav-link">
-            <a href="#"><i class='bx bx-pie-chart-alt icon'></i><span class="text nav-text">Analytics</span></a>
-          </li>
-        <li class="nav-link">
-  <a href="{{ route('empleados.create') }}">
-    <i class='bx bx-user-plus icon'></i>
-    <span class="text nav-text">Crear Empleados</span>
-  </a>
-</li>
+    <!-- Contenedor principal con sidebar y contenido -->
+    <div style="display: flex;">
+    
+      <nav class="sidebar">
+        <div class="menu_content">
+          <ul class="menu_items">
+            <div class="menu_title menu_dahsboard"></div>
+            <!-- start -->
+            <li class="item">
+              <div href="#" class="nav_link submenu_item">
+                <span class="navlink_icon">
+                  <i class="bx bx-home-alt"></i>
+                </span>
+                <span class="navlink">Home</span>
+                <i class="bx bx-chevron-right arrow-left"></i>
+              </div>
+              <ul class="menu_items submenu">
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+              </ul>
+            </li>
+            <!-- end -->
+            <li class="item">
+              <div href="#" class="nav_link submenu_item">
+                <span class="navlink_icon">
+                  <i class="bx bx-grid-alt"></i>
+                </span>
+                <span class="navlink">Overview</span>
+                <i class="bx bx-chevron-right arrow-left"></i>
+              </div>
+              <ul class="menu_items submenu">
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+              </ul>
+            </li>
+          </ul>
+          <hr class="hr-rojo">
 
-          <li class="nav-link">
-            <a href="#"><i class='bx bx-wallet icon'></i><span class="text nav-text">Wallets</span></a>
-          </li>
-        </ul>
-      </div>
 
-      <div class="bottom-content">
-        <li>
-          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-          </form>
-          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class='bx bx-log-out icon'></i>
-            <span class="text nav-text">Logout</span>
-          </a>
-        </li>
 
-        <li class="mode">
-          <div class="sun-moon">
-            <i class='bx bx-moon icon moon'></i>
-            <i class='bx bx-sun icon sun'></i>
+
+          <ul class="menu_items">
+          
+
+            <div class="menu_title menu_editor"></div>
+            <li class="item">
+              <a href="{{ route('productos.index') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-package icon"></i>
+                </span>
+                <span class="navlink">Productos</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="{{ route('empleados.create') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-user-plus ico"></i>
+                </span>
+                <span class="navlink">Crear Empleados</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-filter"></i>
+                </span>
+                <span class="navlink">Filter</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="#" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-cloud-upload"></i>
+                </span>
+                <span class="navlink">Upload new</span>
+              </a>
+            </li>
+          </ul>
+          <hr class="hr-rojo">
+          <ul class="menu_items">
+            <div class="menu_title menu_setting"></div>
+            <li class="item">
+              <a href="#" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-flag"></i>
+                </span>
+                <span class="navlink">Notice board</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="#" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-medal"></i>
+                </span>
+                <span class="navlink">Award</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="#" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-cog"></i>
+                </span>
+                <span class="navlink">Setting</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="#" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-layer"></i>
+                </span>
+                <span class="navlink">Features</span>
+              </a>
+            </li>
+          </ul>
+
+          <div class="bottom_content">
+            <div class="bottom expand_sidebar">
+              <span> Expand</span>
+              <i class='bx bx-log-in'></i>
+            </div>
+            <div class="bottom collapse_sidebar">
+              <span> Collapse</span>
+              <i class='bx bx-log-out'></i>
+            </div>
           </div>
-          <span class="mode-text text">Dark mode</span>
-          <div class="toggle-switch"><span class="switch"></span></div>
-        </li>
+        </div>
+      </nav>
+
+      <!-- Contenido dinámico -->
+      <div class="content p-4" style="margin-top: 80px; margin-left: 250px; flex: 1;">
+        @yield('content')
       </div>
     </div>
-  </nav>
 
-  <!-- Main container: navbar + content -->
-  <div class="main-container">
-    <!-- Navbar -->
-    <div class="top-navbar">
-      <h5 class="mb-0 fw-bold text-dark">Panel de Administrador</h5>
-      <li class="search-box">
-          <i class='bx bx-search icon'></i>
-          <input type="text" placeholder="Search..." />
-        </li>
-      <!-- Puedes agregar aquí el contenido del navbar si deseas -->
-    </div>
+    <!-- JavaScript -->
+    <script>
+      const body = document.querySelector("body");
+      const darkLight = document.querySelector("#darkLight");
+      const sidebar = document.querySelector(".sidebar");
+      const submenuItems = document.querySelectorAll(".submenu_item");
+      const sidebarOpen = document.querySelector("#sidebarOpen");
+      const sidebarClose = document.querySelector(".collapse_sidebar");
+      const sidebarExpand = document.querySelector(".expand_sidebar");
 
-    <!-- Contenido principal -->
-    <div class="content p-4">
-  @yield('content')
-</div>
-  </div>
-
-  <!-- Script -->
-  <script>
-    const body = document.querySelector('body'),
-          sidebar = document.querySelector('nav.sidebar'),
-          toggles = document.querySelectorAll(".toggle"),
-          searchBtn = document.querySelector(".search-box"),
-          modeSwitch = document.querySelector(".toggle-switch"),
-          modeText = document.querySelector(".mode-text");
-
-    toggles.forEach(toggle => {
-      toggle.addEventListener("click", () => {
-        sidebar.classList.toggle("close");
-        document.querySelector('.main-container').classList.toggle('collapsed');
+      sidebarOpen.addEventListener("click", () => sidebar.classList.toggle("close"));
+      sidebarClose.addEventListener("click", () => {
+        sidebar.classList.add("close", "hoverable");
       });
-    });
-
-    searchBtn.addEventListener("click", () => {
-      sidebar.classList.remove("close");
-    });
-
-    modeSwitch.addEventListener("click", () => {
-      body.classList.toggle("dark");
-      modeText.innerText = body.classList.contains("dark") ? "Light mode" : "Dark mode";
-    });
-  </script>
-
-</body>
+      sidebarExpand.addEventListener("click", () => {
+        sidebar.classList.remove("close", "hoverable");
+      });
+      sidebar.addEventListener("mouseenter", () => {
+        if (sidebar.classList.contains("hoverable")) {
+          sidebar.classList.remove("close");
+        }
+      });
+      sidebar.addEventListener("mouseleave", () => {
+        if (sidebar.classList.contains("hoverable")) {
+          sidebar.classList.add("close");
+        }
+      });
+      darkLight.addEventListener("click", () => {
+        body.classList.toggle("dark");
+        if (body.classList.contains("dark")) {
+          darkLight.classList.replace("bx-sun", "bx-moon");
+        } else {
+          darkLight.classList.replace("bx-moon", "bx-sun");
+        }
+      });
+      submenuItems.forEach((item, index) => {
+        item.addEventListener("click", () => {
+          item.classList.toggle("show_submenu");
+          submenuItems.forEach((item2, index2) => {
+            if (index !== index2) {
+              item2.classList.remove("show_submenu");
+            }
+          });
+        });
+      });
+      if (window.innerWidth < 768) {
+        sidebar.classList.add("close");
+      } else {
+        sidebar.classList.remove("close");
+      }
+    </script>
+  </body>
 </html>

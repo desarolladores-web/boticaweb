@@ -139,6 +139,9 @@
             <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
                 <i class="bi bi-person me-2"></i> Panel Admin
             </a>
+            <a class="dropdown-item" href="{{ route('account.edit') }}">
+                <i class="bi bi-person me-2"></i> EDITAR
+            </a>
         @else
             <!-- Usuario normal -->
             <a class="dropdown-item" href="{{ route('account.edit') }}">

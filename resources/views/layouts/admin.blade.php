@@ -10,38 +10,63 @@
     <link rel="stylesheet" href="style.css" />
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 
     @vite(['resources/css/admin.css'])
   </head>
   <body>
-    <!-- navbar -->
-    <nav class="navbar">
-      <div class="logo_item">
-        <i class="bx bx-menu" id="sidebarOpen"></i>
-        <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> Botica Myryan
-      </div>
-      <div class="search_bar">
-        <input type="text" placeholder="Search" />
-      </div>
-      <div class="navbar_content">
-        <i class="bi bi-grid"></i>
-        <i class='bx bx-sun' id="darkLight"></i>
-        <i class='bx bx-bell'></i>
+<!-- navbar -->
+<nav class="navbar">
+  <!-- Logo e ícono de menú -->
+  <div class="logo_item">
+    <i class="bx bx-menu" id="sidebarOpen"></i>
+    <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> Botica Myryan
+  </div>
 
-        @auth
-  @if(Auth::user()->imagen)
-    <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
-         alt="Avatar"
-         class="profile rounded-circle"
-         style="width: 40px; height: 40px; object-fit: cover; border-radius: 0%;" />
-  @else
-    <i class="bi bi-person-circle"
-       style="font-size: 1.8rem; color: #555; width: 50px; height: 50px; border-radius: 0%; display: inline-block;"></i>
-  @endif
-@endauth
+  <!-- Barra de búsqueda -->
+  <div class="search_bar">
+    <input type="text" placeholder="Search" />
+  </div>
 
-      </div>
-    </nav>
+  <!-- Contenido del navbar -->
+  <div class="navbar_content">
+    
+    <i class='bx bx-sun' id="darkLight"></i>
+    <i class='bx bx-bell'></i>
+
+    @auth
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+         id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+        @if(Auth::user()->imagen)
+          <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
+               alt="Avatar"
+               class="rounded-circle"
+               style="width: 40px; height: 40px; object-fit: cover;" />
+        @else
+          <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #555;"></i>
+        @endif
+      </a>
+
+      <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
+        <li>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+            @csrf
+            <button type="submit" class="dropdown-item">
+              <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    @endauth
+
+  </div>
+</nav>
+
+
 
     <!-- Contenedor principal con sidebar y contenido -->
     <div style="display: flex;">
@@ -180,6 +205,7 @@
         @yield('content')
       </div>
     </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- JavaScript -->
     <script>

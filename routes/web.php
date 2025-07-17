@@ -6,7 +6,7 @@ use App\Http\Controllers\WelcomeController;
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\VentaController;
-
+use App\Http\Controllers\InformacionController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
@@ -66,3 +66,8 @@ Route::middleware(['auth'])->group(function () {
     // Ruta para actualizar la contraseña
     Route::put('/account/password/update', [ProfileController::class, 'updatePassword'])->name('account.password.update');
 });
+
+//INFORMACION 
+Route::get('/quienes-somos', [InformacionController::class, 'quienesSomos'])->name('quienes.somos');
+Route::get('/consejos', [InformacionController::class, 'consejos'])->name('consejos');
+

@@ -296,7 +296,7 @@ body.dark {
   font-weight: 450;
 }
 .custom-shadow {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15) ;
 }
 .d-flex  button {
   background-color: #ff0000; /* Color de fondo del botón */

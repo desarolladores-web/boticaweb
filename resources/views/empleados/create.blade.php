@@ -2,36 +2,90 @@
 
 @section('content')
 <div class="container mt-4">
-    <h3>Registrar Nuevo Empleado</h3>
+    <h3 class="fw-semibold">Registrar Nuevo Empleado</h3>
 
-    @if(session('success'))
+<!--@if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    @endif -->
 
-    <form method="POST" action="{{ route('empleados.store') }}">
-        @csrf
+    <!-- Contenedor con sombra y bordes redondeados -->
+    <div class="card shadow p-4 mt-3 rounded-4 custom-shadow">
+        <form method="POST" action="{{ route('empleados.store') }}">
+            @csrf
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nombre</label>
-            <input type="text" name="name" class="form-control" required>
-        </div>
+            <!-- Nombre -->
+            <div class="form-floating mb-3">
+                <input
+                    type="text"
+                    class="form-control styled-input"
+                    id="name"
+                    name="name"
+                    placeholder="Nombre"
+                >
+                <label for="name">Nombre</label>
+            </div>
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Correo</label>
-            <input type="email" name="email" class="form-control" required>
-        </div>
+            <!-- Email -->
+            <div class="form-floating mb-3">
+                <input
+                    type="email"
+                    class="form-control styled-input"
+                    id="email"
+                    name="email"
+                    placeholder="Correo"
+                >
+                <label for="email">Correo</label>
+            </div>
 
-        <div class="mb-3">
-            <label for="password" class="form-label">Contraseña</label>
-            <input type="password" name="password" class="form-control" required>
-        </div>
+            <!-- Contraseña -->
+            <div class="form-floating mb-3">
+                <input
+                    type="password"
+                    class="form-control styled-input"
+                    id="password"
+                    name="password"
+                    placeholder="Contraseña"
+                >
+                <label for="password">Contraseña</label>
+            </div>
 
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
-            <input type="password" name="password_confirmation" class="form-control" required>
-        </div>
+            <!-- Confirmar contraseña -->
+            <div class="form-floating mb-4">
+                <input
+                    type="password"
+                    class="form-control styled-input"
+                    id="password_confirmation"
+                    name="password_confirmation"
+                    placeholder="Confirmar Contraseña"
+                >
+                <label for="password_confirmation">Confirmar Contraseña</label>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Crear Empleado</button>
-    </form>
+            <!-- Botón -->
+            <div class="d-flex ">
+                <button type="submit"  >
+                    Crear Cuenta
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+     document.addEventListener("DOMContentLoaded", function () {
+    @if(session('success'))
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: '{{ session('success') }}',
+        confirmButtonColor: '#198754', // verde Bootstrap
+        background: '#f0f8ff',          // color de fondo suave (opcional)
+        color: '#000',                  // texto en negro
+        timer: 2500,
+        showConfirmButton: false,
+        position: 'center'              // 👈 Esto asegura que sea centrado
+      });
+    @endif
+  });
+</script>

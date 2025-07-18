@@ -2,8 +2,12 @@
 <!-- Coding by CodingNepal || www.codingnepalweb.com -->
 <html lang="en">
   <head>
+    <!-- Tailwind CDN -->
+
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
     <!-- Boxicons CSS -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <title>Side Navigation Bar in HTML CSS JavaScript</title>
@@ -207,6 +211,7 @@
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+
     <!-- JavaScript -->
     <script>
       const body = document.querySelector("body");
@@ -259,4 +264,5 @@
       }
     </script>
   </body>
+  
 </html>

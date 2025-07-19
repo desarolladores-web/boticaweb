@@ -142,62 +142,96 @@
     </div> <!-- /.row -->
 </div> <!-- /.container -->
 
-        <div class="form-group mb-3">
-            <label for="imagen">Imagen</label>
-            <input type="file" name="imagen" class="form-control @error('imagen') is-invalid @enderror" accept="image/*">
-            {!! $errors->first('imagen', '<div class="invalid-feedback">:message</div>') !!}
-        </div>
+<div class="container-fluid">
+  <div class="row">
+    <!-- 🟦 Columna izquierda -->
+    <div class="col-md-6">
+      <div class="card mb-3 shadow-sm p-3">
+        <div class="card-body">
 
-        @if(isset($producto) && $producto->imagen)
-        <div class="mb-3">
-            <p>Imagen actual:</p>
-            <img src="{{ asset('storage/' . $producto->imagen) }}" width="150" alt="Imagen actual">
-        </div>
-        @endif
-        <div class="row">
-        <!-- Columna izquierda -->
-        <div class="col-md-6">
-            <div class="card mb-1 shadow-sm">
-        
-                <div class="card-body">
-        <div class="form-floating mb-3">
-            <input list="categorias" name="categoria_nombre" class="form-control styled-input @error('categoria_nombre') is-invalid @enderror" value="{{ old('categoria_nombre', $producto->categoria->nombre ?? '') }}" placeholder="Categoría">
+          <!-- Categoría -->
+          <div class="form-floating mb-3">
+            <input list="categorias" name="categoria_nombre" class="form-control styled-input @error('categoria_nombre') is-invalid @enderror" 
+              value="{{ old('categoria_nombre', $producto->categoria->nombre ?? '') }}" placeholder="Categoría">
             <datalist id="categorias">
-                @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->nombre }}">
-                @endforeach
+              @foreach ($categorias as $categoria)
+                <option value="{{ $categoria->nombre }}">
+              @endforeach
             </datalist>
-            {!! $errors->first('categoria_nombre', '<div class="invalid-feedback">:message</div>') !!}
             <label for="categoria_nombre">Categoría</label>
-        </div>
+            {!! $errors->first('categoria_nombre', '<div class="invalid-feedback">:message</div>') !!}
+          </div>
 
-        <div class="form-floating mb-3">
-            <input list="laboratorios" name="laboratorio_nombre" class="form-control styled-input @error('laboratorio_nombre') is-invalid @enderror" value="{{ old('laboratorio_nombre', $producto->laboratorio->nombre_laboratorio ?? '') }}" placeholder="Laboratorio">
+          <!-- Laboratorio -->
+          <div class="form-floating mb-3">
+            <input list="laboratorios" name="laboratorio_nombre" class="form-control styled-input @error('laboratorio_nombre') is-invalid @enderror" 
+              value="{{ old('laboratorio_nombre', $producto->laboratorio->nombre_laboratorio ?? '') }}" placeholder="Laboratorio">
             <datalist id="laboratorios">
-                @foreach ($laboratorios as $lab)
-                    <option value="{{ $lab->nombre_laboratorio }}">
-                @endforeach
+              @foreach ($laboratorios as $lab)
+                <option value="{{ $lab->nombre_laboratorio }}">
+              @endforeach
             </datalist>
-            {!! $errors->first('laboratorio_nombre', '<div class="invalid-feedback">:message</div>') !!}
             <label for="laboratorio_nombre">Laboratorio</label>
-        </div>
+            {!! $errors->first('laboratorio_nombre', '<div class="invalid-feedback">:message</div>') !!}
+          </div>
 
-        <div class="form-floating mb-3">
-            <input list="presentaciones" name="presentacion_tipo" class="form-control styled-input @error('presentacion_tipo') is-invalid @enderror" value="{{ old('presentacion_tipo', $producto->presentacion->tipo_presentacion ?? '') }}" placeholder="Presentación">
+          <!-- Presentación -->
+          <div class="form-floating mb-3">
+            <input list="presentaciones" name="presentacion_tipo" class="form-control styled-input @error('presentacion_tipo') is-invalid @enderror" 
+              value="{{ old('presentacion_tipo', $producto->presentacion->tipo_presentacion ?? '') }}" placeholder="Presentación">
             <datalist id="presentaciones">
-                @foreach ($presentaciones as $pres)
-                    <option value="{{ $pres->tipo_presentacion }}">
-                @endforeach
+              @foreach ($presentaciones as $pres)
+                <option value="{{ $pres->tipo_presentacion }}">
+              @endforeach
             </datalist>
-            {!! $errors->first('presentacion_tipo', '<div class="invalid-feedback">:message</div>') !!}
             <label for="presentacion_tipo">Presentación</label>
+            {!! $errors->first('presentacion_tipo', '<div class="invalid-feedback">:message</div>') !!}
+          </div>
+
         </div>
+      </div>
     </div>
 
-    <div class="col-12 mt-3">
-        <button type="submit" class="btn btn-primary">Guardar</button>
+    <!-- 🟩 Columna derecha -->
+    <div class="col-md-6">
+      <div class="card mb-3 shadow-sm p-3">
+        <div class="card-body">
+
+          <!-- Formulario de carga de imagen -->
+          <form class="file-upload-form">
+            <label for="file" class="file-upload-label">
+              <div class="file-upload-text">
+                <svg viewBox="0 0 640 512">
+                  <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8..."></path>
+                </svg>
+                <p>Drag and Drop</p>
+                <p>or</p>
+                <span class="browse-button">Browse file</span>
+              </div>
+              <input id="file" type="file" name="imagen" accept="image/*" onchange="previewImage(event)">
+              <img id="preview" class="file-upload-preview" alt="Vista previa" />
+            </label>
+          </form>
+
+          <!-- Mostrar imagen actual -->
+          @if(isset($producto) && $producto->imagen)
+            <div class="img-preview mt-3 text-center">
+              <p>Imagen actual:</p>
+              <img src="{{ asset('storage/' . $producto->imagen) }}" class="img-thumbnail" style="max-width: 200px;" alt="Imagen actual">
+            </div>
+          @endif
+
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- 🔘 Botón Guardar -->
+  <div class="text-center mt-3">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
 </div>
+
 <!-- Quill CSS y JS -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -218,5 +252,23 @@
     document.querySelector('form').addEventListener('submit', function () {
         document.querySelector('#descripcion').value = quill.root.innerHTML;
     });
+    function previewImage(event) {
+    const fileInput = event.target;
+    const preview = document.getElementById('preview');
+    const text = document.querySelector('.file-upload-text');
+
+    if (fileInput.files && fileInput.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        text.style.display = 'none';
+      };
+
+      reader.readAsDataURL(fileInput.files[0]);
+    }
+  }
+    
 </script>
 

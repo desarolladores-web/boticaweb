@@ -71,21 +71,4 @@
     </div>
 </div>
 @endsection
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-     document.addEventListener("DOMContentLoaded", function () {
-    @if(session('success'))
-      Swal.fire({
-        icon: 'success',
-        title: '¡Éxito!',
-        text: '{{ session('success') }}',
-        confirmButtonColor: '#198754', // verde Bootstrap
-        background: '#f0f8ff',          // color de fondo suave (opcional)
-        color: '#000',                  // texto en negro
-        timer: 2500,
-        showConfirmButton: false,
-        position: 'center'              // 👈 Esto asegura que sea centrado
-      });
-    @endif
-  });
-</script>
+

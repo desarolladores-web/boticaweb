@@ -175,6 +175,6 @@ class ProductoController extends Controller
 
        Excel::import(new ProductosImport, $request->file('archivo_excel'));
 
-      return redirect()->route('productos.index')->with('success', 'Productos importados correctamente.');
+    return redirect()->route('productos.index')->with('success', 'Productos importados correctamente.');
     }
 }

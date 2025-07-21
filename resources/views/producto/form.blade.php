@@ -86,10 +86,7 @@
                         {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
                     </div>
 
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -142,11 +139,14 @@
     </div> <!-- /.row -->
 </div> <!-- /.container -->
 
+
+
 <div class="container-fluid">
   <div class="row">
     <!-- 🟦 Columna izquierda -->
     <div class="col-md-6">
-      <div class="card mb-3 shadow-sm p-3">
+    <div class="card mt-5 mb-3 shadow-sm p-3">
+
         <div class="card-body">
 
           <!-- Categoría -->
@@ -194,24 +194,35 @@
 
     <!-- 🟩 Columna derecha -->
     <div class="col-md-6">
+      
       <div class="card mb-3 shadow-sm p-3">
+      <div class="card-header">
+      <h5 class="mb-0">Imagen del Producto</h5>
+      </div>
         <div class="card-body">
+          
 
           <!-- Formulario de carga de imagen -->
           <form class="file-upload-form">
-            <label for="file" class="file-upload-label">
-              <div class="file-upload-text">
-                <svg viewBox="0 0 640 512">
-                  <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8..."></path>
-                </svg>
-                <p>Drag and Drop</p>
-                <p>or</p>
-                <span class="browse-button">Browse file</span>
-              </div>
-              <input id="file" type="file" name="imagen" accept="image/*" onchange="previewImage(event)">
-              <img id="preview" class="file-upload-preview" alt="Vista previa" />
-            </label>
-          </form>
+  <label for="file" class="file-upload-label">
+    <div class="file-upload-text">
+      <svg viewBox="0 0 640 512">
+        <path
+          d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+        ></path>
+      </svg>
+      <p>Arrastrar y soltar Imagen</p>
+      <p>o</p>
+      <span class="browse-button">Eplorar imagen</span>
+    </div>
+    <input id="file" type="file" name="imagen" accept="image/*" onchange="previewImage(event)">
+    <img id="preview" class="file-upload-preview" alt="Vista previa" />
+  </label>
+  <div style="text-align: center; margin-top: 10px;">
+    <button type="button" class="delete-button" id="deleteBtn" style="display: none;">Eliminar archivo</button>
+  </div>
+</form>
+
 
           <!-- Mostrar imagen actual -->
           @if(isset($producto) && $producto->imagen)
@@ -227,10 +238,11 @@
   </div>
 
   <!-- 🔘 Botón Guardar -->
-  <div class="text-center mt-3">
-    <button type="submit" class="btn btn-primary">Guardar</button>
-  </div>
-</div>
+  <div class="d-flex justify-content-between text-center ">
+                        <button type="button" class="btn btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+
 
 <!-- Quill CSS y JS -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -253,22 +265,29 @@
         document.querySelector('#descripcion').value = quill.root.innerHTML;
     });
     function previewImage(event) {
-    const fileInput = event.target;
+    const input = event.target;
     const preview = document.getElementById('preview');
-    const text = document.querySelector('.file-upload-text');
+    const deleteBtn = document.getElementById('deleteBtn');
 
-    if (fileInput.files && fileInput.files[0]) {
+    if (input.files && input.files[0]) {
       const reader = new FileReader();
-
       reader.onload = function (e) {
         preview.src = e.target.result;
         preview.style.display = 'block';
-        text.style.display = 'none';
+        deleteBtn.style.display = 'inline-block';
       };
-
-      reader.readAsDataURL(fileInput.files[0]);
+      reader.readAsDataURL(input.files[0]);
     }
   }
+
+  document.getElementById('deleteBtn').addEventListener('click', function () {
+    const input = document.getElementById('file');
+    const preview = document.getElementById('preview');
+    input.value = '';
+    preview.src = '';
+    preview.style.display = 'none';
+    this.style.display = 'none';
+  });
     
 </script>
 

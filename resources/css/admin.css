@@ -56,7 +56,7 @@ body.dark {
   column-gap: 10px;
   font-size: 22px;
   font-weight: 500;
-  color: #ff0000;
+  color: #000000;
 }
 .navbar img {
   width: 60px;
@@ -323,10 +323,10 @@ body.dark {
 .file-upload-label {
   cursor: pointer;
   background-color: #f1f1f1;
-  border: 2px dashed #ccc;
+  border: 4px dashed #ccc;
   border-radius: 8px;
   width: 550px;
-  height: 300px;
+  height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -365,4 +365,50 @@ body.dark {
 
 .file-upload-label:hover {
   border-color: #ff0000; 
+}
+.delete-button {
+  background-color: transparent;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 5px;
+}
+.file-upload-preview {
+  max-width: 100%;
+  margin-top: 10px;
+  display: none;
+  border-radius: 8px;
+}
+
+.delete-button {
+  background-color: transparent;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #dc3545;
+  color: white;
+}
+.browse-button {
+  display: inline-block;
+  background-color: #ffffff;        /* Color de fondo */
+  color: #ff0000;                      /* Color del texto */
+  padding: 8px 16px;                /* Espaciado interno */
+  border: 2px solid #ff0000; /* Borde del mismo color del fondo */
+  border-radius: 8px;               /* Bordes redondeados */
+  cursor: pointer;                  /* Cambia el cursor al pasar */
+  transition: background-color 0.3s, color 0.3s; /* Transiciones suaves */
+  font-weight: 500;
+}
+
+.browse-button:hover {
+  background-color: transparent;    /* Fondo transparente al pasar el mouse */
+  color: #ff0000; /* Color del texto cambia */
 }

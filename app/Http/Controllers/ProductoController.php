@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProductoRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductosImport;
 
 class ProductoController extends Controller
 {
@@ -159,5 +161,20 @@ class ProductoController extends Controller
         $producto = Producto::with(['categoria', 'laboratorio', 'presentacion'])->findOrFail($id);
 
         return view('producto.especificaciones', compact('producto'));
+    }
+    public function importarExcel(Request $request)
+    {
+       $request->validate([
+        'archivo_excel' => 'required|file|mimes:xls,xlsx'
+        ]);
+
+      // Verifica si el archivo está presente
+        if (!$request->hasFile('archivo_excel')) {
+        return back()->withErrors(['archivo_excel' => 'Debe seleccionar un archivo.']);
+        }
+
+       Excel::import(new ProductosImport, $request->file('archivo_excel'));
+
+      return redirect()->route('productos.index')->with('success', 'Productos importados correctamente.');
     }
 }

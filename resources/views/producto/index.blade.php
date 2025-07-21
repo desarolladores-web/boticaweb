@@ -21,6 +21,12 @@
                                   {{ __('Create New') }}
                                 </a>
                               </div>
+                              <form action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="archivo_excel" required>
+    <button type="submit">Importar</button>
+</form>
+                              
                         </div>
                     </div>
                     @if ($message = Session::get('success'))
@@ -80,6 +86,7 @@
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
                                                 </form>
+       
                                             </td>
                                         </tr>
                                     @endforeach

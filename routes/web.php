@@ -71,3 +71,4 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/quienes-somos', [InformacionController::class, 'quienesSomos'])->name('quienes.somos');
 Route::get('/consejos', [InformacionController::class, 'consejos'])->name('consejos');
 
+Route::post('/productos/importar', [ProductoController::class, 'importar'])->name('productos.importar');

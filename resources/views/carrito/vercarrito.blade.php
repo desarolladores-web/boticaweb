@@ -104,7 +104,35 @@
                     <strong class="text-success">S/ {{ number_format($total, 2) }}</strong>
                 </div>
 
-                <a href="{{ route('ventas.create', ['total' => $total]) }}" class="btn btn-danger rounded-pill w-100 mt-3">Comprar ahora</a>
+
+                <button type="button" class="btn btn-danger rounded-pill mt-3 w-100" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                    Comprar ahora
+                </button>
+                <!-- MODAL: ¿Iniciar sesión o continuar como invitado? -->
+                <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content p-3">
+                            <div class="modal-header border-0">
+                                <h5 class="modal-title" id="checkoutModalLabel">¿Cómo deseas continuar?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <p>Para finalizar tu compra, puedes iniciar sesión o continuar sin cuenta.</p>
+                                <div class="d-grid gap-2">
+                                    <a href="{{ route('login') }}" class="btn btn-outline-primary">
+                                        <i class="bi bi-person-circle me-2"></i> Iniciar sesión / Registrarse
+                                    </a>
+                                    <a href="{{ route('ventas.create', ['total' => $total]) }}" class="btn btn-primary">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Continuar sin cuenta
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
     </div>

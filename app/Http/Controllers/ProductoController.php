@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductosImport;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
+
 
 
 class ProductoController extends Controller
@@ -183,16 +187,30 @@ class ProductoController extends Controller
 
         return view('producto.especificaciones', compact('producto'));
     }
- // Importar productos desde Excel
 public function importar(Request $request)
 {
     $request->validate([
-        'archivo' => 'required|file|mimes:xlsx,xls',
+        'archivo' => 'required|mimes:xlsx,xls'
     ]);
 
-    Excel::import(new ProductosImport, $request->file('archivo'));
+    $file = $request->file('archivo');
 
-    return redirect()->back()->with('success', 'Productos importados correctamente.');
+    // Definir carpeta y nombre del archivo
+    $folder = 'temp';
+    $fileName = time() . '_' . $file->getClientOriginalName();
+
+    // Ruta completa de la carpeta en el disco local
+    $folderPath = storage_path('app/' . $folder);
+
+    
+
+    // Guardar el archivo
+    $filePath = $file->storeAs($folder, $fileName, 'local');
+
+    // Ejecutar la importación desde Excel
+    Excel::import(new ProductosImport, storage_path('app/' . $filePath));
+
+    return redirect()->back()->with('success', 'Importación completada.');
 }
 
 }

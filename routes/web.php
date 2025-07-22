@@ -74,3 +74,4 @@ Route::get('/consejos', [InformacionController::class, 'consejos'])->name('conse
 Route::post('/productos/importar', [ProductoController::class, 'importar'])->name('productos.importar');
 
 
+Route::get('/productos-filtro', [ProductoController::class, 'vistaConFiltro'])->name('productos.filtro');

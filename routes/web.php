@@ -72,3 +72,5 @@ Route::get('/quienes-somos', [InformacionController::class, 'quienesSomos'])->na
 Route::get('/consejos', [InformacionController::class, 'consejos'])->name('consejos');
 
 Route::post('/productos/importar', [ProductoController::class, 'importar'])->name('productos.importar');
+
+

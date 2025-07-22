@@ -21,10 +21,16 @@
                                   {{ __('Create New') }}
                                 </a>
                               </div>
-                              <form action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data">
+@if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+<form action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <input type="file" name="archivo_excel" required>
-    <button type="submit">Importar</button>
+    <input type="file" name="archivo" class="form-control" required>
+    <button type="submit" class="btn btn-primary mt-2">
+        <i class="fas fa-file-import"></i> Importar Excel
+    </button>
 </form>
                               
                         </div>

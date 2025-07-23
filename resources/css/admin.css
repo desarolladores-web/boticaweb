@@ -325,8 +325,8 @@ body.dark {
   background-color: #f1f1f1;
   border: 4px dashed #ccc;
   border-radius: 8px;
-  width: 550px;
-  height: 250px;
+  width: 450px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;

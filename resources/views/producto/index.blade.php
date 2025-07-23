@@ -34,7 +34,11 @@
                         </ul>
                     </div>
                 @endif
-
+       <div class="float-right">
+                                <a href="{{ route('productos.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                  {{ __('Create New') }}
+                                </a>
+                              </div>
                 {{-- Formulario de importación --}}
                 <div class="card-body border-bottom">
                    <form action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data">
@@ -109,9 +113,12 @@
                 </div>
 
                 {{-- Paginación --}}
-                <div class="card-footer">
-                    {!! $productos->withQueryString()->links() !!}
-                </div>
+                <div class="card-footer d-flex justify-content-center">
+    <nav>
+        {{ $productos->appends(request()->query())->links('pagination::bootstrap-5') }}
+    </nav>
+</div>
+
 
             </div>
         </div>

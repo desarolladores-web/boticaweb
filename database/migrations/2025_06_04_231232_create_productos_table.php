@@ -31,7 +31,8 @@ return new class extends Migration
 
             $table->date('fecha_vencimiento')->nullable(); // Fecha de vencimiento
 
-            $table->string('imagen', 255)->nullable(); // Imagen del producto
+           
+            $table->binary('imagen')->nullable(); // 👈 Campo binario para imagen
 
             // Relaciones con claves foráneas
             $table->unsignedBigInteger('categoria_id')->nullable();

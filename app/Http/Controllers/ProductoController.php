@@ -32,6 +32,22 @@ class ProductoController extends Controller
         return view('producto.index', compact('productos'))
             ->with('i', ($request->input('page', 1) - 1) * $productos->perPage());
     }
+    public function buscar(Request $request): View
+{
+    $keyword = $request->input('keyword');
+
+    $productos = Producto::query()
+        ->when($keyword, function ($query, $keyword) {
+            $query->where('nombre', 'like', "%{$keyword}%")
+                  ->orWhere('descripcion', 'like', "%{$keyword}%");
+        })
+        ->paginate(12);
+
+    return view('welcome', [
+        'productos' => $productos,
+        'i' => ($request->input('page', 1) - 1) * $productos->perPage()
+    ]);
+}
 
     /**
      * Show the form for creating a new resource.

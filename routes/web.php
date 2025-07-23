@@ -35,6 +35,7 @@ Route::get('/contactanos', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('productos', ProductoController::class);
+Route::get('/buscar-productos', [ProductoController::class, 'buscar'])->name('productos.buscar');
 
 Route::get('/productos/especificaciones/{id}', [ProductoController::class, 'especificaciones'])->name('productos.especificaciones');
 

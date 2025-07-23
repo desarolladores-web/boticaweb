@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductosImport;
 
 
+
 class ProductoController extends Controller
 {
     /**
@@ -163,16 +164,7 @@ class ProductoController extends Controller
 
         return view('producto.especificaciones', compact('producto'));
     }
- // Importar productos desde Excel
-public function importar(Request $request)
-{
-    $request->validate([
-        'archivo' => 'required|file|mimes:xlsx,xls',
-    ]);
 
-    Excel::import(new ProductosImport, $request->file('archivo'));
 
-    return redirect()->back()->with('success', 'Productos importados correctamente.');
-}
 
 }

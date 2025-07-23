@@ -10,6 +10,7 @@ use App\Http\Controllers\InformacionController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductoImportController ;
 
 
 /*
@@ -70,7 +71,4 @@ Route::middleware(['auth'])->group(function () {
 //INFORMACION 
 Route::get('/quienes-somos', [InformacionController::class, 'quienesSomos'])->name('quienes.somos');
 Route::get('/consejos', [InformacionController::class, 'consejos'])->name('consejos');
-
-Route::post('/productos/importar', [ProductoController::class, 'importar'])->name('productos.importar');
-
-
+Route::post('productos/importar', [ProductoImportController::class, 'importarExcel'])->name('productos.importar');

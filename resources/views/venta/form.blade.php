@@ -243,26 +243,26 @@
                     <hr>
 
                     @php
-                        $carrito = session('carrito', []);
-                        $total = 0;
+                    $carrito = session('carrito', []);
+                    $total = 0;
                     @endphp
 
                     @forelse ($carrito as $item)
-                        @php
-                            $subtotal = $item['precio'] * $item['cantidad'];
-                            $total += $subtotal;
-                        @endphp
-                        <div class="d-flex mb-3">
-                            <img src="{{ $item['imagen'] ?? 'https://via.placeholder.com/60' }}" class="me-2" style="width: 60px; height: 60px; object-fit: contain;">
-                            <div>
-                                <strong class="d-block">{{ $item['nombre'] }}</strong>
-                                <small class="text-muted">{{ $item['presentacion'] ?? '' }}</small><br>
-                                <small class="text-muted">Cantidad: {{ $item['cantidad'] }}</small>
-                                <div class="text-danger fw-semibold">S/ {{ number_format($subtotal, 2) }}</div>
-                            </div>
+                    @php
+                    $subtotal = $item['precio'] * $item['cantidad'];
+                    $total += $subtotal;
+                    @endphp
+                    <div class="d-flex mb-3">
+                        <img src="{{ $item['imagen'] ?? 'https://via.placeholder.com/60' }}" class="me-2" style="width: 60px; height: 60px; object-fit: contain;">
+                        <div>
+                            <strong class="d-block">{{ $item['nombre'] }}</strong>
+                            <small class="text-muted">{{ $item['presentacion'] ?? '' }}</small><br>
+                            <small class="text-muted">Cantidad: {{ $item['cantidad'] }}</small>
+                            <div class="text-danger fw-semibold">S/ {{ number_format($subtotal, 2) }}</div>
                         </div>
+                    </div>
                     @empty
-                        <p class="text-muted">No hay productos en el carrito.</p>
+                    <p class="text-muted">No hay productos en el carrito.</p>
                     @endforelse
 
                     <hr>
@@ -278,7 +278,7 @@
 
                     <form action="#" method="POST" class="mt-4">
                         @csrf
-                        <button type="submit" class="btn btn-danger w-100">Comprar ahora</button>
+                        <button type="submit" class="btn btn-danger  w-100">Comprar ahora</button>
                     </form>
                 </div>
             </div>
@@ -286,11 +286,11 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const toggle = document.getElementById('toggleFactura');
             const fields = document.getElementById('facturaFields');
 
-            toggle.addEventListener('change', function () {
+            toggle.addEventListener('change', function() {
                 fields.style.display = this.checked ? 'block' : 'none';
             });
         });

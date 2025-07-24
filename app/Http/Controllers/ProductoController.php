@@ -46,6 +46,7 @@ class ProductoController extends Controller
     return view('welcome', [
         'productos' => $productos,
         'i' => ($request->input('page', 1) - 1) * $productos->perPage()
+        
     ]);
 }
 

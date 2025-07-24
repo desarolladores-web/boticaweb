@@ -63,9 +63,13 @@ public function tipoDocumento()
     return $this->belongsTo(TipoDocumento::class, 'tipo_documento_id');
 }
 
-public function rol()
-{
-    return $this->belongsTo(Rol::class);
-}
+  public function rol()
+    {
+        return $this->belongsTo(Rol::class);
+    }
 
+    public function getIsAdminAttribute()
+    {
+        return $this->rol_id === 1;
+    }
 }

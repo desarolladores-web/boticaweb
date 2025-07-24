@@ -54,12 +54,13 @@ Route::resource('ventas', VentaController::class);
 Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito.ver');
 
 // Perfil del usuario (restringido a usuarios autenticados)
-Route::middleware(['auth'])->group(function () {
-    Route::middleware(['auth', 'admin'])->group(function () {
-        Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-        Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
-        Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
-    });
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::get('/account/edit', [ProfileController::class, 'edit'])->name('account.edit');
+    Route::get('/admin/account/edit', [ProfileController::class, 'edit'])->name('admin.account.edit');
+
+    Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
+    Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
 
     Route::get('/account/edit', [ProfileController::class, 'edit'])->name('account.edit'); // Cambié 'cliente' por 'user'
     Route::put('/account/update', [ProfileController::class, 'update'])->name('account.update'); // Cambié 'cliente' por 'user'
@@ -90,4 +91,4 @@ Route::get('/pago/iniciar', [CheckoutController::class, 'iniciarPago'])->name('c
 Route::get('/pago/exito', [CheckoutController::class, 'pagoExitoso'])->name('checkout.exito');
 Route::get('/pago/fallo', [CheckoutController::class, 'pagoFallido'])->name('checkout.fallo');
 Route::get('/pago/pendiente', [CheckoutController::class, 'pagoPendiente'])->name('checkout.pendiente');
-Route::middleware(['auth', 'admin'])->get('/admin/account/edit', [ProfileController::class, 'edit'])->name('admin.account.edit');
+

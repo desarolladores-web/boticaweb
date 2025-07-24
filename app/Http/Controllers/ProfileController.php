@@ -10,18 +10,17 @@ use App\Models\User; // Cambiado de Cliente a User
 class ProfileController extends Controller
 {
     // Mostrar el formulario de edición del perfil
-    public function edit($section = 'profile')
-    {
-        $user = Auth::user(); // Ahora obtenemos al usuario directamente
+public function edit($section = 'profile')
+{
+    $user = auth()->user();
 
-        // Verificar si el usuario está autenticado
-        if (!$user) {
-            return redirect()->back()->with('error', 'No se encontró el usuario autenticado.');
-        }
-
-        // Pasar la variable 'section' y 'user' a la vista para mostrar el formulario adecuado (perfil o contraseña)
-        return view('account.edit', compact('user', 'section'));
+    if (!$user) {
+        return redirect()->back()->with('error', 'No se encontró el usuario autenticado.');
     }
+
+    return view('account.edit', compact('user', 'section'));
+}
+
 
     // Actualizar perfil del usuario
     public function update(Request $request)

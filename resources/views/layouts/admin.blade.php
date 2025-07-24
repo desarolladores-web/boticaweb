@@ -131,12 +131,12 @@
               </a>
             </li>
             <li class="item">
-              <a href="{{ route('account.edit') }} " class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-filter"></i>
-                </span>
-                <span class="navlink">Editar</span>
-              </a>
+             <a href="{{ route('admin.account.edit') }}" class="nav_link">
+    <span class="navlink_icon">
+        <i class="bx bx-filter"></i>
+    </span>
+    <span class="navlink">Editar</span>
+</a>
             </li>
             <li class="item">
               <a href="#" class="nav_link">

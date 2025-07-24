@@ -135,16 +135,13 @@
                 <div class="col mb-4"> <!-- Añadí 'mb-4' para agregar un margen en la parte inferior de cada tarjeta -->
                   <div class="product-item product-card">
                     <figure>
-                      <a href="{{ route('productos.especificaciones', $producto->id) }}"
-                        title="{{ $producto->nombre }}">
+                     <a href="{{ route('productos.especificaciones', $producto->id) }}" title="{{ $producto->nombre }}">
                         @if($producto->imagen)
-                        <img src="{{ asset('storage/' . $producto->imagen) }}" class="tab-image"
-                          alt="{{ $producto->nombre }}">
+                            <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" class="tab-image" alt="{{ $producto->nombre }}">
                         @else
-                        <img src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="tab-image"
-                          alt="Sin Imagen">
+                            <img src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="tab-image" alt="Sin Imagen">
                         @endif
-                      </a>
+                    </a>
                     </figure>
                     <h3>{{ $producto->nombre }}</h3>
                     <span class="qty">

@@ -7,22 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Producto
  *
- * @property $id
- * @property $codigo
- * @property $nombre
- * @property $descripcion
- * @property $principio_activo
- * @property $pvp1
- * @property $precio_costo_unitario
- * @property $stock
- * @property $stock_min
- * @property $fecha_vencimiento
- * @property $imagen
- * @property $categoria_id
- * @property $laboratorio_id
- * @property $presentacion_id
- * @property $created_at
- * @property $updated_at
+ * @property int $id
+ * @property string $codigo
+ * @property string $nombre
+ * @property string|null $descripcion
+ * @property string|null $principio_activo
+ * @property float $pvp1
+ * @property float $precio_costo_unitario
+ * @property int $stock
+ * @property int $stock_min
+ * @property string|null $fecha_vencimiento
+ * @property string|null $imagen (binario)
+ * @property int|null $categoria_id
+ * @property int|null $laboratorio_id
+ * @property int|null $presentacion_id
+ * @property string|null $created_at
+ * @property string|null $updated_at
  *
  * @property Categoria $categoria
  * @property Laboratorio $laboratorio
@@ -35,7 +35,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Producto extends Model
 {
-
     protected $perPage = 20;
 
     /**
@@ -43,54 +42,53 @@ class Producto extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['codigo', 'nombre', 'descripcion', 'principio_activo', 'pvp1', 'precio_costo_unitario', 'stock', 'stock_min', 'fecha_vencimiento', 'imagen', 'categoria_id', 'laboratorio_id', 'presentacion_id'];
-
+    protected $fillable = [
+        'codigo',
+        'nombre',
+        'descripcion',
+        'principio_activo',
+        'pvp1',
+        'precio_costo_unitario',
+        'stock',
+        'stock_min',
+        'fecha_vencimiento',
+        'imagen', // imagen binaria
+        'categoria_id',
+        'laboratorio_id',
+        'presentacion_id'
+    ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * RELACIONES
      */
+
     public function categoria()
     {
-        return $this->belongsTo(\App\Models\Categoria::class, 'categoria_id', 'id');
+        return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function laboratorio()
     {
-        return $this->belongsTo(\App\Models\Laboratorio::class, 'laboratorio_id', 'id');
+        return $this->belongsTo(Laboratorio::class, 'laboratorio_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function presentacion()
     {
-        return $this->belongsTo(\App\Models\Presentacion::class, 'presentacion_id', 'id');
+        return $this->belongsTo(Presentacion::class, 'presentacion_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function almacens()
     {
-        return $this->hasMany(\App\Models\Almacen::class, 'id', 'producto_id');
+        return $this->hasMany(Almacen::class, 'producto_id'); // corregido: el campo correcto de relación es producto_id
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function detalleCompras()
     {
-        return $this->hasMany(\App\Models\DetalleCompra::class, 'id', 'producto_id');
+        return $this->hasMany(DetalleCompra::class, 'producto_id'); // corregido
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function detalleVentas()
     {
-        return $this->hasMany(\App\Models\DetalleVenta::class, 'id', 'producto_id');
+        return $this->hasMany(DetalleVenta::class, 'producto_id'); // corregido
     }
 }

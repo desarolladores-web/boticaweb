@@ -202,10 +202,10 @@
         <div class="card-body">
           
 
-          <!-- Formulario de carga de imagen -->
-<form class="file-upload-form">
+<form class="file-upload-form" method="POST" action="{{ route('productos.store') }}" enctype="multipart/form-data">
+  @csrf
   <label for="file" class="file-upload-label">
-    <div class="file-upload-text" id="uploadContent" style="display: {{ isset($producto) && $producto->imagen ? 'none' : 'block' }};">
+    <div class="file-upload-text" id="uploadContent" style="display: {{ isset($producto) && !empty($producto->imagen) ? 'none' : 'block' }};">
       <svg viewBox="0 0 640 512">
         <path
           d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
@@ -217,20 +217,27 @@
     </div>
 
     <input id="file" type="file" name="imagen" accept="image/*" onchange="previewImage(event)">
-    
-    <img id="preview" class="file-upload-preview" alt="Vista previa" 
-         style="max-width: 200px; display: {{ isset($producto) && $producto->imagen ? 'block' : 'none' }};"
-         src="{{ isset($producto) && $producto->imagen ? asset('storage/' . $producto->imagen) : '' }}">
+
+    {{-- 👇 Vista previa (si existe en binario) --}}
+    @if(isset($producto) && !empty($producto->imagen))
+      <img id="preview" class="file-upload-preview"
+           style="max-width: 200px; display: block;"
+           src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}"
+           alt="Imagen actual del producto">
+    @else
+      <img id="preview" class="file-upload-preview"
+           style="max-width: 200px; display: none;"
+           alt="Vista previa">
+    @endif
   </label>
 
   <div style="text-align: center; margin-top: 10px;">
-    <button type="button" class="delete-button" id="deleteBtn" 
-            style="display: {{ isset($producto) && $producto->imagen ? 'inline-block' : 'none' }};">
+    <button type="button" class="delete-button" id="deleteBtn"
+            style="display: {{ isset($producto) && !empty($producto->imagen) ? 'inline-block' : 'none' }};">
       Eliminar imagen
     </button>
   </div>
 </form>
-
 
       
         </div>
@@ -265,36 +272,36 @@
     document.querySelector('form').addEventListener('submit', function () {
         document.querySelector('#descripcion').value = quill.root.innerHTML;
     });
-    function previewImage(event) {
+   function previewImage(event) {
     const preview = document.getElementById('preview');
     const uploadContent = document.getElementById('uploadContent');
     const deleteBtn = document.getElementById('deleteBtn');
 
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        preview.src = e.target.result;
-        preview.style.display = 'block';
-        uploadContent.style.display = 'none';
-        deleteBtn.style.display = 'inline-block';
-      };
-      reader.readAsDataURL(file);
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            uploadContent.style.display = 'none';
+            deleteBtn.style.display = 'inline-block';
+        };
+        reader.readAsDataURL(file);
     }
-  }
+}
 
-  document.getElementById('deleteBtn').addEventListener('click', function () {
+document.getElementById('deleteBtn').addEventListener('click', function () {
     const fileInput = document.getElementById('file');
     const preview = document.getElementById('preview');
     const uploadContent = document.getElementById('uploadContent');
     const deleteBtn = document.getElementById('deleteBtn');
 
-    // Reset file input
+    // Limpiar campos
     fileInput.value = '';
     preview.src = '';
     preview.style.display = 'none';
     uploadContent.style.display = 'block';
     deleteBtn.style.display = 'none';
-  });
+});
 </script>
 

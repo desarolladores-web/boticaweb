@@ -85,7 +85,13 @@
                                         <td>{{ $producto->stock }}</td>
                                         <td>{{ $producto->stock_min }}</td>
                                         <td>{{ $producto->fecha_vencimiento }}</td>
-                                        <td>{{ $producto->imagen }}</td>
+                                        <td>
+    @if ($producto->imagen)
+        <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" alt="Imagen del producto" width="80">
+    @else
+        Sin imagen
+    @endif
+</td>
                                         <td>{{ $producto->categoria_id }}</td>
                                         <td>{{ $producto->laboratorio_id }}</td>
                                         <td>{{ $producto->presentacion_id }}</td>

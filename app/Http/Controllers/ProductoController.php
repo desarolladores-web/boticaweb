@@ -66,68 +66,86 @@ class ProductoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductoRequest $request): RedirectResponse
-    {
-
-
-
-        // Buscar o crear la categoría
-        $categoria = null;
-        if ($request->filled('categoria_nombre')) {
-            $categoria = Categoria::firstOrCreate(
-                ['nombre' => $request->input('categoria_nombre')],
-                ['descripcion' => null] // Puedes cambiar esto si necesitas
-            );
-        }
-
-        // Buscar o crear el laboratorio
-        $laboratorio = null;
-        if ($request->filled('laboratorio_nombre')) {
-            $laboratorio = Laboratorio::firstOrCreate(
-                ['nombre_laboratorio' => $request->input('laboratorio_nombre')]
-            );
-        }
-
-        // Buscar o crear la presentación
-        $presentacion = null;
-        if ($request->filled('presentacion_tipo')) {
-            $presentacion = Presentacion::firstOrCreate(
-                ['tipo_presentacion' => $request->input('presentacion_tipo')]
-            );
-        }
-
-        // Subir imagen (si se adjunta)
-        $rutaImagen = null;
-
-        if ($request->hasFile('imagen') && $request->file('imagen')->isValid()) {
-            $archivo = $request->file('imagen');
-            $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
-            $archivo->move(public_path('storage/imagenes_productos'), $nombreArchivo);
-            $rutaImagen = 'imagenes_productos/' . $nombreArchivo;
-        }
-
-
-
-        // Crear el producto
-        $producto = Producto::create([
-            'codigo' => $request->input('codigo'),
-            'nombre' => $request->input('nombre'),
-            'descripcion' => $request->input('descripcion'),
-            'principio_activo' => $request->input('principio_activo'),
-            'pvp1' => $request->input('pvp1'),
-            'precio_costo_unitario' => $request->input('precio_costo_unitario'),
-            'stock' => $request->input('stock'),
-            'stock_min' => $request->input('stock_min'),
-            'fecha_vencimiento' => $request->input('fecha_vencimiento'),
-            'imagen' => $rutaImagen, // Aquí usamos la ruta si se subió imagen
-            'categoria_id' => $categoria?->id,
-            'laboratorio_id' => $laboratorio?->id,
-            'presentacion_id' => $presentacion?->id,
-        ]);
-
-        return Redirect::route('productos.index')
-            ->with('success', 'Producto creado correctamente.');
+ public function store(ProductoRequest $request): RedirectResponse
+{
+    // 1. Buscar o crear la categoría
+    $categoria = null;
+    if ($request->filled('categoria_nombre')) {
+        $categoria = Categoria::firstOrCreate(
+            ['nombre' => $request->input('categoria_nombre')],
+            ['descripcion' => null]
+        );
     }
+
+    // 2. Buscar o crear el laboratorio
+    $laboratorio = null;
+    if ($request->filled('laboratorio_nombre')) {
+        $laboratorio = Laboratorio::firstOrCreate(
+            ['nombre_laboratorio' => $request->input('laboratorio_nombre')]
+        );
+    }
+
+    // 3. Buscar o crear la presentación
+    $presentacion = null;
+    if ($request->filled('presentacion_tipo')) {
+        $presentacion = Presentacion::firstOrCreate(
+            ['tipo_presentacion' => $request->input('presentacion_tipo')]
+        );
+    }
+
+    // 4. Leer imagen como binario (no se guarda en disco)
+   $contenidoImagen = null;
+if ($request->hasFile('imagen')) {
+    $imagen = $request->file('imagen');
+
+    if ($imagen->isValid()) {
+        try {
+            // Validar que el archivo sea una imagen
+            $mimeType = $imagen->getMimeType();
+            if (!str_starts_with($mimeType, 'image/')) {
+                return back()->withErrors(['imagen' => 'El archivo debe ser una imagen válida.']);
+            }
+
+            // Leer imagen en binario
+            $contenido = file_get_contents($imagen->getPathname());
+
+            if ($contenido !== false) {
+                $contenidoImagen = $contenido;
+            } else {
+                \Log::error('[ProductoController] No se pudo leer el contenido binario de la imagen.');
+                return back()->withErrors(['imagen' => 'La imagen no se pudo leer.']);
+            }
+        } catch (\Exception $e) {
+            \Log::error('[ProductoController] Excepción al procesar imagen: ' . $e->getMessage());
+            return back()->withErrors(['imagen' => 'Error inesperado al subir la imagen.']);
+        }
+    } else {
+        return back()->withErrors(['imagen' => 'La imagen subida no es válida.']);
+    }
+}
+
+    // 5. Insertar producto con imagen binaria
+    $producto = Producto::create([
+        'codigo' => $request->input('codigo'),
+        'nombre' => $request->input('nombre'),
+        'descripcion' => $request->input('descripcion'),
+        'principio_activo' => $request->input('principio_activo'),
+        'pvp1' => $request->input('pvp1'),
+        'precio_costo_unitario' => $request->input('precio_costo_unitario'),
+        'stock' => $request->input('stock'),
+        'stock_min' => $request->input('stock_min'),
+        'fecha_vencimiento' => $request->input('fecha_vencimiento'),
+        'imagen' => $contenidoImagen, // 👈 Aquí va como binario
+        'categoria_id' => $categoria?->id,
+        'laboratorio_id' => $laboratorio?->id,
+        'presentacion_id' => $presentacion?->id,
+    ]);
+
+    return Redirect::route('productos.index')
+        ->with('success', 'Producto creado correctamente.');
+}
+
+
 
 
     /**
@@ -157,21 +175,28 @@ class ProductoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductoRequest $request, Producto $producto): RedirectResponse
-    {
-        $producto->update($request->validated());
+   public function update(ProductoRequest $request, Producto $producto): RedirectResponse
+{
+    $datos = $request->validated();
 
-        return Redirect::route('productos.index')
-            ->with('success', 'Producto updated successfully');
+    if ($request->hasFile('imagen')) {
+        $archivo = $request->file('imagen');
+
+        if ($archivo->isValid()) {
+            $datos['imagen'] = file_get_contents($archivo); // sin usar getRealPath()
+        } else {
+            return back()->with('error', 'La imagen no es válida.');
+        }
+    } else {
+        unset($datos['imagen']); // no actualizar si no se envió imagen
     }
 
-    public function destroy($id): RedirectResponse
-    {
-        Producto::find($id)->delete();
+    $producto->update($datos);
 
-        return Redirect::route('productos.index')
-            ->with('success', 'Producto deleted successfully');
-    }
+    return Redirect::route('productos.index')
+        ->with('success', 'Producto actualizado correctamente.');
+}
+
 
     public function vistaConFiltro(Request $request)
 {

@@ -1,5 +1,8 @@
-@extends('layouts.app')
+@php
+    $layout = auth()->check() && auth()->user()->is_admin ? 'layouts.admin' : 'layouts.app';
+@endphp
 
+@extends($layout)
 @section('body-class', 'page-edit')
 
 @section('content')

@@ -22,7 +22,7 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        return redirect('/account/edit'); // Redirige al inicio
+        return redirect('/'); // Redirige al inicio
     }
 
 

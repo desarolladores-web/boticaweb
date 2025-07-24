@@ -80,24 +80,17 @@
           <ul class="menu_items">
             <div class="menu_title menu_dahsboard"></div>
             <!-- start -->
-            <li class="item">
-              <div href="#" class="nav_link submenu_item">
+              <li class="item">
+              <a href="{{ route('welcome') }}" class="nav_link">
                 <span class="navlink_icon">
                   <i class="bx bx-home-alt"></i>
                 </span>
-                <span class="navlink">Home</span>
-                <i class="bx bx-chevron-right arrow-left"></i>
-              </div>
-              <ul class="menu_items submenu">
-                <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                <a href="#" class="nav_link sublink">Nav Sub Link</a>
-              </ul>
+                <span class="navlink">Inicio</span>
+              </a>
             </li>
             <!-- end -->
             <li class="item">
-              <div href="#" class="nav_link submenu_item">
+              <div href="" class="nav_link submenu_item">
                 <span class="navlink_icon">
                   <i class="bx bx-grid-alt"></i>
                 </span>
@@ -138,11 +131,11 @@
               </a>
             </li>
             <li class="item">
-              <a href="" class="nav_link">
+              <a href="{{ route('account.edit') }} " class="nav_link">
                 <span class="navlink_icon">
                   <i class="bx bx-filter"></i>
                 </span>
-                <span class="navlink">Filter</span>
+                <span class="navlink">Editar</span>
               </a>
             </li>
             <li class="item">

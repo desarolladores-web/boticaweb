@@ -90,3 +90,4 @@ Route::get('/pago/iniciar', [CheckoutController::class, 'iniciarPago'])->name('c
 Route::get('/pago/exito', [CheckoutController::class, 'pagoExitoso'])->name('checkout.exito');
 Route::get('/pago/fallo', [CheckoutController::class, 'pagoFallido'])->name('checkout.fallo');
 Route::get('/pago/pendiente', [CheckoutController::class, 'pagoPendiente'])->name('checkout.pendiente');
+Route::middleware(['auth', 'admin'])->get('/admin/account/edit', [ProfileController::class, 'edit'])->name('admin.account.edit');

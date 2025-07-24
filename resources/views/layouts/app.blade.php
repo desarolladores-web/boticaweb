@@ -88,7 +88,7 @@
 
 
                     <div class="right">
-                        <form action="{{ route('productos.buscar') }}"" method="get" class="search-group">
+                        <form action="{{ route('productos.buscar') }}"" method=" get" class="search-group">
                             <input type="text" class="form-control" name="keyword" placeholder="Buscar"
                                 value="{{ request('keyword') }}">
                             <button type="submit" class="btn"><i class="bi bi-search"></i></button>
@@ -326,9 +326,13 @@
                         <a href="{{ route('login') }}" class="btn btn-outline-primary">
                             <i class="bi bi-person-circle me-2"></i> Iniciar sesión / Registrarse
                         </a>
-                        <a href="{{ route('ventas.create', ['total' => $total]) }}" class="btn btn-primary">
-                            <i class="bi bi-box-arrow-right me-2"></i> Continuar sin cuenta
-                        </a>
+                        <form action="{{ route('checkout.iniciar') }}" method="GET">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-box-arrow-right me-2"></i> Continuar sin cuenta
+                            </button>
+                        </form>
+
+
                     </div>
                 </div>
             </div>
@@ -394,6 +398,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.iconify.design/2/2.0.0/iconify.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 
 </html>

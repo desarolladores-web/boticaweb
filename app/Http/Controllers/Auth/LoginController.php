@@ -15,16 +15,16 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Redirecciona según el rol después del login.
      */
     protected function authenticated(Request $request, $user)
     {
-        
-        return redirect()->route('home'); // Cliente o empleado
+        return redirect('/account/edit'); // Redirige al inicio
     }
+
 
     /**
      * Create a new controller instance.

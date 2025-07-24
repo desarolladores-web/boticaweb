@@ -10,8 +10,9 @@ use App\Http\Controllers\InformacionController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProductoImportController ;
+use App\Http\Controllers\ProductoImportController;
 
+use App\Http\Controllers\CheckoutController;
 
 /*
 |---------------------------------------------------------------------------
@@ -26,7 +27,10 @@ use App\Http\Controllers\ProductoImportController ;
 
 Auth::routes();
 
-Route::get('/', [WelcomeController::class, 'index']);
+
+
+
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('/contactanos', function () {
     return view('contactanos.contactanos');
@@ -54,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
         Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
-    Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
+        Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
     });
 
     Route::get('/account/edit', [ProfileController::class, 'edit'])->name('account.edit'); // Cambié 'cliente' por 'user'
@@ -74,3 +78,15 @@ Route::get('/quienes-somos', [InformacionController::class, 'quienesSomos'])->na
 Route::get('/consejos', [InformacionController::class, 'consejos'])->name('consejos');
 
 Route::post('productos/importar', [ProductoImportController::class, 'importarExcel'])->name('productos.importar');
+
+
+
+
+
+
+
+
+Route::get('/pago/iniciar', [CheckoutController::class, 'iniciarPago'])->name('checkout.iniciar');
+Route::get('/pago/exito', [CheckoutController::class, 'pagoExitoso'])->name('checkout.exito');
+Route::get('/pago/fallo', [CheckoutController::class, 'pagoFallido'])->name('checkout.fallo');
+Route::get('/pago/pendiente', [CheckoutController::class, 'pagoPendiente'])->name('checkout.pendiente');

@@ -72,7 +72,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/account/edit', [ProfileController::class, 'edit'])->name('admin.account.edit');
     Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
-
+ Route::resource('productos', ProductoController::class);
 
 
 });

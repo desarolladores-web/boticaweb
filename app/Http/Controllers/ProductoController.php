@@ -25,13 +25,27 @@ class ProductoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
-    {
-        $productos = Producto::paginate();
+public function index(Request $request): View
+{
+    $query = Producto::query();
 
-        return view('producto.index', compact('productos'))
-            ->with('i', ($request->input('page', 1) - 1) * $productos->perPage());
+    // Filtro por nombre (buscador)
+    if ($request->filled('buscar')) {
+        $query->where('nombre', 'like', '%' . $request->buscar . '%');
     }
+
+    // Filtro por categoría
+    if ($request->filled('categoria_id')) {
+        $query->where('categoria_id', $request->categoria_id);
+    }
+
+    $productos = $query->paginate(10)->appends($request->query());
+    $categorias = Categoria::all();
+
+    return view('producto.index', compact('productos', 'categorias'))
+        ->with('i', ($request->input('page', 1) - 1) * $productos->perPage());
+}
+
     public function buscar(Request $request): View
 {
     $keyword = $request->input('keyword');

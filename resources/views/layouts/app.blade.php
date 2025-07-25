@@ -223,6 +223,7 @@
 
     <main>
         @yield('content')
+        
     </main>
     @include('layouts.whatsapp')
     @include('layouts.footer')

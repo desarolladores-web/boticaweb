@@ -221,12 +221,12 @@
     {{-- 👇 Vista previa (si existe en binario) --}}
     @if(isset($producto) && !empty($producto->imagen))
       <img id="preview" class="file-upload-preview"
-           style="max-width: 200px; display: block;"
+           style="max-width: 550px; display: block;"
            src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}"
            alt="Imagen actual del producto">
     @else
       <img id="preview" class="file-upload-preview"
-           style="max-width: 200px; display: none;"
+           style="max-width: 550px; display: none;"
            alt="Vista previa">
     @endif
   </label>

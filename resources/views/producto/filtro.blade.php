@@ -1,215 +1,209 @@
+@vite('resources/css/welcome.css')
+
 @extends('layouts.app')
 
 @section('content')
-<section class="container py-4">
-    <div class="row">
-        <div class="col-md-3 mb-4">
-    <div class="card shadow border border-primary rounded-3">
-        <div class="card-header bg-primary text-white fw-bold text-center">
-            <i class="bi bi-funnel-fill me-1"></i> Filtros
+    <section class="py-5 container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-uppercase" style="color: #198754; font-size: 2.2rem;">
+                Catálogo de Productos
+            </h2>
         </div>
-        <div class="card-body">
 
-            <!-- FILTRO POR CATEGORÍAS -->
-            <h6 class="fw-bold mb-2 text-primary">Departamento</h6>
-            <ul class="list-group list-unstyled mb-4 ps-1">
-                <li>
-                    <a href="{{ route('productos.filtro') }}"
-                       class="text-decoration-none d-block py-1 {{ request('categoria') ? '' : 'fw-bold text-primary' }}">
-                        Todas
-                    </a>
-                </li>
-                @foreach ($categorias as $categoria)
-                    <li>
-                        <a href="{{ route('productos.filtro', array_merge(request()->except(['precio_min', 'precio_max']), ['categoria' => $categoria->id])) }}"
-                           class="text-decoration-none d-block py-1 {{ request('categoria') == $categoria->id ? 'fw-bold text-primary' : '' }}">
-                            {{ $categoria->nombre }}
+        <div class="row">
+            <!-- FILTRO LATERAL -->
+            <div class="col-md-3 mb-4">
+                <div class="filtro-categorias">
+                    <h5>Categorías</h5>
+                    <div style="max-height: 700px; overflow-y: auto;">
+                        {{-- Opción "Todos los productos" --}}
+                        <a href="{{ route('productos.filtro') }}"
+                            class="categoria-link {{ request('categorias') ? '' : 'active' }}">
+                            Todos
                         </a>
-                    </li>
-                @endforeach
-            </ul>
 
-            <!-- FILTRO POR PRECIO -->
-            <h6 class="fw-bold mb-2 text-primary">Precio</h6>
-            <form method="GET" action="{{ route('productos.filtro') }}" id="filtro-precio-form">
-                <input type="hidden" name="categoria" value="{{ request('categoria') }}">
-                <input type="hidden" name="precio_min" id="precio_min" value="{{ request('precio_min', 10) }}">
-                <input type="hidden" name="precio_max" id="precio_max" value="{{ request('precio_max', 540) }}">
-
-                <div class="range-slider mb-3">
-                    <input type="range" id="slider_min" class="form-range" min="10" max="540" step="1"
-                           value="{{ request('precio_min', 10) }}">
-                    <input type="range" id="slider_max" class="form-range mt-1" min="10" max="540" step="1"
-                           value="{{ request('precio_max', 540) }}">
-                    <div class="text-center fw-bold text-danger small mt-1">
-                        $<span id="label_min">{{ request('precio_min', 10) }}</span> - $<span id="label_max">{{ request('precio_max', 540) }}</span>
+                        @foreach($categorias as $categoria)
+                            @php
+                                $activa = is_array(request('categorias')) && in_array($categoria->id, request('categorias'));
+                            @endphp
+                            <a href="{{ route('productos.filtro', array_merge(request()->except('page', 'categorias'), ['categorias[]' => $categoria->id])) }}"
+                                class="categoria-link {{ $activa ? 'active' : '' }}">
+                                {{ $categoria->nombre }}
+                            </a>
+                        @endforeach
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-outline-primary btn-sm w-100">
-                    <i class="bi bi-funnel"></i> Aplicar filtros
-                </button>
-            </form>
-
-        </div>
-    </div>
-</div>
+            </div>
 
 
-        <!-- CARDS DE PRODUCTOS -->
-        <div class="col-md-9">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-                @forelse($productos as $producto)
-                <div class="col">
-                    <div class="card h-100 shadow border-0 rounded-4 product-card">
-                        @if($producto->imagen)
-                            <img src="{{ asset('storage/' . $producto->imagen) }}" class="card-img-top product-img rounded-top-4" alt="{{ $producto->nombre }}">
-                        @else
-                            <img src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="card-img-top product-img rounded-top-4" alt="Sin Imagen">
-                        @endif
-                        <div class="card-body text-center">
-                            <h6 class="fw-bold text-primary mb-2">{{ $producto->nombre }}</h6>
-                            <p class="text-muted small mb-1">Stock: {{ $producto->stock }}</p>
-                            <div class="price mb-3">S/. {{ number_format($producto->pvp1, 2) }}</div>
-                            <a href="{{ route('productos.especificaciones', $producto->id) }}" class="btn btn-success btn-sm px-3 rounded-pill">Ver más</a>
+
+            <!-- PRODUCTOS -->
+            <div class="col-md-9">
+                <form method="GET" action="{{ route('productos.filtro') }}" id="filtro-form">
+                    <div class="mb-3 d-flex justify-content-end">
+                        <select name="orden" class="form-select w-auto"
+                            onchange="document.getElementById('filtro-form').submit();">
+                            <option value="">Ordenar por</option>
+                            <option value="precio_asc" {{ request('orden') == 'precio_asc' ? 'selected' : '' }}>Precio: Menor
+                                a Mayor</option>
+                            <option value="precio_desc" {{ request('orden') == 'precio_desc' ? 'selected' : '' }}>Precio:
+                                Mayor a Menor</option>
+                            <option value="az" {{ request('orden') == 'az' ? 'selected' : '' }}>Nombre: A-Z</option>
+                            <option value="za" {{ request('orden') == 'za' ? 'selected' : '' }}>Nombre: Z-A</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                    @php $carrito = session('carrito', []); @endphp
+                    @forelse($productos as $producto)
+                        <div class="col">
+                            <div class="product-item product-card">
+                                <figure>
+                                    <a href="{{ route('productos.especificaciones', $producto->id) }}"
+                                        title="{{ $producto->nombre }}">
+                                        @if($producto->imagen)
+                                            <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}"
+                                                class="tab-image" alt="{{ $producto->nombre }}">
+                                        @else
+                                            <img src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="tab-image"
+                                                alt="Sin Imagen">
+                                        @endif
+                                    </a>
+                                </figure>
+                                <h3>{{ $producto->nombre }}</h3>
+                                <span class="qty">
+                                    {{ $producto->presentacion?->tipo_presentacion ?? 'Sin presentación' }}
+                                </span>
+                                <span class="rating">
+                                    <svg width="24" height="24" class="text-primary"></svg>
+                                </span>
+                                <span class="price">S/. {{ number_format($producto->pvp1, 2) }}</span>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    @if(isset($carrito[$producto->id]))
+                                        <a href="{{ route('carrito.ver') }}"
+                                            class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
+                                            style="font-size: 15px; font-weight: 100; padding: 25px;">
+                                            Ver carrito
+                                            <span class="iconify ms-2" data-icon="bi:cart-check-fill"
+                                                style="font-size: 25px;"></span>
+                                        </a>
+                                    @else
+                                        <div class="input-group product-qty">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number"
+                                                    data-type="minus">
+                                                    <svg width="13" height="13">
+                                                        <use xlink:href="#minus"></use>
+                                                    </svg>
+                                                </button>
+                                            </span>
+                                            <input type="text" id="quantity" name="quantity" class="form-control input-number"
+                                                value="1">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="quantity-right-plus btn btn-success btn-number"
+                                                    data-type="plus">
+                                                    <svg width="16" height="16">
+                                                        <use xlink:href="#plus"></use>
+                                                    </svg>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                            class="agregar-carrito-form">
+                                            @csrf
+                                            <input type="hidden" name="cantidad" value="1">
+                                            <button type="submit" class="button">
+                                                Agregar Carrito
+                                                <span class="iconify ms-2" data-icon="uil:shopping-cart"
+                                                    style="font-size: 24px;"></span>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    @empty
+                        <div class="col-12">
+                            <div class="alert alert-warning text-center">No hay productos disponibles.</div>
+                        </div>
+                    @endforelse
                 </div>
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-warning text-center">No se encontraron productos.</div>
-                    </div>
-                @endforelse
             </div>
         </div>
-    </div>
-</section>
+    </section>
 @endsection
 
-@push('scripts')
+<!-- ICONOS SVG -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <defs>
+        <symbol xmlns="http://www.w3.org/2000/svg" id="plus" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M19 11h-6V5a1 1 0 0 0-2 0v6H5a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2Z" />
+        </symbol>
+        <symbol xmlns="http://www.w3.org/2000/svg" id="minus" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19 11H5a1 1 0 0 0 0 2h14a1 1 0 0 0 0-2Z" />
+        </symbol>
+    </defs>
+</svg>
+
+<!-- JS para cantidades -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const sliderMin = document.getElementById('slider_min');
-    const sliderMax = document.getElementById('slider_max');
-    const precioMinInput = document.getElementById('precio_min');
-    const precioMaxInput = document.getElementById('precio_max');
-    const label = document.getElementById('precio_range_label');
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.product-card').forEach(function (card) {
+            const input = card.querySelector('input[name="cantidad"]');
+            const plusBtn = card.querySelector('.quantity-right-plus');
+            const minusBtn = card.querySelector('.quantity-left-minus');
 
-    function actualizarLabel() {
-        let min = Math.min(parseInt(sliderMin.value), parseInt(sliderMax.value));
-        let max = Math.max(parseInt(sliderMin.value), parseInt(sliderMax.value));
+            if (!input || !plusBtn || !minusBtn) return;
 
-        precioMinInput.value = min;
-        precioMaxInput.value = max;
-        label.textContent = `S/. ${min} - S/. ${max}`;
-    }
+            plusBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                let qty = parseInt(input.value) || 1;
+                input.value = qty + 1;
+            });
 
-    sliderMin.addEventListener('input', actualizarLabel);
-    sliderMax.addEventListener('input', actualizarLabel);
+            minusBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                let qty = parseInt(input.value) || 1;
+                if (qty > 1) input.value = qty - 1;
+            });
 
-    // Inicializa al cargar
-    actualizarLabel();
-});
-</script>
-@endpush
-<script>
-    const sliderMin = document.getElementById('slider_min');
-    const sliderMax = document.getElementById('slider_max');
-    const labelMin = document.getElementById('label_min');
-    const labelMax = document.getElementById('label_max');
-    const precioMin = document.getElementById('precio_min');
-    const precioMax = document.getElementById('precio_max');
-
-    function updateLabels() {
-        let min = parseInt(sliderMin.value);
-        let max = parseInt(sliderMax.value);
-        if (min > max) {
-            [min, max] = [max, min]; // intercambia
-        }
-        labelMin.innerText = min;
-        labelMax.innerText = max;
-        precioMin.value = min;
-        precioMax.value = max;
-    }
-
-    sliderMin.addEventListener('input', updateLabels);
-    sliderMax.addEventListener('input', updateLabels);
-    document.addEventListener('DOMContentLoaded', updateLabels);
+            input.addEventListener('input', function () {
+                let qty = parseInt(this.value);
+                if (isNaN(qty) || qty < 1) this.value = 1;
+            });
+        });
+    });
 </script>
 
+<!-- SweetAlert mensajes -->
+@if (session('status'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let mensaje = '';
+            let tipo = '';
+            switch ("{{ session('status') }}") {
+                case 'compra_exitosa':
+                    mensaje = '¡Compra realizada con éxito!';
+                    tipo = 'success';
+                    break;
+                case 'compra_pendiente':
+                    mensaje = 'Tu pago está pendiente. Te notificaremos cuando se confirme.';
+                    tipo = 'warning';
+                    break;
+                case 'compra_fallida':
+                    mensaje = 'El pago no se completó. Inténtalo nuevamente.';
+                    tipo = 'error';
+                    break;
+            }
 
-@push('styles')
-
-<style>
-    .product-img {
-        height: 200px;
-        object-fit: cover;
-    }
-
-    .product-card {
-        transition: all 0.2s ease-in-out;
-        border: 1px solid #e0e0e0;
-    }
-
-    .product-card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
-    }
-
-    .price {
-        font-size: 1.1rem;
-        font-weight: bold;
-        color: #198754;
-    }
-
-    .list-group-item a {
-        display: block;
-        color: #000;
-    }
-
-    .list-group-item a:hover {
-        color: #0d6efd;
-    }
-
-    .range-slider input[type="range"] {
-    appearance: none;
-    width: 100%;
-    height: 4px;
-    background: #ddd;
-    border-radius: 2px;
-    outline: none;
-    margin: 0;
-    padding: 0;
-}
-
-.range-slider input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #d10000;
-    cursor: pointer;
-    border: 2px solid #fff;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-}
-
-.range-slider input[type="range"]::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #d10000;
-    cursor: pointer;
-    border: 2px solid #fff;
-}
-
-.range-slider input[type="range"]::-ms-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #d10000;
-    cursor: pointer;
-    border: 2px solid #fff;
-}
-
-</style>
-@endpush
+            Swal.fire({
+                icon: tipo,
+                title: mensaje,
+                confirmButtonText: 'Aceptar',
+                timer: 5000
+            });
+        });
+    </script>
+@endif

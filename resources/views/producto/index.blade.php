@@ -39,24 +39,31 @@
 <div class="card-body border-top">
     <div class="d-flex flex-wrap align-items-center gap-3">
 
-        {{-- Formulario de búsqueda --}}
-        <form action="{{ route('productos.index') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
-            {{-- Filtro por categoría --}}
-            <select name="categoria_id" class="form-select form-select-sm w-auto">
-                <option value="">-- Todas las Categorías --</option>
+      <form action="{{ route('productos.index') }}" method="GET" class="d-flex align-items-center gap-2">
+            <select name="categoria_id"
+                class="form-control styled-input w-auto @error('categoria_id') is-invalid @enderror"
+                id="categoria_id">
+                <option value="" disabled selected>Seleccione una categoría</option>
                 @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}" {{ request('categoria_id') == $categoria->id ? 'selected' : '' }}>
+                    <option value="{{ $categoria->id }}"
+                        {{ old('categoria_id', $producto->categoria_id ?? '') == $categoria->id ? 'selected' : '' }}>
                         {{ $categoria->nombre }}
                     </option>
                 @endforeach
-            </select>
+            </select> 
 
-            {{-- Búsqueda por nombre --}}
-            <input type="text" name="buscar" value="{{ request('buscar') }}" class="form-control form-control-sm w-auto" placeholder="Buscar producto...">
+<div class="right">
+    <form action="{{ route('productos.buscar') }}" method="get" class="search-group">
+        <input type="text" class="form-control styled-input" name="buscar" placeholder="Buscar"
+            value="{{ request('buscar') }}">
+        <button type="submit" class="btn">
+            <i class="bi bi-search"></i>
+        </button>
+    </form>
+</div>
 
-            <button type="submit" class="btn btn-sm btn-primary">
-                <i class="bi bi-search me-1"></i> Buscar
-            </button>
+
+          
 
             <a href="{{ route('productos.index') }}" class="btn btn-sm btn-secondary">
                 <i class="bi bi-x-circle me-1"></i> Limpiar

@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductoImportController;
+use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\CheckoutController;
 
@@ -73,6 +74,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
  Route::resource('productos', ProductoController::class);
+Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
 
 
 });

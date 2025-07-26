@@ -137,15 +137,15 @@
     </span>
     <span class="navlink">Editar</span>
 </a>
-            </li>
             <li class="item">
-              <a href="#" class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-cloud-upload"></i>
-                </span>
-                <span class="navlink">Upload new</span>
-              </a>
-            </li>
+  <a href="{{ route('usuarios.index') }}" class="nav_link">
+    <span class="navlink_icon">
+      <i class="bx bx-user"></i> <!-- Cambiado el ícono a "usuario" -->
+    </span>
+    <span class="navlink">Clientes</span>
+  </a>
+</li>
+
           </ul>
           <hr class="hr-rojo">
           <ul class="menu_items">

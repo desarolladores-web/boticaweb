@@ -12,17 +12,18 @@ class CartController extends Controller
         $producto = Producto::findOrFail($id);
         $carrito = session()->get('carrito', []);
 
-        if (isset($carrito[$id])) {
-            $carrito[$id]['cantidad'] += $request->input('cantidad', 1);
-        } else {
-            $carrito[$id] = [
-                "nombre" => $producto->nombre,
-                "cantidad" => $request->input('cantidad', 1),
-                "precio" => $producto->pvp1,
-                "imagen" => $producto->imagen ? asset('storage/' . $producto->imagen) : null,
-                "presentacion" => optional($producto->presentacion)->tipo_presentacion ?? '—'
-            ];
-        }
+     if (isset($carrito[$id])) {
+    $carrito[$id]['cantidad'] += $request->input('cantidad', 1);
+} else {
+    $carrito[$id] = [
+        "nombre" => $producto->nombre,
+        "cantidad" => $request->input('cantidad', 1),
+        "precio" => $producto->pvp1,
+        "imagen" => $producto->imagen ? 'data:image/jpeg;base64,' . base64_encode($producto->imagen) : null,
+        "presentacion" => optional($producto->presentacion)->tipo_presentacion ?? '—'
+    ];
+}
+
 
         session()->put('carrito', $carrito);
 

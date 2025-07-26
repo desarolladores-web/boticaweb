@@ -243,9 +243,10 @@
             @foreach($carrito as $id => $item)
             <div class="mb-3 border-bottom pb-3">
                 <div class="d-flex align-items-center">
-                    @if($item['imagen'])
-                    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img">
-                    @endif
+     @if($item['imagen'])
+    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img" style="width: 60px;">
+@endif
+
 
                     <div class="flex-grow-1 ps-2">
                         <div class="fw-bold">{{ $item['nombre'] }}</div>

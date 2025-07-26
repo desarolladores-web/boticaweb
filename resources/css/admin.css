@@ -412,3 +412,18 @@ body.dark {
   background-color: transparent;    /* Fondo transparente al pasar el mouse */
   color: #ff0000; /* Color del texto cambia */
 }
+
+.right {
+    display: flex;
+    align-items: center;
+}
+
+.right .dropdown .dropdown-toggle::after {
+    display: none;
+}
+
+.right .icons {
+    display: flex;
+    align-items: center;
+}
+

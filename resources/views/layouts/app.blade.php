@@ -39,7 +39,8 @@
     <div id="app">
         <!-- Header Section -->
         <header id="appHeader">
-            <div class="header-top">
+            <div class="header-top" style="padding-top: 1px; padding-bottom: 13px;">
+
                 <div class="container-fluid d-flex justify-content-between align-items-center">
                     <!-- Horario de atención -->
                     <div class="header-schedule text-white">

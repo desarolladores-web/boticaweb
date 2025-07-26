@@ -158,4 +158,42 @@
     color: #222;
     padding: 0;
 }
-/* From Uiverse.io by niat786 */
+/* === Filtro Lateral de Categorías con fondo moderno === */
+.filtro-categorias {
+    background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.filtro-categorias h5 {
+    font-weight: 600;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.filtro-categorias .categoria-link {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #495057;
+    text-decoration: none;
+    font-size: 15px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.filtro-categorias .categoria-link:hover {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+.filtro-categorias .categoria-link.active {
+    font-weight: bold;
+    color: #0d6efd;
+    background-color: #e0f0ff;
+}

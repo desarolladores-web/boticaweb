@@ -215,23 +215,43 @@ if ($request->hasFile('imagen')) {
 
     public function vistaConFiltro(Request $request)
 {
-    $categoriaId = $request->input('categoria');
-    $precioMin = $request->input('precio_min');
-    $precioMax = $request->input('precio_max');
+    $query = Producto::query();
 
-    $productos = Producto::query()
-        ->when($categoriaId, function ($query) use ($categoriaId) {
-            return $query->where('categoria_id', $categoriaId);
-        })
-        ->when($precioMin !== null && $precioMax !== null, function ($query) use ($precioMin, $precioMax) {
-            return $query->whereBetween('pvp1', [$precioMin, $precioMax]);
-        })
-        ->get();
+    if ($request->filled('categorias')) {
+        $query->whereIn('categoria_id', $request->categorias);
+    }
 
+    if ($request->filled('precio_min') && $request->filled('precio_max')) {
+        $query->whereBetween('pvp1', [$request->precio_min, $request->precio_max]);
+    }
+
+    if ($request->filled('buscar')) {
+        $query->where('nombre', 'like', '%' . $request->buscar . '%');
+    }
+
+    if ($request->filled('orden')) {
+        switch ($request->orden) {
+            case 'precio_asc':
+                $query->orderBy('pvp1', 'asc');
+                break;
+            case 'precio_desc':
+                $query->orderBy('pvp1', 'desc');
+                break;
+            case 'az':
+                $query->orderBy('nombre', 'asc');
+                break;
+            case 'za':
+                $query->orderBy('nombre', 'desc');
+                break;
+        }
+    }
+
+    $productos = $query->paginate(20);
     $categorias = Categoria::all();
 
     return view('producto.filtro', compact('productos', 'categorias'));
 }
+
 
 
 

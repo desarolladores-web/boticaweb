@@ -31,6 +31,7 @@
 
 
 
+
 </head>
 
 <body>
@@ -57,7 +58,8 @@
                 </div>
             </div>
 
-            <div class="header-desktop">
+            <div class="header-desktop"
+                style="background-color:rgb(224, 224, 224); padding-top: 10px; padding-bottom: 10px;">
                 <div class="container d-flex justify-content-between align-items-center">
                     <div class="left">
                         <h1 class="logo">
@@ -81,6 +83,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ url('/contactanos') }}">Contáctanos</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ url('/producto-filtro') }}">Productos</a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
@@ -102,19 +107,19 @@
                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <!-- Si el usuario está autenticado, mostramos la imagen de perfil -->
                                         @auth
-                                        @if(Auth::user()->imagen)
-                                        <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
-                                            alt="Avatar" class="rounded-circle"
-                                            style="width: 30px; height: 30px; object-fit: cover;">
+                                            @if(Auth::user()->imagen)
+                                                <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
+                                                    alt="Avatar" class="rounded-circle"
+                                                    style="width: 30px; height: 30px; object-fit: cover;">
+                                            @else
+                                                <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                                                <!-- Icono por defecto si no tiene imagen -->
+                                            @endif
+                                            <span class="ms-2">{{ Auth::user()->name }}</span>
+                                            <!-- Nombre del usuario autenticado -->
                                         @else
-                                        <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                                        <!-- Icono por defecto si no tiene imagen -->
-                                        @endif
-                                        <span class="ms-2">{{ Auth::user()->name }}</span>
-                                        <!-- Nombre del usuario autenticado -->
-                                        @else
-                                        <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
-                                        <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                                            <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
+                                            <i class="bi bi-person" style="font-size: 1.5rem;"></i>
 
                                         @endauth
                                     </a>
@@ -127,53 +132,53 @@
                                     <!-- Menú desplegable -->
                                     <div class="dropdown-menu dropdown-menu-end">
                                         @guest
-                                        @if (Route::has('login'))
-                                        <a class="dropdown-item"
-                                            href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
-                                        @endif
+                                            @if (Route::has('login'))
+                                                <a class="dropdown-item"
+                                                    href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
+                                            @endif
 
-                                        @if (Route::has('register'))
-                                        <a class="dropdown-item"
-                                            href="{{ route('register') }}">{{ __('Registrarse') }}</a>
-                                        @endif
+                                            @if (Route::has('register'))
+                                                <a class="dropdown-item"
+                                                    href="{{ route('register') }}">{{ __('Registrarse') }}</a>
+                                            @endif
                                         @else
-                                        @php
-                                        $user = Auth::user();
-                                        @endphp
+                                            @php
+                                                $user = Auth::user();
+                                            @endphp
 
-                                        <!-- Mi cuenta con ícono -->
-                                        @if ($user->rol_id == 1)
-                                        <!-- Admin -->
-                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                            <i class="bi bi-person me-2"></i> Panel Admin
-                                        </a>
-                                        <a class="dropdown-item" href="{{ route('account.edit') }}">
-                                            <i class="bi bi-person me-2"></i> EDITAR
-                                        </a>
-                                        @else
-                                        <!-- Usuario normal -->
-                                        <a class="dropdown-item" href="{{ route('account.edit') }}">
-                                            <i class="bi bi-person me-2"></i> Mi Cuenta
-                                        </a>
-                                        @endif
+                                            <!-- Mi cuenta con ícono -->
+                                            @if ($user->rol_id == 1)
+                                                <!-- Admin -->
+                                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                    <i class="bi bi-person me-2"></i> Panel Admin
+                                                </a>
+                                                <a class="dropdown-item" href="{{ route('account.edit') }}">
+                                                    <i class="bi bi-person me-2"></i> EDITAR
+                                                </a>
+                                            @else
+                                                <!-- Usuario normal -->
+                                                <a class="dropdown-item" href="{{ route('account.edit') }}">
+                                                    <i class="bi bi-person me-2"></i> Mi Cuenta
+                                                </a>
+                                            @endif
 
-                                        <!-- Pedidos -->
-                                        <a class="dropdown-item" href="#">Pedidos</a>
+                                            <!-- Pedidos -->
+                                            <a class="dropdown-item" href="#">Pedidos</a>
 
-                                        <!-- Favoritos -->
-                                        <a class="dropdown-item" href="#">Favoritos</a>
+                                            <!-- Favoritos -->
+                                            <a class="dropdown-item" href="#">Favoritos</a>
 
-                                        <!-- Cerrar sesión -->
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar sesión') }}
-                                        </a>
+                                            <!-- Cerrar sesión -->
+                                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar sesión') }}
+                                            </a>
 
-                                        <!-- Formulario de cierre de sesión -->
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                            class="d-none">
-                                            @csrf
-                                        </form>
+                                            <!-- Formulario de cierre de sesión -->
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                class="d-none">
+                                                @csrf
+                                            </form>
                                         @endguest
                                     </div>
 
@@ -185,8 +190,8 @@
 
 
                         @php
-                        $carrito = session('carrito', []);
-                        $cantidadTotal = count($carrito);
+                            $carrito = session('carrito', []);
+                            $cantidadTotal = count($carrito);
                         @endphp
 
                         <div class="item ms-4">
@@ -221,10 +226,10 @@
     </div>
     </nav>
 
-    <main>
+    <main class="py-4" style="background-color: #f5f7fa;">
         @yield('content')
-        
     </main>
+
     @include('layouts.whatsapp')
     @include('layouts.footer')
     </div>
@@ -240,53 +245,55 @@
             @php $carrito = session('carrito', []); @endphp
 
             @if(count($carrito) > 0)
-            @foreach($carrito as $id => $item)
-            <div class="mb-3 border-bottom pb-3">
-                <div class="d-flex align-items-center">
-     @if($item['imagen'])
-    <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img" style="width: 60px;">
-@endif
+                @foreach($carrito as $id => $item)
+                    <div class="mb-3 border-bottom pb-3">
+                        <div class="d-flex align-items-center">
+                            @if($item['imagen'])
+                                <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img"
+                                    style="width: 60px;">
+                            @endif
 
 
-                    <div class="flex-grow-1 ps-2">
-                        <div class="fw-bold">{{ $item['nombre'] }}</div>
-                        @php $subtotal = $item['precio'] * $item['cantidad']; @endphp
-                        <div class="text-danger fw-semibold mb-2">S/ {{ number_format($subtotal, 2) }}</div>
+                            <div class="flex-grow-1 ps-2">
+                                <div class="fw-bold">{{ $item['nombre'] }}</div>
+                                @php $subtotal = $item['precio'] * $item['cantidad']; @endphp
+                                <div class="text-danger fw-semibold mb-2">S/ {{ number_format($subtotal, 2) }}</div>
 
-                        <div class="d-flex align-items-center mb-2" style="width: fit-content;">
-                            <form method="POST" action="{{ route('carrito.actualizar', $id) }}"
-                                class="d-flex align-items-center me-1">
-                                @csrf
-                                <input type="hidden" name="tipo" value="restar">
-                                <input type="hidden" name="desde_sidebar" value="1">
-                                <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
-                                <button type="submit" class="btn btn-outline-secondary btn-sm px-2">−</button>
-                            </form>
+                                <div class="d-flex align-items-center mb-2" style="width: fit-content;">
+                                    <form method="POST" action="{{ route('carrito.actualizar', $id) }}"
+                                        class="d-flex align-items-center me-1">
+                                        @csrf
+                                        <input type="hidden" name="tipo" value="restar">
+                                        <input type="hidden" name="desde_sidebar" value="1">
+                                        <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm px-2">−</button>
+                                    </form>
 
-                            <div class="px-3">{{ $item['cantidad'] }}</div>
+                                    <div class="px-3">{{ $item['cantidad'] }}</div>
 
-                            <form method="POST" action="{{ route('carrito.actualizar', $id) }}"
-                                class="d-flex align-items-center ms-1">
-                                @csrf
-                                <input type="hidden" name="tipo" value="sumar">
-                                <input type="hidden" name="desde_sidebar" value="1">
-                                <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
-                                <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
-                            </form>
+                                    <form method="POST" action="{{ route('carrito.actualizar', $id) }}"
+                                        class="d-flex align-items-center ms-1">
+                                        @csrf
+                                        <input type="hidden" name="tipo" value="sumar">
+                                        <input type="hidden" name="desde_sidebar" value="1">
+                                        <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
+                                    </form>
+                                </div>
+
+                                <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="desde_sidebar" value="1">
+                                    <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
+                                    <button type="submit" class="btn btn-danger rounded-pill  btn-sm mt-1">Eliminar
+                                        Producto</button>
+                                </form>
+                            </div>
                         </div>
-
-                        <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="desde_sidebar" value="1">
-                            <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
-                            <button type="submit" class="btn btn-danger rounded-pill  btn-sm mt-1">Eliminar Producto</button>
-                        </form>
                     </div>
-                </div>
-            </div>
-            @endforeach
+                @endforeach
             @else
-            <p class="text-muted">Tu carrito está vacío.</p>
+                <p class="text-muted">Tu carrito está vacío.</p>
             @endif
         </div>
 
@@ -294,14 +301,15 @@
             <div class="d-flex justify-content-between">
                 <strong>Total:</strong>
                 @php
-                $total = 0;
-                foreach ($carrito as $item) {
-                $total += $item['precio'] * $item['cantidad'];
-                }
+                    $total = 0;
+                    foreach ($carrito as $item) {
+                        $total += $item['precio'] * $item['cantidad'];
+                    }
                 @endphp
                 <span class="text-success" id="cart-total">S/. {{ number_format($total, 2) }}</span>
             </div>
-            <button type="button" class="btn btn-danger rounded-pill  mt-3 w-100" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+            <button type="button" class="btn btn-danger rounded-pill  mt-3 w-100" data-bs-toggle="modal"
+                data-bs-target="#checkoutModal">
                 Comprar ahora
             </button>
         </div>

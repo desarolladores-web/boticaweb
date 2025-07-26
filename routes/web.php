@@ -73,8 +73,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/account/edit', [ProfileController::class, 'edit'])->name('admin.account.edit');
     Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
+
  Route::resource('productos', ProductoController::class);
 Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
+
+    Route::resource('productos', ProductoController::class);
 
 
 });
@@ -87,13 +90,9 @@ Route::post('productos/importar', [ProductoImportController::class, 'importarExc
 
 
 
-
-
-
-
-
 Route::get('/pago/iniciar', [CheckoutController::class, 'iniciarPago'])->name('checkout.iniciar');
 Route::get('/pago/exito', [CheckoutController::class, 'pagoExitoso'])->name('checkout.exito');
 Route::get('/pago/fallo', [CheckoutController::class, 'pagoFallido'])->name('checkout.fallo');
 Route::get('/pago/pendiente', [CheckoutController::class, 'pagoPendiente'])->name('checkout.pendiente');
 
+Route::get('/producto-filtro', [ProductoController::class, 'vistaConFiltro'])->name('productos.filtro');

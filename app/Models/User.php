@@ -16,9 +16,8 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
-     */
-    protected $fillable = [
-    'name',
+     */protected $fillable = [
+       'name',
     'email',
     'password',
     'tipo_documento_id',
@@ -27,8 +26,16 @@ class User extends Authenticatable
     'estado',
     'fecha_ingreso',
     'fecha_salida',
-    'imagen', // 
+    'imagen',
+
+    // Añadir los campos faltantes:
+    'apellido_paterno',
+    'apellido_materno',
+    'DNI',
+    'direccion',
+    'telefono',
 ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -72,4 +79,5 @@ public function tipoDocumento()
     {
         return $this->rol_id === 1;
     }
+    
 }

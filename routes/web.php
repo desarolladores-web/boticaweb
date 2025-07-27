@@ -76,7 +76,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
  Route::resource('productos', ProductoController::class);
 Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
-
+Route::get('/usuarios/clientes', [UserController::class, 'clientes'])->name('usuarios.clientes');
     Route::resource('productos', ProductoController::class);
 
 

@@ -138,7 +138,7 @@
     <span class="navlink">Editar</span>
 </a>
             <li class="item">
-  <a href="{{ route('usuarios.index') }}" class="nav_link">
+  <a href="{{ route('usuarios.clientes') }}" class="nav_link">
     <span class="navlink_icon">
       <i class="bx bx-user"></i> <!-- Cambiado el ícono a "usuario" -->
     </span>
@@ -158,14 +158,15 @@
                 <span class="navlink">Notice board</span>
               </a>
             </li>
-            <li class="item">
-              <a href="#" class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-medal"></i>
-                </span>
-                <span class="navlink">Award</span>
-              </a>
-            </li>
+          <li class="item">
+  <a href="{{ route('usuarios.index') }}" class="nav_link">
+    <span class="navlink_icon">
+      <i class="bx bx-group"></i> <!-- Ícono cambiado -->
+    </span>
+    <span class="navlink">Empleados</span>
+  </a>
+</li>
+
             <li class="item">
               <a href="#" class="nav_link">
                 <span class="navlink_icon">

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('venta_id')->nullable();
             $table->integer('cantidad')->nullable();
             $table->double('precio_venta')->nullable();
-            //$table->double('descuento')->nullable();
-            // $table->unsignedBigInteger('sucursal_id')->nullable();
+
+            $table->unsignedBigInteger('sucursal_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
 

@@ -13,25 +13,25 @@ return new class extends Migration
     {
         // Tabla users
         Schema::create('users', function (Blueprint $table) {
-    $table->id();
-    $table->unsignedBigInteger('tipo_documento_id')->nullable();
-    $table->unsignedBigInteger('rol_id')->nullable();
-    $table->unsignedBigInteger('cliente_id')->nullable();
-    $table->string('name', 100);
-    $table->string('email')->unique();
-    $table->timestamp('email_verified_at')->nullable();
-    $table->string('password', 100)->nullable();
-    $table->boolean('estado')->default(true);
-    $table->dateTime('fecha_ingreso')->nullable();
-    $table->dateTime('fecha_salida')->nullable();
-    $table->binary('imagen')->nullable(); // 👈 Campo binario para imagen
-    $table->rememberToken();
-    $table->timestamps();
+            $table->id();
+            $table->unsignedBigInteger('tipo_documento_id')->nullable(); //duplicados por las huevas jaja
+            $table->unsignedBigInteger('rol_id')->nullable();
+            $table->unsignedBigInteger('cliente_id')->nullable();
+            $table->string('name', 100);
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password', 100)->nullable();
+            $table->boolean('estado')->default(true);
+            $table->dateTime('fecha_ingreso')->nullable();
+            $table->dateTime('fecha_salida')->nullable();
+            $table->binary('imagen')->nullable(); // 👈 Campo binario para imagen
+            $table->rememberToken();
+            $table->timestamps();
 
-    $table->foreign('tipo_documento_id')->references('id')->on('tipo_documentos')->onDelete('set null');
-    $table->foreign('rol_id')->references('id')->on('rols')->onDelete('set null');
-    $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('set null');
-});
+            $table->foreign('tipo_documento_id')->references('id')->on('tipo_documentos')->onDelete('set null');
+            $table->foreign('rol_id')->references('id')->on('rols')->onDelete('set null');
+            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('set null');
+        });
 
         // Tabla sessions
         Schema::create('sessions', function (Blueprint $table) {

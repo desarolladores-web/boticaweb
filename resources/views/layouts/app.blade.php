@@ -337,11 +337,9 @@
                         <a href="{{ route('login') }}" class="btn btn-outline-primary">
                             <i class="bi bi-person-circle me-2"></i> Iniciar sesión / Registrarse
                         </a>
-                        <form action="{{ route('checkout.iniciar') }}" method="GET">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="bi bi-box-arrow-right me-2"></i> Continuar sin cuenta
-                            </button>
-                        </form>
+                        <a href="{{ route('checkout.formulario') }}" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-right me-2"></i> Continuar sin cuenta
+                        </a>
 
 
                     </div>

@@ -44,12 +44,17 @@ Route::get('/buscar-productos', [ProductoController::class, 'buscar'])->name('pr
 
 Route::get('/productos/especificaciones/{id}', [ProductoController::class, 'especificaciones'])->name('productos.especificaciones');
 
+
+// Filtro de productos (sin cambios)
+Route::get('/producto-filtro', [ProductoController::class, 'vistaConFiltro'])->name('productos.filtro');
+
+
+
 Route::post('/agregar-carrito/{id}', [CartController::class, 'agregar'])->name('carrito.agregar');
 Route::get('/carrito', [CartController::class, 'mostrar'])->name('carrito.mostrar');
 Route::post('/carrito/eliminar/{id}', [CartController::class, 'eliminar'])->name('carrito.eliminar');
 Route::post('/carrito/actualizar/{id}', [CartController::class, 'actualizar'])->name('carrito.actualizar');
 
-Route::resource('ventas', VentaController::class);
 
 
 Route::get('/ver-carrito', [CartController::class, 'verCarrito'])->name('carrito.ver');
@@ -74,12 +79,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
 
- Route::resource('productos', ProductoController::class);
-Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
-Route::get('/usuarios/clientes', [UserController::class, 'clientes'])->name('usuarios.clientes');
     Route::resource('productos', ProductoController::class);
-
-
+    Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
+    Route::get('/usuarios/clientes', [UserController::class, 'clientes'])->name('usuarios.clientes');
+    Route::resource('productos', ProductoController::class);
 });
 
 //INFORMACION 
@@ -90,9 +93,10 @@ Route::post('productos/importar', [ProductoImportController::class, 'importarExc
 
 
 
-Route::get('/pago/iniciar', [CheckoutController::class, 'iniciarPago'])->name('checkout.iniciar');
-Route::get('/pago/exito', [CheckoutController::class, 'pagoExitoso'])->name('checkout.exito');
-Route::get('/pago/fallo', [CheckoutController::class, 'pagoFallido'])->name('checkout.fallo');
-Route::get('/pago/pendiente', [CheckoutController::class, 'pagoPendiente'])->name('checkout.pendiente');
 
-Route::get('/producto-filtro', [ProductoController::class, 'vistaConFiltro'])->name('productos.filtro');
+
+// Mostrar formulario de checkout (GET)
+Route::get('/checkout', [CheckoutController::class, 'mostrarCheckout'])->name('checkout.formulario');
+
+// Guardar datos del cliente 
+Route::post('/checkout/guardar-datos', [CheckoutController::class, 'guardarDatosYRedirigir'])->name('checkout.guardar-datos');

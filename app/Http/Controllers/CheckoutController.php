@@ -4,68 +4,92 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use MercadoPago\MercadoPagoConfig;
-use MercadoPago\Client\Preference\PreferenceClient;
+use App\Models\Cliente;
+use App\Models\Venta;
+use App\Models\DetalleVenta;
+use App\Models\TipoDocumento;
+use App\Models\Sucursal;
+use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
-    public function iniciarPago()
+    public function mostrarCheckout()
+    {
+        $sucursales = Sucursal::all();
+        $tiposDocumento = TipoDocumento::all();
+        $carrito = session('carrito', []);
+        $total = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
+
+        return view('venta.checkout', compact('sucursales', 'tiposDocumento', 'carrito', 'total'));
+    }
+
+    // 👉 Guardar datos en BD directamente (sin MercadoPago)
+    public function guardarDatosYRedirigir(Request $request)
     {
         $carrito = session()->get('carrito', []);
+
         if (empty($carrito)) {
-            return redirect()->back()->with('error', 'El carrito está vacío.');
+            return response()->json(['error' => 'El carrito está vacío.'], 400);
         }
 
         try {
-            // Configurar MercadoPago
-            MercadoPagoConfig::setAccessToken('APP_USR-6033445216607702-072403-a0022df6e0a245763db56094498c00ae-1686393409');
-
-            $preferenceClient = new PreferenceClient();
-
-            // Preparar items
-            $items = [];
-            foreach ($carrito as $id => $item) {
-                $items[] = [
-                    "title" => $item['nombre'],
-                    "quantity" => (int) $item['cantidad'],
-                    "unit_price" => (float) $item['precio'],
-                    "currency_id" => "PEN"
-                ];
-            }
-
-            // Crear preferencia
-            $preference = $preferenceClient->create([
-                "items" => $items,
-                "back_urls" => [
-                    "success" => route('checkout.exito'),
-                    "failure" => route('checkout.fallo'),
-                    "pending" => route('checkout.pendiente'),
-                ],
+            $validated = $request->validate([
+                'nombres' => 'required|string',
+                'apellido_paterno' => 'required|string',
+                'apellido_materno' => 'required|string',
+                'correo' => 'required|email',
+                'tipo_documento_id' => 'required|integer',
+                'numero_documento' => 'required',
+                'celular' => 'required',
+                'sucursal_id' => 'required'
             ]);
-
-            return redirect($preference->init_point);
-        } catch (\Exception $e) {
-            Log::error('Error al crear preferencia de MercadoPago: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Ocurrió un error al iniciar el pago. Inténtalo nuevamente.');
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422);
         }
-    }
 
-    // 👉 Cuando el pago es exitoso
-    public function pagoExitoso()
-    {
+        // 👉 Registrar cliente
+        $cliente = Cliente::create([
+            'nombre'            => $validated['nombres'],
+            'apellido_paterno'  => $validated['apellido_paterno'],
+            'apellido_materno'  => $validated['apellido_materno'],
+            'email'             => $validated['correo'],
+            'tipo_documento_id' => $validated['tipo_documento_id'],
+            'DNI'               => $validated['numero_documento'],
+            'telefono'          => $validated['celular'],
+        ]);
+
+        // 👉 Calcular totales
+        $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
+        $igv = round($subtotal * 0.18, 2);
+        $total = $subtotal + $igv;
+
+        // 👉 Registrar venta
+        $venta = Venta::create([
+            'cliente_id'       => $cliente->id,
+            'fecha'            => now(),
+            'igv'              => $igv,
+            'subtotal'         => $subtotal,
+            'total'            => $total,
+            'metodo_pago_id'   => null, // Se puede asignar después
+            'estado_venta_id'  => 1,
+        ]);
+
+        // 👉 Registrar detalles de la venta
+        foreach ($carrito as $productoId => $item) {
+            DetalleVenta::create([
+                'venta_id'     => $venta->id,
+                'producto_id'  => $productoId,
+                'cantidad'     => $item['cantidad'],
+                'precio_venta' => $item['precio'],
+                'sucursal_id'  => $validated['sucursal_id'],
+                'user_id'      => auth()->check() ? auth()->id() : null,
+            ]);
+        }
+
+        // 👉 Limpiar carrito
         session()->forget('carrito');
-        return redirect()->route('welcome')->with('status', 'compra_exitosa');
-    }
 
-    // 👉 Cuando el pago falla
-    public function pagoFallido()
-    {
-        return redirect()->route('welcome')->with('status', 'compra_fallida');
-    }
-
-    // 👉 Cuando el pago está pendiente
-    public function pagoPendiente()
-    {
-        return redirect()->route('welcome')->with('status', 'compra_pendiente');
+        return response()->json(['mensaje' => 'Se guardaron los datos correctamente']);
     }
 }

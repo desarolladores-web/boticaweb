@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sucursals', function (Blueprint $table) {
-    $table->id();
-    $table->string('nombre', 255)->nullable();
-    $table->string('direccion', 255)->nullable();
-    $table->text('ubicacion_exacta')->nullable();
-    $table->timestamps();
-});
+            $table->id();
+            $table->string('nombre', 255)->nullable();
+            $table->string('direccion', 255)->nullable();
+            $table->text('ubicacion_exacta')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**

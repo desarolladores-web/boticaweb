@@ -9,21 +9,21 @@ class Cliente extends Model
 {
     use HasFactory;
 
-    protected $table = 'clientes'; // Nombre de la tabla
-    protected $primaryKey = 'id'; // Laravel usará 'id' como PK por defecto, pero lo dejamos explícito
-    public $timestamps = true; // Si estás usando $table->timestamps() en la migración
+    protected $table = 'clientes';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
 
     protected $fillable = [
-        'nombre',
+        'tipo_documento_id',
         'DNI',
+        'nombre',
         'apellido_paterno',
         'apellido_materno',
         'direccion',
         'telefono',
         'email',
-        'imagen', // ✅ Añadir esto
     ];
-    
+
     public function usuario()
     {
         return $this->hasOne(User::class, 'cliente_id');

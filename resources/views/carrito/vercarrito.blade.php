@@ -122,7 +122,7 @@
                                     <a href="{{ route('login') }}" class="btn btn-outline-primary">
                                         <i class="bi bi-person-circle me-2"></i> Iniciar sesión / Registrarse
                                     </a>
-                                    <a href="{{ route('ventas.create', ['total' => $total]) }}" class="btn btn-primary">
+                                    <a href="{{ route('checkout.formulario') }}" class="btn btn-primary">
                                         <i class="bi bi-box-arrow-right me-2"></i> Continuar sin cuenta
                                     </a>
                                 </div>

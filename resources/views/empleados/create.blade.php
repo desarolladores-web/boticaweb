@@ -101,11 +101,11 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="rol_id" class="form-label">Rol</label>
-                    <select name="rol_id" id="rol_id" class="form-select" required>
-                        @foreach($roles as $rol)
-                            <option value="{{ $rol->id }}">{{ ucfirst($rol->tipo) }}</option>
-                        @endforeach
-                    </select>
+                   <select name="rol_id" id="rol_id" class="form-select" required>
+    @foreach($roles as $rol)
+        <option value="{{ $rol->id }}">{{ ucfirst($rol->tipo) }}</option>
+    @endforeach
+</select>
                 </div>
             </div>
 

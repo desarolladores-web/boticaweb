@@ -18,6 +18,23 @@ return new class extends Migration
             $table->text('ubicacion_exacta')->nullable();
             $table->timestamps();
         });
+
+         DB::table('sucursals')->insert([
+            [
+                'nombre' => 'Sucursal Centro',
+                'direccion' => 'Av. Principal 123 - Centro',
+                'ubicacion_exacta' => 'Frente al parque central',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nombre' => 'Sucursal Norte',
+                'direccion' => 'Calle Norte 456 - Distrito Norte',
+                'ubicacion_exacta' => 'A una cuadra del hospital',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
     /**

@@ -38,22 +38,27 @@
 
                 <!-- Opciones de compra -->
                 <div class="border-top pt-3">
-                    <h5 class="mb-3">
-                        <i class="bi bi-truck me-2"></i>Opciones de entrega
-                    </h5>
-                    <div class="d-flex gap-3">
-                        <button class="btn btn-outline-success w-50">
-                            <i class="bi bi-shop me-1"></i>Retiro en tienda
-                        </button>
-                        <button class="btn btn-outline-primary w-50">
-                            <i class="bi bi-house-door me-1"></i>Despacho a domicilio
-                        </button>
-                    </div>
+    <h5 class="mb-3">
+        <i class="bi bi-truck me-2"></i>Opciones de entrega
+    </h5>
+    <div class="d-flex gap-3">
+        <button class="btn btn-outline-success w-50">
+            <i class="bi bi-shop me-1"></i>Retiro en tienda
+        </button>
+        <button class="btn btn-outline-primary w-50">
+            <i class="bi bi-house-door me-1"></i>Despacho a domicilio
+        </button>
+    </div>
 
-                    <button class="btn btn-primary w-100 mt-4">
-                        <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
-                    </button>
-                </div>
+    <!-- Formulario para agregar al carrito -->
+    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}" class="agregar-carrito-form mt-4">
+        @csrf
+        <input type="hidden" name="cantidad" value="1">
+        <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
+        </button>
+    </form>
+</div>
             </div>
         </div>
     </div>

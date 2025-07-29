@@ -94,6 +94,7 @@
 
 
                     <div class="right">
+                        
                         <form action="{{ route('productos.buscar') }}"" method=" get" class="search-group">
                             <input type="text" class="form-control" name="keyword" placeholder="Buscar"
                                 value="{{ request('keyword') }}">

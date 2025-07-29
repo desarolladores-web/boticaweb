@@ -50,13 +50,13 @@ class CheckoutController extends Controller
 
         // 👉 Registrar cliente
         $cliente = Cliente::create([
-            'nombre'            => $validated['nombres'],
-            'apellido_paterno'  => $validated['apellido_paterno'],
-            'apellido_materno'  => $validated['apellido_materno'],
-            'email'             => $validated['correo'],
+            'nombre' => $validated['nombres'],
+            'apellido_paterno' => $validated['apellido_paterno'],
+            'apellido_materno' => $validated['apellido_materno'],
+            'email' => $validated['correo'],
             'tipo_documento_id' => $validated['tipo_documento_id'],
-            'DNI'               => $validated['numero_documento'],
-            'telefono'          => $validated['celular'],
+            'DNI' => $validated['numero_documento'],
+            'telefono' => $validated['celular'],
         ]);
 
         // 👉 Calcular totales
@@ -66,25 +66,31 @@ class CheckoutController extends Controller
 
         // 👉 Registrar venta
         $venta = Venta::create([
-            'cliente_id'       => $cliente->id,
-            'fecha'            => now(),
-            'igv'              => $igv,
-            'subtotal'         => $subtotal,
-            'total'            => $total,
-            'metodo_pago_id'   => null, // Se puede asignar después
-            'estado_venta_id'  => 1,
+            'cliente_id' => $cliente->id,
+            'fecha' => now(),
+            'igv' => $igv,
+            'subtotal' => $subtotal,
+            'total' => $total,
+            'metodo_pago_id' => null, // Se puede asignar después
+            'estado_venta_id' => 1,
         ]);
 
         // 👉 Registrar detalles de la venta
         foreach ($carrito as $productoId => $item) {
             DetalleVenta::create([
-                'venta_id'     => $venta->id,
-                'producto_id'  => $productoId,
-                'cantidad'     => $item['cantidad'],
+                'venta_id' => $venta->id,
+                'producto_id' => $productoId,
+                'cantidad' => $item['cantidad'],
                 'precio_venta' => $item['precio'],
-                'sucursal_id'  => $validated['sucursal_id'],
-                'user_id'      => auth()->check() ? auth()->id() : null,
+                'sucursal_id' => $validated['sucursal_id'],
+                'user_id' => auth()->check() ? auth()->id() : null,
             ]);
+        }
+        // 👉 Reducir el stock del producto
+        $producto = \App\Models\Producto::find($productoId);
+        if ($producto) {
+            $producto->stock = max(0, $producto->stock - $item['cantidad']);
+            $producto->save();
         }
 
         // 👉 Limpiar carrito

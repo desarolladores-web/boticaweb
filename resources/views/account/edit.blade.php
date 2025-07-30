@@ -11,7 +11,7 @@
     <div class="row">
   <!-- Sidebar principal -->
   <div class="col-12 col-lg-3">
-    <div class="sidebar"> 
+    <div class="user-sidebar"> 
       <!-- Imagen del avatar -->
       <div class="avatar text-center">
         @if($user && $user->imagen)

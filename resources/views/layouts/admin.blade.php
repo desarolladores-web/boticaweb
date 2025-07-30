@@ -74,135 +74,145 @@
 
     <!-- Contenedor principal con sidebar y contenido -->
     <div style="display: flex;">
-    
-      <nav class="sidebar">
-        <div class="menu_content">
-          <ul class="menu_items">
-            <div class="menu_title menu_dahsboard"></div>
-            <!-- start -->
-              <li class="item">
-              <a href="{{ route('welcome') }}" class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-home-alt"></i>
-                </span>
-                <span class="navlink">Inicio</span>
-              </a>
-            </li>
-            <!-- end -->
-            <li class="item">
-              <div href="" class="nav_link submenu_item">
-                <span class="navlink_icon">
-                  <i class="bx bx-grid-alt"></i>
-                </span>
-                <span class="navlink">Overview</span>
-                <i class="bx bx-chevron-right arrow-left"></i>
-              </div>
-              <ul class="menu_items submenu">
-                <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                <a href="#" class="nav_link sublink">Nav Sub Link</a>
-              </ul>
-            </li>
-          </ul>
-          <hr class="hr-rojo">
-
-
-
-
-          <ul class="menu_items">
-          
-
-            <div class="menu_title menu_editor"></div>
-            <li class="item">
-              <a href="{{ route('productos.index') }}" class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-package icon"></i>
-                </span>
-                <span class="navlink">Productos</span>
-              </a>
-            </li>
-            <li class="item">
-              <a href="{{ route('empleados.create') }}" class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-user-plus ico"></i>
-                </span>
-                <span class="navlink">Crear Empleados</span>
-              </a>
-            </li>
-            <li class="item">
-             <a href="{{ route('admin.account.edit') }}" class="nav_link">
-    <span class="navlink_icon">
-        <i class="bx bx-filter"></i>
-    </span>
-    <span class="navlink">Editar</span>
-</a>
-            <li class="item">
-  <a href="{{ route('usuarios.clientes') }}" class="nav_link">
-    <span class="navlink_icon">
-      <i class="bx bx-user"></i> <!-- Cambiado el ícono a "usuario" -->
-    </span>
-    <span class="navlink">Clientes</span>
-  </a>
-</li>
-
-          </ul>
-          <hr class="hr-rojo">
-          <ul class="menu_items">
-            <div class="menu_title menu_setting"></div>
-            <li class="item">
-              <a href="#" class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-flag"></i>
-                </span>
-                <span class="navlink">Notice board</span>
-              </a>
-            </li>
+  @if(View::hasSection('admin-sidebar'))
+    @yield('admin-sidebar')
+  @else
+    <nav class="sidebar">
+      <div class="menu_content">
+        <ul class="menu_items">
+          <div class="menu_title menu_dahsboard"></div>
+          <!-- start -->
           <li class="item">
-  <a href="{{ route('usuarios.index') }}" class="nav_link">
-    <span class="navlink_icon">
-      <i class="bx bx-group"></i> <!-- Ícono cambiado -->
-    </span>
-    <span class="navlink">Empleados</span>
-  </a>
-</li>
-
-            <li class="item">
-              <a href="#" class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-cog"></i>
-                </span>
-                <span class="navlink">Setting</span>
-              </a>
-            </li>
-            <li class="item">
-              <a href="#" class="nav_link">
-                <span class="navlink_icon">
-                  <i class="bx bx-layer"></i>
-                </span>
-                <span class="navlink">Features</span>
-              </a>
-            </li>
-          </ul>
-
-          <div class="bottom_content">
-            <div class="bottom expand_sidebar">
-              <span> Expand</span>
-              <i class='bx bx-log-in'></i>
+            <a href="{{ route('welcome') }}" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-home-alt"></i>
+              </span>
+              <span class="navlink">Inicio</span>
+            </a>
+          </li>
+          <!-- end -->
+          <li class="item">
+            <div href="" class="nav_link submenu_item">
+              <span class="navlink_icon">
+                <i class="bx bx-grid-alt"></i>
+              </span>
+              <span class="navlink">Overview</span>
+              <i class="bx bx-chevron-right arrow-left"></i>
             </div>
-            <div class="bottom collapse_sidebar">
-              <span> Collapse</span>
-              <i class='bx bx-log-out'></i>
-            </div>
+            <ul class="menu_items submenu">
+              <a href="#" class="nav_link sublink">Nav Sub Link</a>
+              <a href="#" class="nav_link sublink">Nav Sub Link</a>
+              <a href="#" class="nav_link sublink">Nav Sub Link</a>
+              <a href="#" class="nav_link sublink">Nav Sub Link</a>
+            </ul>
+          </li>
+        </ul>
+
+        <hr class="hr-rojo">
+
+        <ul class="menu_items">
+          <div class="menu_title menu_editor"></div>
+
+          <li class="item">
+            <a href="{{ route('productos.index') }}" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-package icon"></i>
+              </span>
+              <span class="navlink">Productos</span>
+            </a>
+          </li>
+
+          <li class="item">
+            <a href="{{ route('empleados.create') }}" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-user-plus ico"></i>
+              </span>
+              <span class="navlink">Crear Empleados</span>
+            </a>
+          </li>
+
+          <li class="item">
+            <a href="{{ route('admin.account.edit') }}" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-filter"></i>
+              </span>
+              <span class="navlink">Editar</span>
+            </a>
+          </li>
+
+          <li class="item">
+            <a href="{{ route('usuarios.clientes') }}" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-user"></i>
+              </span>
+              <span class="navlink">Clientes</span>
+            </a>
+          </li>
+        </ul>
+
+        <hr class="hr-rojo">
+
+        <ul class="menu_items">
+          <div class="menu_title menu_setting"></div>
+
+          <li class="item">
+            <a href="#" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-flag"></i>
+              </span>
+              <span class="navlink">Notice board</span>
+            </a>
+          </li>
+
+          <li class="item">
+            <a href="{{ route('usuarios.index') }}" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-group"></i>
+              </span>
+              <span class="navlink">Empleados</span>
+            </a>
+          </li>
+
+          <li class="item">
+            <a href="#" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-cog"></i>
+              </span>
+              <span class="navlink">Setting</span>
+            </a>
+          </li>
+
+          <li class="item">
+            <a href="#" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-layer"></i>
+              </span>
+              <span class="navlink">Features</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="bottom_content">
+          <div class="bottom expand_sidebar">
+            <span> Expand</span>
+            <i class='bx bx-log-in'></i>
+          </div>
+          <div class="bottom collapse_sidebar">
+            <span> Collapse</span>
+            <i class='bx bx-log-out'></i>
           </div>
         </div>
-      </nav>
+      </div>
+    </nav>
+  @endif
+</div>
 
       <!-- Contenido dinámico -->
       <div class="content p-4" style="margin-top: 80px; margin-left: 250px; flex: 1;">
         @yield('content')
       </div>
     </div>
+    
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

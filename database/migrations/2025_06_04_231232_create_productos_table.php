@@ -46,6 +46,8 @@ return new class extends Migration
             $table->foreign('laboratorio_id')->references('id')->on('laboratorios')->onDelete('set null');
             $table->foreign('presentacion_id')->references('id')->on('presentacions')->onDelete('set null');
         });
+             DB::statement('ALTER TABLE productos MODIFY imagen LONGBLOB NULL');
+    
     }
 
 

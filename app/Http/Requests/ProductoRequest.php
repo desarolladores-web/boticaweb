@@ -32,7 +32,7 @@ class ProductoRequest extends FormRequest
             'stock_min' => 'nullable|integer',
             'fecha_vencimiento' => 'nullable|date',
 
-            'imagen' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // Máx 2MB  aun con fallas
+            'imagen' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,bmp,tiff,tif,svg,ico,heic,heif,avif|max:5120', // Máx 2MB  aun con fallas
 
             'categoria_id' => 'nullable|integer|exists:categorias,id',
             'laboratorio_id' => 'nullable|integer|exists:laboratorios,id',

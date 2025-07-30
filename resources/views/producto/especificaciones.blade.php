@@ -1,64 +1,88 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .text-primary {
+    color: #0b3b60 !important;
+}
+.btn-warning {
+    background-color: #8a5f43ff;
+    border-color: #0f0f0fff;
+}
+.btn-warning:hover {
+    background-color: #e65c00;
+}
+.shadow-sm {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+
+</style>
 <div class="container py-5">
-    <div class="row">
-        <!-- Imagen del producto -->
-        <div class="col-md-5">
-            <div class="border rounded p-3 bg-white shadow-sm">
+    <div class="row g-5">
+        <!-- Miniaturas laterales -->
+        <div class="col-md-1 d-none d-md-flex flex-column gap-3">
+            @for($i = 0; $i < 4; $i++)
+                <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" class="img-fluid rounded border" style="cursor:pointer;">
+            @endfor
+        </div>
+
+        <!-- Imagen principal -->
+        <div class="col-md-4">
+            <div class="bg-white border rounded p-3 shadow-sm text-center">
                 @if($producto->imagen)
-                    <img src="{{ asset('storage/' . $producto->imagen) }}" class="img-fluid w-100 rounded" alt="{{ $producto->nombre }}">
+                    <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" class="img-fluid rounded" alt="Producto">
                 @else
-                    <img src="https://via.placeholder.com/400x400?text=Sin+Imagen" class="img-fluid w-100 rounded" alt="Sin Imagen">
+                    <img src="https://via.placeholder.com/400x400?text=Sin+Imagen" class="img-fluid rounded" alt="Sin Imagen">
                 @endif
             </div>
         </div>
 
-        <!-- Detalles del producto -->
+        <!-- Información del producto -->
         <div class="col-md-7">
-            <div class="bg-white p-4 rounded shadow-sm">
-                <h2 class="fw-bold mb-3">
-                    <i class="bi bi-capsule me-2"></i>{{ $producto->nombre }}
-                </h2>
-                <p class="text-muted mb-4">
-                    <i class="bi bi-file-earmark-text me-2"></i>{{ $producto->descripcion }}
-                </p>
+            <div class="bg-white border rounded p-4 shadow-sm" style="font-size: 14px; color: #333;">
+                <p class="text-muted mb-1" style="font-size: 13px;">TUBO {{ $producto->presentacion->tipo_presentacion ?? '' }}</p>
+                <h2 class="fw-semibold mb-3" style="color: #1c1c1c; font-size: 20px;">{{ $producto->nombre }}</h2>
 
-                <ul class="list-group list-group-flush mb-4">
-                    <li class="list-group-item"><i class="bi bi-coin me-2"></i><strong>Precio:</strong> S/. {{ number_format($producto->pvp1, 2) }}</li>
-                    
-                    <li class="list-group-item"><i class="bi bi-eyedropper me-2"></i><strong>Principio Activo:</strong> {{ $producto->principio_activo ?? 'N/A' }}</li>
-                    <li class="list-group-item"><i class="bi bi-box-seam me-2"></i><strong>Stock disponible:</strong> {{ $producto->stock }}</li>
-                  
-                    <li class="list-group-item"><i class="bi bi-calendar-event me-2"></i><strong>Fecha de vencimiento:</strong> {{ \Carbon\Carbon::parse($producto->fecha_vencimiento)->format('d/m/Y') }}</li>
-                    <li class="list-group-item"><i class="bi bi-bag me-2"></i><strong>Presentación:</strong> {{ $producto->presentacion->tipo_presentacion ?? 'N/A' }}</li>
-                    <li class="list-group-item"><i class="bi bi-tag me-2"></i><strong>Categoría:</strong> {{ $producto->categoria->nombre ?? 'N/A' }}</li>
-                    <li class="list-group-item"><i class="bi bi-building me-2"></i><strong>Laboratorio:</strong> {{ $producto->laboratorio->nombre_laboratorio ?? 'N/A' }}</li>
+                <div class="mb-3">
+                    <span class="text-muted text-decoration-line-through" style="font-size: 14px;">S/ {{ number_format($producto->pvp1 + 50, 2) }}</span>
+                    <span class="fw-bold ms-2" style="color: #e63946; font-size: 18px;">S/ {{ number_format($producto->pvp1, 2) }}</span>
+                </div>
+
+                <!-- Precio Monedero -->
+                <div class="border p-3 rounded mb-4" style="background-color: #fffbe6;">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-wallet-fill text-warning fs-5 me-2"></i>
+                        <div style="font-size: 13px;">
+                            <strong>Inicia sesión</strong> para ahorrar 
+                            <span class="text-danger">S/ 50.00</span> con el precio Monedero del Ahorro.
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="list-group list-group-flush mb-4 small">
+                    <li class="list-group-item"><strong>Principio Activo:</strong> {{ $producto->principio_activo ?? 'N/A' }}</li>
+                    <li class="list-group-item"><strong>Stock:</strong> {{ $producto->stock }}</li>
+                    <li class="list-group-item"><strong>Vencimiento:</strong> {{ \Carbon\Carbon::parse($producto->fecha_vencimiento)->format('d/m/Y') }}</li>
+                    <li class="list-group-item"><strong>Categoría:</strong> {{ $producto->categoria->nombre ?? 'N/A' }}</li>
+                    <li class="list-group-item"><strong>Laboratorio:</strong> {{ $producto->laboratorio->nombre_laboratorio ?? 'N/A' }}</li>
                 </ul>
 
-                <!-- Opciones de compra -->
-                <div class="border-top pt-3">
-    <h5 class="mb-3">
-        <i class="bi bi-truck me-2"></i>Opciones de entrega
-    </h5>
-    <div class="d-flex gap-3">
-        <button class="btn btn-outline-success w-50">
-            <i class="bi bi-shop me-1"></i>Retiro en tienda
-        </button>
-        <button class="btn btn-outline-primary w-50">
-            <i class="bi bi-house-door me-1"></i>Despacho a domicilio
-        </button>
-    </div>
+                <!-- Retiro en botica -->
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-2" style="font-size: 14px;">Método de entrega</h6>
+                    <button class="btn btn-outline-success w-100 d-flex align-items-center justify-content-center gap-2 py-2" style="font-size: 14px;">
+                        <i class="bi bi-hospital fs-5"></i> Retiro en botica (Gratis)
+                    </button>
+                </div>
 
-    <!-- Formulario para agregar al carrito -->
-    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}" class="agregar-carrito-form mt-4">
-        @csrf
-        <input type="hidden" name="cantidad" value="1">
-        <button type="submit" class="btn btn-primary w-100">
-            <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
-        </button>
-    </form>
-</div>
+                <!-- Botón agregar al carrito -->
+                <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}">
+                    @csrf
+                    <input type="hidden" name="cantidad" value="1">
+                    <button type="submit" class="btn btn-warning text-white w-100 fw-semibold py-2" style="font-size: 13px;">
+                        <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
+                    </button>
+                </form>
             </div>
         </div>
     </div>

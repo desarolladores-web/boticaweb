@@ -78,6 +78,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/account/edit', [ProfileController::class, 'edit'])->name('admin.account.edit');
     Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
+    Route::get('/empleados/{id}/edit', [App\Http\Controllers\EmpleadoController::class, 'edit'])->name('empleados.edit');
+Route::put('/empleados/{id}', [App\Http\Controllers\EmpleadoController::class, 'update'])->name('empleados.update');
+
 
     Route::resource('productos', ProductoController::class);
     Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');

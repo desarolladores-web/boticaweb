@@ -41,6 +41,7 @@
                 <th>Rol</th>
                 <th>Tipo Documento</th>
                 <th>Estado</th>
+                <th>Acciones</th> <!-- Nueva columna para el botón -->
             </tr>
         </thead>
         <tbody>
@@ -76,12 +77,18 @@
                     </td>
 
                     <td>
-    @if($user->estado)
-        <span class="badge bg-success estado-badge">Activo</span>
-    @else
-        <span class="badge bg-danger estado-badge">Inactivo</span>
-    @endif
-</td>
+                        @if($user->estado)
+                            <span class="badge bg-success estado-badge">Activo</span>
+                        @else
+                            <span class="badge bg-danger estado-badge">Inactivo</span>
+                        @endif
+                    </td>
+
+                    <td>
+                        <a href="{{ route('empleados.edit', $user->id) }}" class="btn btn-sm btn-warning">
+                            Editar
+                        </a>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

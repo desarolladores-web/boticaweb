@@ -15,6 +15,9 @@ use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\CheckoutController;
 
+
+
+
 /*
 |---------------------------------------------------------------------------
 | Web Routes
@@ -79,7 +82,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/empleados/create', [App\Http\Controllers\EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [App\Http\Controllers\EmpleadoController::class, 'store'])->name('empleados.store');
     Route::get('/empleados/{id}/edit', [App\Http\Controllers\EmpleadoController::class, 'edit'])->name('empleados.edit');
-Route::put('/empleados/{id}', [App\Http\Controllers\EmpleadoController::class, 'update'])->name('empleados.update');
+    Route::put('/empleados/{id}', [App\Http\Controllers\EmpleadoController::class, 'update'])->name('empleados.update');
 
 
     Route::resource('productos', ProductoController::class);
@@ -103,3 +106,17 @@ Route::get('/checkout', [CheckoutController::class, 'mostrarCheckout'])->name('c
 
 // Guardar datos del cliente 
 Route::post('/checkout/guardar-datos', [CheckoutController::class, 'guardarDatosYRedirigir'])->name('checkout.guardar-datos');
+
+
+
+Route::get('/pago/exito', function () {
+    return 'Pago exitoso';
+})->name('pago.exito');
+
+Route::get('/pago/fallo', function () {
+    return 'Pago fallido';
+})->name('pago.fallo');
+
+Route::get('/pago/pendiente', function () {
+    return 'Pago pendiente';
+})->name('pago.pendiente');

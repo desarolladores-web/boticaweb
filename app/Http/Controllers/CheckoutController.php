@@ -12,6 +12,14 @@ use App\Models\Sucursal;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 
+
+use MercadoPago\SDK;
+use MercadoPago\Preference;
+use MercadoPago\Item;
+
+use MercadoPago\Payer;
+
+
 class CheckoutController extends Controller
 {
     public function mostrarCheckout()
@@ -19,6 +27,7 @@ class CheckoutController extends Controller
         $sucursales = Sucursal::all();
         $tiposDocumento = TipoDocumento::all();
         $carrito = session('carrito', []);
+
         $total = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
 
         return view('venta.checkout', compact('sucursales', 'tiposDocumento', 'carrito', 'total'));
@@ -27,6 +36,7 @@ class CheckoutController extends Controller
     // 👉 Guardar datos en BD directamente (sin MercadoPago)
     public function guardarDatosYRedirigir(Request $request)
     {
+
         $carrito = session()->get('carrito', []);
 
         if (empty($carrito)) {
@@ -47,6 +57,7 @@ class CheckoutController extends Controller
         } catch (ValidationException $e) {
             return response()->json(['error' => $e->errors()], 422);
         }
+
 
         // 👉 Registrar cliente
         $cliente = Cliente::create([
@@ -71,31 +82,90 @@ class CheckoutController extends Controller
             'igv' => $igv,
             'subtotal' => $subtotal,
             'total' => $total,
-            'metodo_pago_id' => null, // Se puede asignar después
+            'metodo_pago_id' => null,
             'estado_venta_id' => 1,
         ]);
 
         // 👉 Registrar detalles de la venta
-        foreach ($carrito as $productoId => $item) {
+        foreach ($carrito as $item) {
             DetalleVenta::create([
                 'venta_id' => $venta->id,
-                'producto_id' => $productoId,
+                'producto_id' => $item['id'],
                 'cantidad' => $item['cantidad'],
                 'precio_venta' => $item['precio'],
                 'sucursal_id' => $validated['sucursal_id'],
                 'user_id' => auth()->check() ? auth()->id() : null,
             ]);
+
+            // 👉 Reducir stock
+            $producto = \App\Models\Producto::find($item['id']);
+            if ($producto) {
+                $producto->stock = max(0, $producto->stock - $item['cantidad']);
+                $producto->save();
+            }
         }
-        // 👉 Reducir el stock del producto
-        $producto = \App\Models\Producto::find($productoId);
-        if ($producto) {
-            $producto->stock = max(0, $producto->stock - $item['cantidad']);
-            $producto->save();
+
+
+
+        // ✅ Crear preferencia Mercado Pago
+        SDK::setAccessToken(config('services.mercadopago.token'));
+
+        $items = [];
+        foreach ($carrito as $itemCarrito) {
+            $precioConIgv = round($itemCarrito['precio'] * 1.18, 2); // 👈 incluye IGV
+
+            $item = new Item();
+            $item->title = $itemCarrito['nombre'] ?? 'Producto';
+            $item->quantity = (int) $itemCarrito['cantidad'];
+            $item->unit_price = (float) $precioConIgv;
+            $items[] = $item;
         }
+
+
+
+        $preference = new Preference();
+        $preference->items = $items;
+
+
+
+        // ✅ Agregar datos del cliente a la preferencia
+        $payer = new Payer();
+        $payer->name = $validated['nombres'];
+        $payer->surname = $validated['apellido_paterno'] . ' ' . $validated['apellido_materno'];
+        $payer->email = $validated['correo'];
+        $payer->identification = [
+            'type' => 'DNI',
+            'number' => $validated['numero_documento']
+        ];
+        $payer->phone = [
+            'area_code' => '51',
+            'number' => $validated['celular']
+        ];
+        $payer->address = [
+            'street_name' => 'Dirección no especificada',
+            'street_number' => 0
+        ];
+        $preference->payer = $payer;
+
+
+
+
+
+        $preference->back_urls = [
+            'success' => route('pago.exito'),
+            'failure' => route('pago.fallo'),
+            'pending' => route('pago.pendiente'),
+        ];
+
+
+        //$preference->auto_return = 'approved';
+        $preference->save();
 
         // 👉 Limpiar carrito
-        session()->forget('carrito');
+        //session()->forget('carrito');
 
-        return response()->json(['mensaje' => 'Se guardaron los datos correctamente']);
+
+
+        return response()->json(['init_point' => $preference->init_point]);
     }
 }

@@ -241,6 +241,11 @@
                     <p class="text-muted">No hay productos en el carrito.</p>
                     @endforelse
 
+                    @php
+                    $igv = round($total * 0.18, 2);
+                    $totalConIgv = $total + $igv;
+                    @endphp
+
                     <hr>
 
                     <div class="d-flex justify-content-between">
@@ -248,13 +253,17 @@
                         <span>S/ {{ number_format($total, 2) }}</span>
                     </div>
                     <div class="d-flex justify-content-between">
+                        <span>IGV (18%)</span>
+                        <span>S/ {{ number_format($igv, 2) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
                         <strong>Total</strong>
-                        <span class="text-danger fw-bold">S/ {{ number_format($total, 2) }}</span>
+                        <span class="text-danger fw-bold">S/ {{ number_format($totalConIgv, 2) }}</span>
                     </div>
 
                     <div class="mt-4">
                         <button type="button" class="btn btn-danger w-100" onclick="validarFormulario();">
-                            Comprar ahora
+                            Comprar ahora gaaa
                         </button>
                     </div>
 
@@ -277,14 +286,15 @@
                         headers: {
                             'X-CSRF-TOKEN': "{{ csrf_token() }}"
                         },
-                        body: formData
+                        body: formData,
+                        credentials: 'same-origin' // 👈 ESTA LÍNEA ES CLAVE PARA QUE FUNCIONE LA SESIÓN
                     })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.mensaje) {
+                        if (data.init_point) {
+                            window.location.href = data.init_point; // Redirige a Mercado Pago
+                        } else if (data.mensaje) {
                             alert(data.mensaje);
-                            // Redirigir al inicio después del mensaje
-                            window.location.href = "/";
                         } else if (data.error) {
                             alert("Error: " + data.error);
                         }
@@ -298,7 +308,6 @@
             }
         }
     </script>
-
 
 
 

@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
@@ -11,7 +14,8 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.6",
-        "mercadopago/dx-php": "^3.5",
+        "mercadopago/dx-php": "2.5",
+        "mercadopago/sdk": "0.5.6",
         "phpoffice/phpspreadsheet": "^4.4"
     },
     "require-dev": {

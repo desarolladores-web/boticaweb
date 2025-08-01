@@ -36,7 +36,8 @@ public function edit($section = 'profile')
         $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|string|email|max:100|unique:users,email,' . $user->id,
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagen' => 'nullable|file|mimetypes:image/*|max:20480',
+
         ]);
 
         // Actualizar datos

@@ -31,9 +31,8 @@ return new class extends Migration
             $table->foreign('tipo_documento_id')->references('id')->on('tipo_documentos')->onDelete('set null');
             $table->foreign('rol_id')->references('id')->on('rols')->onDelete('set null');
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('set null');
-       
         });
-            
+
 
         // Tabla sessions
         Schema::create('sessions', function (Blueprint $table) {
@@ -55,5 +54,4 @@ return new class extends Migration
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');
     }
-      DB::statement('ALTER TABLE users MODIFY imagen LONGBLOB NULL');
 };

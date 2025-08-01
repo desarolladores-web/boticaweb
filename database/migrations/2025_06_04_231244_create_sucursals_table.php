@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-         DB::table('sucursals')->insert([
+        DB::table('sucursals')->insert([
             [
                 'nombre' => 'Sucursal Centro',
                 'direccion' => 'Av. Principal 123 - Centro',

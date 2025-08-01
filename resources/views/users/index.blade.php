@@ -40,7 +40,7 @@
                 <th>Cliente</th>
                 <th>Rol</th>
                 <th>Tipo Documento</th>
-                <th>Estado</th>
+                <th>Estado</th><!-- Nueva columna para el botón -->
                 <th>Acciones</th> <!-- Nueva columna para el botón -->
             </tr>
         </thead>

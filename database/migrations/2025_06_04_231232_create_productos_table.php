@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+
 
 return new class extends Migration
 {
@@ -31,7 +33,7 @@ return new class extends Migration
 
             $table->date('fecha_vencimiento')->nullable(); // Fecha de vencimiento
 
-           
+
             $table->binary('imagen')->nullable(); // 👈 Campo binario para imagen
 
             // Relaciones con claves foráneas
@@ -46,8 +48,7 @@ return new class extends Migration
             $table->foreign('laboratorio_id')->references('id')->on('laboratorios')->onDelete('set null');
             $table->foreign('presentacion_id')->references('id')->on('presentacions')->onDelete('set null');
         });
-             DB::statement('ALTER TABLE productos MODIFY imagen LONGBLOB NULL');
-    
+        DB::statement('ALTER TABLE productos MODIFY imagen LONGBLOB NULL');
     }
 
 

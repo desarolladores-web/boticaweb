@@ -157,12 +157,12 @@ class CheckoutController extends Controller
             'pending' => route('pago.pendiente'),
         ];
 
-
+        //recordarle a chat que todo esta en local 
         //$preference->auto_return = 'approved';
         $preference->save();
 
         // 👉 Limpiar carrito
-        //session()->forget('carrito');
+        session()->forget('carrito');
 
 
 

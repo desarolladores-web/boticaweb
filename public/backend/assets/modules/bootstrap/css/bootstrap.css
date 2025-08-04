@@ -2323,9 +2323,7 @@ textarea.form-control {
   opacity: 0.65;
 }
 
-.btn:not(:disabled):not(.disabled) {
-  cursor: pointer;
-}
+
 
 a.btn.disabled,
 fieldset:disabled a.btn {

@@ -42,11 +42,7 @@
     <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"> Botica Myryan
   </div>
 
-  <!-- Barra de búsqueda -->
-  <div class="search_bar">
-    <input type="text" placeholder="Search" />
-  </div>
-
+ 
   <!-- Contenido del navbar -->
   <div class="navbar_content">
     
@@ -181,7 +177,7 @@
               <span class="navlink_icon">
                 <i class="bx bx-flag"></i>
               </span>
-              <span class="navlink">Notice board</span>
+              <span class="navlink">Ventas pendientes</span>
             </a>
           </li>
 
@@ -190,7 +186,7 @@
               <span class="navlink_icon">
                 <i class="bx bx-group"></i>
               </span>
-              <span class="navlink">Empleados</span>
+              <span class="navlink">Ventas entregadas</span>
             </a>
           </li>
 
@@ -199,7 +195,7 @@
               <span class="navlink_icon">
                 <i class="bx bx-cog"></i>
               </span>
-              <span class="navlink">Setting</span>
+              <span class="navlink">Null</span>
             </a>
           </li>
 
@@ -208,7 +204,7 @@
               <span class="navlink_icon">
                 <i class="bx bx-layer"></i>
               </span>
-              <span class="navlink">Features</span>
+              <span class="navlink">Null</span>
             </a>
           </li>
         </ul>

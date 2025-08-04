@@ -22,16 +22,16 @@ return new class extends Migration
 
         DB::table('sucursals')->insert([
             [
-                'nombre' => 'Sucursal Centro',
-                'direccion' => 'Av. Principal 123 - Centro',
-                'ubicacion_exacta' => 'Frente al parque central',
+                'nombre' => 'Sucursal TINGUIÑA',
+                'direccion' => 'CALLE. CARACAS N° 498 MZ° 36 LT° 01 TINGUIÑA - ZONA C',
+                'ubicacion_exacta' => 'Alfrente de la plaza',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'nombre' => 'Sucursal Norte',
-                'direccion' => 'Calle Norte 456 - Distrito Norte',
-                'ubicacion_exacta' => 'A una cuadra del hospital',
+                'nombre' => 'Sucursal TINGUIÑA 2',
+                'direccion' => 'CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA TINGUIÑA - ZONA C',
+                'ubicacion_exacta' => '#',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

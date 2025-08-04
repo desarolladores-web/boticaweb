@@ -18,17 +18,12 @@ return new class extends Migration
         // Insertar los estados después de crear la tabla
         DB::table('estado_ventas')->insert([
             [
-                'estado' => 'pendiente',
+                'estado' => 'venta pendiente',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
-                'estado' => 'pagado',
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'estado' => 'cancelado',
+                'estado' => 'venta entregada',
                 'created_at' => now(),
                 'updated_at' => now()
             ],

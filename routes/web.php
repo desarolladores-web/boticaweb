@@ -129,4 +129,5 @@ Route::get('/pago/pendiente', function () {
 
 
 Route::get('/admin/ventas/pendientes', [VentaController::class, 'pendientes'])->name('admin.ventas.pendientes');
-Route::get('/admin/ventas/entregadas', [VentaController::class, 'entregadas'])->name('admin.ventas.entregadas');
+Route::get('/admin/ventas/entregadas', [VentaController::class, 'ventasEntregadas'])->name('admin.ventas.entregadas');
+Route::put('/admin/ventas/{id}/entregar', [VentaController::class, 'marcarComoEntregada'])->name('admin.ventas.marcarEntregada');

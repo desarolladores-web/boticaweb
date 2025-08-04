@@ -18,6 +18,10 @@ use App\Http\Controllers\CheckoutController;
 
 
 
+
+
+
+
 /*
 |---------------------------------------------------------------------------
 | Web Routes
@@ -120,3 +124,9 @@ Route::get('/pago/fallo', function () {
 Route::get('/pago/pendiente', function () {
     return 'Pago pendiente';
 })->name('pago.pendiente');
+
+
+
+
+Route::get('/admin/ventas/pendientes', [VentaController::class, 'pendientes'])->name('admin.ventas.pendientes');
+Route::get('/admin/ventas/entregadas', [VentaController::class, 'entregadas'])->name('admin.ventas.entregadas');

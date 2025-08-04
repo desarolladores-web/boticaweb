@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Venta extends Model
 {
-    
+
     protected $perPage = 20;
 
     /**
@@ -48,7 +48,7 @@ class Venta extends Model
     {
         return $this->belongsTo(\App\Models\Cliente::class, 'cliente_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -56,7 +56,7 @@ class Venta extends Model
     {
         return $this->belongsTo(\App\Models\EstadoVenta::class, 'estado_venta_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -64,29 +64,22 @@ class Venta extends Model
     {
         return $this->belongsTo(\App\Models\MetodoPago::class, 'metodo_pago_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comprobantes()
     {
-        return $this->hasMany(\App\Models\Comprobante::class, 'id', 'venta_id');
+        return $this->hasMany(\App\Models\Comprobante::class, 'venta_id', 'id');
     }
-    
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+
     public function detalleVentas()
     {
-        return $this->hasMany(\App\Models\DetalleVenta::class, 'id', 'venta_id');
+        return $this->hasMany(\App\Models\DetalleVenta::class, 'venta_id', 'id');
     }
-    
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+
     public function reclamos()
     {
-        return $this->hasMany(\App\Models\Reclamo::class, 'id', 'venta_id');
+        return $this->hasMany(\App\Models\Reclamo::class, 'venta_id', 'id');
     }
-    
 }

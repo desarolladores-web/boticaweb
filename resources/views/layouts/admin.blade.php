@@ -90,6 +90,14 @@
               <span class="navlink">Inicio</span>
             </a>
           </li>
+          <li class="item">
+            <a href="{{ route('admin.dashboard') }}" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-layout"></i> 
+              </span>
+              <span class="navlink">Dashboard</span>
+            </a>
+          </li>
           <!-- end -->
           <li class="item">
             <div href="" class="nav_link submenu_item">

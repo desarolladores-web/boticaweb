@@ -34,7 +34,7 @@
 
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <div id="app">
         <!-- Header Section -->
@@ -53,7 +53,7 @@
                             <i class="bi bi-envelope-fill me-1"></i> boticamyryan@gmail.com
                         </a>
                         <span class="text-white d-flex align-items-center">
-                            <i class="bi bi-telephone-outbound-fill me-1"></i> +51 xxx xxx xnxx
+                            <i class="bi bi-telephone-outbound-fill me-1"></i> +51 973059257
                         </span>
                     </div>
                 </div>
@@ -228,12 +228,15 @@
     </div>
     </nav>
 
-    <main class="py-4" style="background-color: #f5f7fa;">
-        @yield('content')
-    </main>
+    <main class="flex-fill py-4" style="background-color: #f5f7fa;">
+    @yield('content')
+</main>
 
     @include('layouts.whatsapp')
+    <footer class="mt-auto" >
     @include('layouts.footer')
+</footer>
+
     </div>
 
     <!-- SIDEBAR DEL CARRITO -->
@@ -410,8 +413,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+ 
 </body>
 
 </html>

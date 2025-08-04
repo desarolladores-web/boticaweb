@@ -136,4 +136,22 @@
     color: #cccccc;
     text-decoration: none;
   }
+
+  .footer-box,
+.footer-top-links,
+.bottom-box,
+.footer-item-content,
+.footer-link-title,
+.about-text {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.footer-box {
+  padding: 10px 0 !important;
+}
+
+
 </style>

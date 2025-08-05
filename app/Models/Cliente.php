@@ -28,4 +28,10 @@ class Cliente extends Model
     {
         return $this->hasOne(User::class, 'cliente_id');
     }
+
+
+    public function tipoDocumento()
+    {
+        return $this->belongsTo(TipoDocumento::class);
+    }
 }

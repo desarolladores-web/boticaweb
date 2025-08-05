@@ -173,25 +173,27 @@
               <span class="navlink">Productos</span>
             </a>
           </li>
-          <li class="item">
-            <a href="{{ route('admin.ventas.pendientes') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-flag"></i>
-              </span>
-              <span class="navlink">Ventas pendientes</span>
-            </a>
-          </li>
+       <li class="item">
+  <a href="{{ route('admin.ventas.pendientes') }}" class="nav_link">
+    <span class="navlink_icon">
+      <i class="bx bx-time-five"></i>
+    </span>
+    <span class="navlink">Ventas pendientes</span>
+  </a>
+</li>
 
 
 
-          <li class="item">
-            <a href="{{ route('admin.ventas.entregadas') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-cog"></i>
-              </span>
-              <span class="navlink">Ventas entregadas</span>
-            </a>
-          </li>
+
+         <li class="item">
+  <a href="{{ route('admin.ventas.entregadas') }}" class="nav_link">
+    <span class="navlink_icon">
+      <i class="bx bx-check-circle"></i>
+    </span>
+    <span class="navlink">Ventas entregadas</span>
+  </a>
+</li>
+
 
           <li class="item">
             <a href="#" class="nav_link">

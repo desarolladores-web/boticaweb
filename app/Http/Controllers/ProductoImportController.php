@@ -21,8 +21,8 @@ class ProductoImportController extends Controller
         error_reporting(E_ALL);
 
         // Aumentar tiempo y memoria si es necesario
-        ini_set('max_execution_time', 1000); // 5 minutos
-        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', 1500); // 5 minutos
+        ini_set('memory_limit', '1000M');
 
         $request->validate([
             'archivo' => 'required|file|mimes:xlsx,xls',

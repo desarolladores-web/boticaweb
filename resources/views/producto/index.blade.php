@@ -67,24 +67,34 @@ Productos
                             </a>
                         </form>
 
-                        {{-- Formulario de importación --}}
-                        <form action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data" class="d-flex flex-wrap align-items-center gap-2">
-                            @csrf
-                            <input type="file" name="archivo" class="form-control form-control-sm w-auto" required>
-                            <button type="submit"
-                                <i class="bi bi-upload me-1"></i> Importar
-                            </button>
-                        </form>
+           {{-- Formulario de importación --}}
+<form action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data" class="d-flex flex-wrap align-items-center gap-2">
+    @csrf
+    <input type="file" name="archivo" class="form-control form-control-sm w-auto" required>
+    <button type="submit">
+        <i class="bi bi-upload me-1"></i> Importar
+    </button>
+</form>
 
-                        {{-- Formulario de creación --}}
-                        <form action="{{ route('productos.create') }}" method="GET" class="d-flex">
-                            <button type="submit">
-                                <i class="bi bi-plus-circle me-1"></i> Agregar Producto
-                            </button>
-                        </form>
+<div id="loadingContainer" class="w-100 mt-2" style="display: none;">
+    <div class="progress" style="height: 20px;">
+        <div id="progressBar" class="progress-bar bg-success progress-bar-striped" role="progressbar" style="width: 0%;">
+            0%
+        </div>
+    </div>
+</div>
+{{-- Formulario de creación --}}
+<form action="{{ route('productos.create') }}" method="GET" class="d-flex mt-3">
+    <button type="submit" class="btn btn-success btn-sm">
+        <i class="bi bi-plus-circle me-1"></i> Agregar Producto
+    </button>
+</form>
 
-                    </div>
-                </div>
+
+
+</div>
+</div>
+
 
 
 
@@ -115,7 +125,7 @@ Productos
 
                     /* Cabecera moderna en rojo degradado */
                     .table-red-lines thead th {
-                        background: linear-gradient(to right, #ca2020, #cc2626);
+                        background: linear-gradient(to right, #e91111ff, #cc2626);
                         color: white;
                         padding: 12px;
                         font-weight: 600;
@@ -335,6 +345,51 @@ Productos
 
 
                 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form[action="{{ route('productos.importar') }}"]');
+    const loadingContainer = document.getElementById('loadingContainer');
+    const progressBar = document.getElementById('progressBar');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const xhr = new XMLHttpRequest();
+
+        loadingContainer.style.display = 'block';
+
+        xhr.upload.addEventListener('progress', function (e) {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                progressBar.style.width = percent + '%';
+                progressBar.textContent = percent + '%';
+            }
+        });
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    alert('Archivo importado correctamente.');
+                } else {
+                    alert('Error al importar el archivo.');
+                }
+                // Reset progress bar
+                progressBar.style.width = '0%';
+                progressBar.textContent = '0%';
+                loadingContainer.style.display = 'none';
+                form.reset();
+            }
+        };
+
+        xhr.open('POST', form.getAttribute('action'), true);
+        xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('input[name="_token"]').value);
+        xhr.send(formData);
+    });
+});
+</script>
+
+
 
             </div>
         </div>

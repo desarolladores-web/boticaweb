@@ -18,19 +18,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <!-- dashboard -->
 <!-- General CSS Files -->
-  <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('backend/assets/modules/fontawesome/css/all.min.css') }}">
-
-  <!-- CSS Libraries -->
-  <link rel="stylesheet" href="{{ asset('backend/assets/modules/jqvmap/dist/jqvmap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('backend/assets/modules/weather-icon/css/weather-icons.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('backend/assets/modules/weather-icon/css/weather-icons-wind.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('backend/assets/modules/summernote/summernote-bs4.css') }}">
-
-  <!-- Template CSS -->
-  <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
-  <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css') }}">
-<!-- dashboard -->
+ 
     @vite(['resources/css/admin.css'])
   </head>
   <body>
@@ -130,14 +118,7 @@
         <ul class="menu_items">
           <div class="menu_title menu_editor"></div>
 
-          <li class="item">
-            <a href="{{ route('productos.index') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-package icon"></i>
-              </span>
-              <span class="navlink">Productos</span>
-            </a>
-          </li>
+        
 
           <li class="item">
             <a href="{{ route('empleados.create') }}" class="nav_link">
@@ -147,15 +128,23 @@
               <span class="navlink">Crear Empleados</span>
             </a>
           </li>
-
-          <li class="item">
-            <a href="{{ route('admin.account.edit') }}" class="nav_link">
+              <li class="item">
+            <a href="{{ route('usuarios.index') }}" class="nav_link">
               <span class="navlink_icon">
-                <i class="bx bx-filter"></i>
+                <i class="bx bx-group"></i>
               </span>
-              <span class="navlink">Editar</span>
+              <span class="navlink">Empleados</span>
             </a>
           </li>
+
+          <li class="item">
+  <a href="{{ route('admin.account.edit') }}" class="nav_link">
+    <span class="navlink_icon">
+      <i class="bx bx-user-circle"></i>
+    </span>
+    <span class="navlink">Editar Perfil</span>
+  </a>
+</li>
 
           <li class="item">
             <a href="{{ route('usuarios.clientes') }}" class="nav_link">
@@ -172,6 +161,14 @@
         <ul class="menu_items">
           <div class="menu_title menu_setting"></div>
 
+            <li class="item">
+            <a href="{{ route('productos.index') }}" class="nav_link">
+              <span class="navlink_icon">
+                <i class="bx bx-package icon"></i>
+              </span>
+              <span class="navlink">Productos</span>
+            </a>
+          </li>
           <li class="item">
             <a href="#" class="nav_link">
               <span class="navlink_icon">
@@ -181,14 +178,7 @@
             </a>
           </li>
 
-          <li class="item">
-            <a href="{{ route('usuarios.index') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-group"></i>
-              </span>
-              <span class="navlink">Ventas entregadas</span>
-            </a>
-          </li>
+       
 
           <li class="item">
             <a href="#" class="nav_link">

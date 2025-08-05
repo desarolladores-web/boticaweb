@@ -133,7 +133,7 @@ body.dark {
   content: "Editor";
 }
 .menu_setting::before {
-  content: "Setting";
+  content: "Inventario y Ventas";
 }
 .sidebar.close .menu_title::before {
   content: "";

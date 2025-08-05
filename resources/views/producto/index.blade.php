@@ -94,132 +94,162 @@
 
   
 {{-- Estilos personalizados --}}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
-    .modern-table-container {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        margin-bottom: 30px;
-    }
+.table-red-lines {
+    border-collapse: collapse; /* Cambiado de 'separate' a 'collapse' */
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
 
-    .modern-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 12px;
-        font-size: 0.9rem;
-    }
+/* Título de la tabla */
+.table-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 1rem;
+    border-left: 5px solid #b30000;
+    padding-left: 10px;
+}
 
-    .modern-table thead th {
-        text-align: left;
-        padding: 12px;
-        color: #555;
-        font-weight: 600;
-    }
+/* Cabecera moderna en rojo degradado */
+.table-red-lines thead th {
+    background: linear-gradient(to right, #ca2020, #cc2626);
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    border: none;
+}
+.table-red-lines tbody td {
+    background-color: #ffffffff; /* Fondo claro */
+    padding: 10px;
+    border-radius: 4px;
+    border-bottom: 1px solid #000000; /* Línea negra horizontal */
+}
+/* Fila del cuerpo de tabla */
+.table-red-lines tbody tr {
+    background-color: #0000004b!important; /* plomo claro */
+    border-bottom:1px solid rgba(196, 196, 196, 0.86); /* línea roja horizontal */
+    transition: background 0.3s ease;
+}
 
-    .modern-table tbody td {
-        background-color: #f5f5f5ff;
-        padding: 14px;
-        vertical-align: middle;
-        border-radius: 8px;
-    }
+/* Hover sobre fila */
+.table-red-lines tbody tr:hover {
+    background-color: #f9dcdc; /* rojo suave al pasar mouse */
+}
 
-    .img-thumb {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
+/* Celdas */
+.table-red-lines tbody td {
+    padding: 10px;
+    vertical-align: middle;
+    border: none;
+}
 
-    .btn-icon {
-        padding: 6px 10px;
-        font-size: 0.8rem;
-        margin-right: 4px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        border-radius: 6px;
-    }
+.table-red-lines th,
+.table-red-lines td {
+    text-align: center;
+}
 
-    .btn-icon i {
-        font-size: 14px;
-    }
+/* Texto pequeño en descripción */
+.table-red-lines small {
+    font-size: 0.85rem;
+    color: #666;
+}
 
-    .text-muted {
-        color: #999 !important;
-    }
+/* Imagen miniatura */
+.img-thumb {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Íconos de acciones */
+.table-actions .btn i,
+.icon-btn {
+    font-size: 1.3rem; /* íconos un poco más grandes */
+    color: #000;
+    transition: color 0.3s ease;
+}
+
+.table-actions .btn i:hover,
+.icon-btn:hover {
+    color: #dc3545; /* rojo al pasar */
+}
+
 </style>
 
-{{-- Tabla de productos --}}
-<div class="modern-table-container">
-    <h4 class="mb-4">Listado de Productos</h4>
-    <div class="table-responsive">
-        <table class="modern-table">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Principio Activo</th>
-                    <th>PVP1</th>
-                    <th>Precio Costo</th>
-                    <th>Stock</th>
-                    <th>Stock Min</th>
-                    <th>Vencimiento</th>
-                    <th>Imagen</th>
-                    <th>Categoría</th>
-                    <th>Laboratorio</th>
-                    <th>Presentación</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($productos as $producto)
-                    <tr>
-                        <td>{{ $producto->codigo }}</td>
-                        <td>{{ $producto->nombre }}</td>
-                        <td>{{ $producto->descripcion }}</td>
-                        <td>{{ $producto->principio_activo }}</td>
-                        <td>S/ {{ number_format($producto->pvp1, 2) }}</td>
-                        <td>S/ {{ number_format($producto->precio_costo_unitario, 2) }}</td>
-                        <td>{{ $producto->stock }}</td>
-                        <td>{{ $producto->stock_min }}</td>
-                        <td>{{ $producto->fecha_vencimiento }}</td>
-                        <td>
-                            @if ($producto->imagen)
-                                <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" class="img-thumb" alt="Producto">
-                            @else
-                                <span class="text-muted">Sin imagen</span>
-                            @endif
-                        </td>
-                        <td>{{ $producto->categoria->nombre ?? 'Sin categoría' }}</td>
-                        <td>{{ $producto->laboratorio->nombre_laboratorio ?? 'Sin laboratorio' }}</td>
-                        <td>{{ $producto->presentacion->nombre ?? 'Sin presentación' }}</td>
-                        <td>
-                          <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" class="d-inline-flex gap-2 align-items-center">
-    <a class="btn btn-light btn-sm rounded-circle shadow-sm" href="{{ route('productos.show', $producto->id) }}" title="Ver">
-        <i class="bi bi-eye fs-5"></i>
-    </a>
-    <a class="btn btn-light btn-sm rounded-circle shadow-sm" href="{{ route('productos.edit', $producto->id) }}" title="Editar">
-        <i class="bi bi-pencil fs-5"></i>
-    </a>
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="btn btn-light btn-sm rounded-circle shadow-sm" title="Eliminar"
-        onclick="event.preventDefault(); if (confirm('¿Eliminar producto?')) this.closest('form').submit();">
-        <i class="bi bi-trash3 fs-5"></i>
-    </button>
-</form>
+<h4 class="table-title">📦 Listado de Productos</h4>
 
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+<div class="table-responsive">
+    <table class="table table-red-lines text-center w-100">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Principio Activo</th>
+                <th>PVP1</th>
+                <th>Precio Costo</th>
+                <th>Stock</th>
+                <th>Stock Min</th>
+                <th>Vencimiento</th>
+                <th>Imagen</th>
+                <th>Categoría</th>
+                <th>Laboratorio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($productos as $producto)
+                <tr>
+                    <td>{{ $producto->codigo }}</td>
+                    <td class="fw-bold">{{ $producto->nombre }}</td>
+                    <td><small>{{ $producto->descripcion }}</small></td>
+                    <td>{{ $producto->principio_activo }}</td>
+                    <td>S/ {{ number_format($producto->pvp1, 2) }}</td>
+                    <td>S/ {{ number_format($producto->precio_costo_unitario, 2) }}</td>
+                    <td>{{ $producto->stock }}</td>
+                    <td>{{ $producto->stock_min }}</td>
+                    <td>{{ $producto->fecha_vencimiento }}</td>
+                    <td>
+                        @if ($producto->imagen)
+                            <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" class="img-thumb" alt="Producto">
+                        @else
+                            <span class="text-muted">Sin imagen</span>
+                        @endif
+                    </td>
+                    <td>{{ $producto->categoria->nombre ?? 'Sin categoría' }}</td>
+                    <td>{{ $producto->laboratorio->nombre_laboratorio ?? 'Sin laboratorio' }}</td>
+                    <td class="table-actions">
+                        <form action="{{ route('productos.destroy', $producto->id) }}" method="POST" class="d-inline-flex align-items-center gap-2">
+                            <a class="btn btn-sm" href="{{ route('productos.show', $producto->id) }}" title="Ver">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a class="btn btn-sm" href="{{ route('productos.edit', $producto->id) }}" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm" title="Eliminar"
+                                onclick="event.preventDefault(); if (confirm('¿Eliminar producto?')) this.closest('form').submit();">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
+
+
 
 
                 {{-- Paginación --}}

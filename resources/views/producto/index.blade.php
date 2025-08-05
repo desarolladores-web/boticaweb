@@ -5,15 +5,14 @@ Productos
 @endsection
 
 @section('content')
+
+
+<h4 class="table-title">📋 Listado de Productos</h4>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
             <div class="card shadow-sm">
 
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h1 class="mb-0">{{ __('Productos') }}</h1>
-
-                </div>
 
                 {{-- Mensajes de éxito --}}
                 @if (session('success'))
@@ -192,7 +191,7 @@ Productos
                     }
                 </style>
 
-                <h4 class="table-title">📋 Listado de Productos</h4>
+
 
 
                 <div class="table-responsive">

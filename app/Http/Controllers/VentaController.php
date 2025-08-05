@@ -16,7 +16,7 @@ class VentaController extends Controller
         $ventas = Venta::with(['cliente.tipoDocumento', 'detalleVentas.producto', 'estadoVenta'])
             ->where('estado_venta_id', 1) // Ventas "para entregar"
             ->orderByDesc('fecha')
-            ->get();
+            ->paginate(10);
 
         return view('admin.ventas.index', compact('ventas'));
     }
@@ -37,7 +37,11 @@ class VentaController extends Controller
 
     public function ventasEntregadas()
     {
-        $ventas = Venta::where('estado_venta_id', 2)->with('cliente')->get(); // Asegúrate que 2 sea 'entregada'
+        $ventas = Venta::where('estado_venta_id', 2)
+            ->with('cliente')
+            ->orderByDesc('fecha')
+            ->paginate(10); // ✅ para que también funcione links()
+
         return view('admin.ventas.entregadas', compact('ventas'));
     }
 }

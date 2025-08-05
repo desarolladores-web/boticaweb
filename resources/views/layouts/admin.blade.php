@@ -146,7 +146,7 @@
               <span class="navlink_icon">
                 <i class="bx bx-user-circle"></i>
               </span>
-              <span class="navlink">Editar Perfil</span>
+              <span class="navlink">Editar Perfil cvvv</span>
             </a>
           </li>
 

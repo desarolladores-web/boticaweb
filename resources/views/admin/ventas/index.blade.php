@@ -1,56 +1,135 @@
 @extends('layouts.admin')
 
 @section('content')
+
 <div class="container">
-    <h2 class="mb-4">Ventas pendientes de entrega</h2>
 
-    <a href="{{ route('admin.ventas.entregadas') }}" class="btn btn-outline-primary mb-4">
-        <i class="bi bi-truck"></i> Ver ventas entregadas
-    </a>
 
-    @if ($ventas->count() > 0)
-        <div class="table-responsive">
-            <table class="table table-striped table-hover align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Cliente</th>
-                        <th>Fecha</th>
-                        <th>Total (S/)</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($ventas as $venta)
-                        <tr>
-                            <td>{{ $venta->id }}</td>
-                            <td>{{ $venta->cliente->nombre }} {{ $venta->cliente->apellido_paterno }}</td>
-                            <td>{{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}</td>
-                            <td>S/ {{ number_format($venta->total, 2) }}</td>
-                            <td>
-                                <span class="badge bg-warning text-dark">
-                                    {{ $venta->estadoVenta->estado ?? 'Sin estado' }}
-                                </span>
-                            </td>
-                            <td>
-                                <!-- Botón para cambiar a entregado -->
-                                <form action="{{ route('admin.ventas.marcarEntregada', $venta->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Marcar como entregada?')">
-                                        <i class="bi bi-check-circle"></i> Marcar como entregada
-                                    </button>
-                                </form>
-                                <!-- Puedes agregar más acciones aquí -->
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    {{-- Título --}}
+    <h4 class="mb-4">
+        <span style="font-size: 1.5rem; margin-right: 10px;">📦</span>
+        <strong>Listado de Ventas Pendientes</strong>
+    </h4>
+
+    {{-- Encabezado tipo productos (imagen 1 adaptada) --}}
+    <div class="card mb-4">
+        <div class="card-body d-flex flex-wrap align-items-center gap-2">
+            <select class="form-select" style="max-width: 250px;">
+                <option selected>Seleccione una opción</option>
+                <option value="1">Por cliente</option>
+                <option value="2">Por documento</option>
+                <option value="3">Por fecha</option>
+            </select>
+
+            <input type="text" class="form-control" placeholder="Buscar" style="max-width: 250px;">
+
+            <button class="btn btn-danger">
+                <i class="bi bi-search"></i>
+            </button>
+
+            <button class="btn btn-secondary">
+                <i class="bi bi-x-circle"></i> Limpiar
+            </button>
+
+            <a href="{{ route('admin.ventas.entregadas') }}" class="btn btn-primary ms-auto">
+                <i class="bi bi-truck"></i> Ver ventas entregadas
+            </a>
         </div>
+    </div>
+
+
+
+    {{-- Lista de ventas --}}
+    @if ($ventas->count() > 0)
+    @foreach ($ventas as $venta)
+    <div class="card mb-4 shadow-sm border border-warning">
+        <div class="card-header bg-warning-subtle d-flex justify-content-between align-items-center">
+            <div>
+                <strong>Venta #{{ $venta->id }}</strong> |
+                Cliente: {{ $venta->cliente->nombre }} {{ $venta->cliente->apellido_paterno }} |
+                Documento: {{ $venta->cliente->tipoDocumento->nombre_documento ?? 'Sin documento' }} - {{ $venta->cliente->DNI }}
+            </div>
+            <div>
+                <form id="form-entregar-{{ $venta->id }}" action="{{ route('admin.ventas.marcarEntregada', $venta->id) }}" method="POST" style="display:inline-block;">
+                    @csrf
+                    @method('PUT')
+                    <button type="button" class="btn btn-success btn-sm btn-confirmar-entrega">
+                        <i class="bi bi-check-circle"></i> Marcar como entregada
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card-body bg-light">
+            <p class="mb-1"><strong>Total:</strong> S/ {{ number_format($venta->total, 2) }}</p>
+            <p class="mb-1"><strong>Fecha:</strong> {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y H:i') }}</p>
+            <p class="mb-3">
+                <strong>Estado:</strong>
+                <span class="badge bg-warning text-dark">
+                    {{ $venta->estadoVenta->estado ?? 'Sin estado' }}
+                </span>
+            </p>
+
+            <div class="bg-white p-3 rounded border">
+                <strong>Productos:</strong>
+                <ul class="mb-0">
+                    @foreach ($venta->detalleVentas as $detalle)
+                    <li>{{ $detalle->producto->nombre }} - Cantidad: {{ $detalle->cantidad }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+    @endforeach
     @else
-        <div class="alert alert-info">No hay ventas pendientes por entregar.</div>
+    <div class="alert alert-info">No hay ventas pendientes por entregar.</div>
     @endif
+
+    {{-- Paginación (imagen 2) --}}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $ventas->links('pagination::bootstrap-5') }}
+    </div>
+
 </div>
+
+{{-- Script de confirmación --}}
+<script>
+    document.querySelectorAll('.btn-confirmar-entrega').forEach(boton => {
+        boton.addEventListener('mouseover', function() {
+            this.classList.add('btn-hover-green');
+        });
+
+        boton.addEventListener('mouseout', function() {
+            this.classList.remove('btn-hover-green');
+        });
+
+        boton.addEventListener('click', function() {
+            const form = this.closest('form');
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¿Deseas marcar esta venta como entregada?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, marcar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+
+{{-- Estilos adicionales --}}
+<style>
+    .btn-confirmar-entrega.btn-hover-green:hover {
+        background-color: #28a745 !important;
+        border-color: #28a745 !important;
+        color: white !important;
+    }
+</style>
+
 @endsection

@@ -13,31 +13,35 @@ class VentaController extends Controller
 {
     public function pendientes()
     {
-        $ventas = Venta::with('cliente', 'estadoVenta')
-            ->where('estado_venta_id', 1) // Solo ventas "para entregar"
+        $ventas = Venta::with(['cliente.tipoDocumento', 'detalleVentas.producto', 'estadoVenta'])
+            ->where('estado_venta_id', 1) // Ventas "para entregar"
             ->orderByDesc('fecha')
-            ->get();
+            ->paginate(10);
 
         return view('admin.ventas.index', compact('ventas'));
     }
 
-    
+
+
 
     public function marcarComoEntregada($id)
-{
-    $venta = Venta::findOrFail($id);
-    $venta->estado_venta_id = 2; // Asegúrate que 2 es el ID de "entregada" en tu tabla estado_ventas
-    $venta->save();
+    {
+        $venta = Venta::findOrFail($id);
+        $venta->estado_venta_id = 2; // Asegúrate que 2 es el ID de "entregada" en tu tabla estado_ventas
+        $venta->save();
 
-    return redirect()->route('admin.ventas.pendientes')->with('success', 'Venta marcada como entregada.');
-}
+        return redirect()->route('admin.ventas.pendientes')->with('success', 'Venta marcada como entregada.');
+    }
 
 
 
-public function ventasEntregadas()
-{
-    $ventas = Venta::where('estado_venta_id', 2)->with('cliente')->get(); // Asegúrate que 2 sea 'entregada'
-    return view('admin.ventas.entregadas', compact('ventas'));
-}
+    public function ventasEntregadas()
+    {
+        $ventas = Venta::where('estado_venta_id', 2)
+            ->with('cliente')
+            ->orderByDesc('fecha')
+            ->paginate(10); // ✅ para que también funcione links()
 
+        return view('admin.ventas.entregadas', compact('ventas'));
+    }
 }

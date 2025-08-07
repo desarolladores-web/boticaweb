@@ -197,10 +197,11 @@
                         <div class="item ms-4">
                             <a href="#" class="header-cart-icon position-relative">
                                 <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
-                                <span
-                                    class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ $cantidadTotal }}
-                                </span>
+  <span id="contador-carrito" class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    {{ $cantidadTotal }}
+</span>
+
+
                             </a>
                         </div>
 
@@ -262,69 +263,26 @@
             @php $carrito = session('carrito', []); @endphp
 
             @if(count($carrito) > 0)
-                @foreach($carrito as $id => $item)
-                    <div class="mb-3 border-bottom pb-3">
-                        <div class="d-flex align-items-center">
-                            @if($item['imagen'])
-                                <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img"
-                                    style="width: 60px;">
-                            @endif
+                <div class="cart-body p-3" id="cart-items">
+    @include('components.cart-items')
+</div>
 
-
-                            <div class="flex-grow-1 ps-2">
-                                <div class="fw-bold">{{ $item['nombre'] }}</div>
-                                @php $subtotal = $item['precio'] * $item['cantidad']; @endphp
-                                <div class="text-danger fw-semibold mb-2">S/ {{ number_format($subtotal, 2) }}</div>
-
-                                <div class="d-flex align-items-center mb-2" style="width: fit-content;">
-                                    <form method="POST" action="{{ route('carrito.actualizar', $id) }}"
-                                        class="d-flex align-items-center me-1">
-                                        @csrf
-                                        <input type="hidden" name="tipo" value="restar">
-                                        <input type="hidden" name="desde_sidebar" value="1">
-                                        <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
-                                        <button type="submit" class="btn btn-outline-secondary btn-sm px-2">−</button>
-                                    </form>
-
-                                    <div class="px-3">{{ $item['cantidad'] }}</div>
-
-                                    <form method="POST" action="{{ route('carrito.actualizar', $id) }}"
-                                        class="d-flex align-items-center ms-1">
-                                        @csrf
-                                        <input type="hidden" name="tipo" value="sumar">
-                                        <input type="hidden" name="desde_sidebar" value="1">
-                                        <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
-                                        <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
-                                    </form>
-                                </div>
-
-                                <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="desde_sidebar" value="1">
-                                    <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
-                                    <button type="submit" class="btn btn-danger rounded-pill  btn-sm mt-1">Eliminar
-                                        Producto</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
             @else
                 <p class="text-muted">Tu carrito está vacío.</p>
             @endif
         </div>
 
-        <div class="cart-footer p-3 border-top">
-            <div class="d-flex justify-content-between">
-                <strong>Total:</strong>
-                @php
-                    $total = 0;
-                    foreach ($carrito as $item) {
-                        $total += $item['precio'] * $item['cantidad'];
-                    }
-                @endphp
-                <span class="text-success" id="cart-total">S/. {{ number_format($total, 2) }}</span>
-            </div>
+       <div class="cart-footer p-3 border-top">
+    <div class="d-flex justify-content-between">
+        <strong>Total:</strong>
+        @php
+            $total = 0;
+            foreach ($carrito as $item) {
+                $total += $item['precio'] * $item['cantidad'];
+            }
+        @endphp
+        <span class="text-success" id="cart-total">S/. {{ number_format($total, 2) }}</span>
+    </div>
             <button type="button" class="btn btn-danger rounded-pill  mt-3 w-100" data-bs-toggle="modal"
                 data-bs-target="#checkoutModal">
                 Comprar ahora
@@ -427,6 +385,64 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.querySelectorAll('.agregar-carrito-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // evita que recargue la página
+
+            const url = this.action;
+            const formData = new FormData(this);
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': formData.get('_token'),
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // ✅ Actualizar contador del carrito
+                document.getElementById('contador-carrito').textContent = data.cantidadTotal;
+
+                // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
+                if (typeof actualizarSidebarCarrito === 'function') {
+                    actualizarSidebarCarrito();
+                }
+            })
+            .catch(error => {
+                console.error('Error al agregar al carrito:', error);
+            });
+        });
+    });
+</script>
+
+<script>
+function actualizarSidebarCarrito() {
+    fetch('{{ route('carrito.sidebar.ajax') }}')
+        .then(res => res.json())
+        .then(data => {
+            // Actualizar los ítems del carrito
+            const sidebarItems = document.getElementById('cart-items');
+            if (sidebarItems) {
+                sidebarItems.innerHTML = data.items_html;
+            }
+
+            // Actualizar el total
+            const cartTotal = document.getElementById('cart-total');
+            if (cartTotal) {
+                cartTotal.textContent = 'S/. ' + data.total;
+            }
+        })
+        .catch(error => console.error('Error actualizando sidebar:', error));
+}
+</script>
+
+
+
+
 
 
 </body>

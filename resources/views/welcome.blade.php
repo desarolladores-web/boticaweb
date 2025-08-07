@@ -139,54 +139,47 @@
 
 
 
+<div class="d-flex align-items-center justify-content-between" id="carrito-container-{{ $producto->id }}">
+    @php
+        $carrito = session('carrito', []);
+    @endphp
 
-                    <div class="d-flex align-items-center justify-content-between">
-                      @php
-                      $carrito = session('carrito', []);
-                      @endphp
+    @if(isset($carrito[$producto->id]))
+        <a href="{{ route('carrito.ver') }}"
+            class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
+            style="font-size: 15px; font-weight: 100; padding: 25px;">
+            Ver carrito
+            <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 25px;"></span>
+        </a>
+    @else
+        {{-- Mostrar controles de cantidad y botón agregar --}}
+        <div class="input-group product-qty">
+            <span class="input-group-btn">
+              <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
+                <svg width="13" height="13">
+                  <use xlink:href="#minus"></use>
+                </svg>
+              </button>
+            </span>
+            <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
+            <span class="input-group-btn">
+              <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
+                <svg width="16" height="16">
+                  <use xlink:href="#plus"></use>
+                </svg>
+              </button>
+            </span>
+        </div>
 
-                      @if(isset($carrito[$producto->id]))
-                      {{-- Mostrar botón "Ver carrito" si el producto ya está en el carrito --}}
-                      <a href="{{ route('carrito.ver') }}"
-                        class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
-                        style="font-size: 15px; font-weight: 100; padding: 25px;">
-                        Ver carrito
-                        <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 25px;"></span>
-                      </a>
-
-
-                      @else
-                      {{-- Mostrar controles de cantidad y botón agregar --}}
-                      <div class="input-group product-qty">
-                        <span class="input-group-btn">
-                          <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
-                            <svg width="13" height="13">
-                              <use xlink:href="#minus"></use>
-                            </svg>
-                          </button>
-                        </span>
-                        <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
-                        <span class="input-group-btn">
-                          <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
-                            <svg width="16" height="16">
-                              <use xlink:href="#plus"></use>
-                            </svg>
-                          </button>
-                        </span>
-                      </div>
-                    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}" class="agregar-carrito-form">
-    @csrf
-    <input type="hidden" name="cantidad" value="1">
-    <button type="submit" class="button">
-        Agregar Carrito
-        <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
-    </button>
-</form>
-
-                      @endif
-
-
-
+        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}" class="agregar-carrito-form">
+            @csrf
+            <input type="hidden" name="cantidad" value="1">
+            <button type="submit" class="button">
+                Agregar Carrito
+                <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
+            </button>
+        </form>
+    @endif
 
 
                     </div>
@@ -314,40 +307,35 @@
 
 @endsection
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const forms = document.querySelectorAll('.agregar-carrito-form');
+document.addEventListener("DOMContentLoaded", function () {
+    const forms = document.querySelectorAll('.agregar-carrito-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
 
-        forms.forEach(form => {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault(); // Evita que la página se recargue
+            const formData = new FormData(this);
+            const action = this.action;
+            const container = this.closest('[id^="carrito-container-"]');
 
-                const action = form.getAttribute('action');
-                const formData = new FormData(form);
-
-                fetch(action, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Actualiza el contador del carrito en el DOM
-                        const contador = document.querySelector('.icon-quantity');
-                        if (contador) {
-                            contador.textContent = data.cantidadTotal;
-                        }
-
-                        // Mensaje opcional
-                        alert('Producto agregado al carrito');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
+            fetch(action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value
+                },
+                body: formData
+            })
+            .then(res => res.ok ? res.text() : Promise.reject(res))
+            .then(() => {
+                container.innerHTML = `
+                    <a href="{{ route('carrito.ver') }}"
+                        class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
+                        style="font-size: 15px; font-weight: 100; padding: 25px;">
+                        Ver carrito
+                        <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 25px;"></span>
+                    </a>`;
+            })
+            .catch(err => console.error('Error al agregar al carrito:', err));
         });
     });
+});
 </script>

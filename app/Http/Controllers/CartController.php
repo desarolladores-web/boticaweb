@@ -29,7 +29,11 @@ class CartController extends Controller
     session()->put('carrito', $carrito);
 
     if ($request->ajax()) {
-        return response()->json(['success' => true, 'message' => 'Producto agregado al carrito']);
+       return response()->json([
+    'success' => true,
+    'message' => 'Producto agregado al carrito',
+    'cantidadTotal' => count($carrito)
+]);
     }
 
     return redirect()->back()->with('success', 'Producto agregado al carrito');
@@ -43,56 +47,78 @@ class CartController extends Controller
         return view('carrito.sidebar', compact('carrito'));
     }
 
-    public function eliminar(Request $request, $id)
-    {
-        $carrito = session()->get('carrito', []);
+   public function eliminar(Request $request, $id)
+{
+    $carrito = session()->get('carrito', []);
 
-        if (isset($carrito[$id])) {
-            unset($carrito[$id]);
-            session()->put('carrito', $carrito);
+    if (isset($carrito[$id])) {
+        unset($carrito[$id]);
+        session()->put('carrito', $carrito);
+    }
+if ($request->ajax()) {
+    return response()->json([
+        'success' => true,
+        'mensaje' => 'Producto eliminado del carrito',
+        'cantidadTotal' => count($carrito), // Para actualizar el contador
+        'carrito' => $carrito,
+        'ruta_carrito' => route('carrito.ver') // <-- línea añadida
+    ]);
+}
+
+    $redirect = $request->input('redirect_back', url()->previous());
+    return redirect($redirect)->with('success', 'Producto eliminado del carrito');
+}
+
+
+
+
+
+
+  public function actualizar(Request $request, $id)
+{
+    $tipo = $request->input('tipo');
+    $carrito = session()->get('carrito', []);
+
+    if (isset($carrito[$id])) {
+        if ($tipo === 'sumar') {
+            $carrito[$id]['cantidad'] += 1;
+        } elseif ($tipo === 'restar' && $carrito[$id]['cantidad'] > 1) {
+            $carrito[$id]['cantidad'] -= 1;
         }
-
-        $redirect = $request->input('redirect_back', url()->previous());
-        $desdeSidebar = $request->input('desde_sidebar', false);
-
-        $response = redirect($redirect)->with('success', 'Producto eliminado del carrito');
-
-        if ($desdeSidebar) {
-            $response->with('abrir_sidebar', true);
-        }
-
-        return $response;
+        session()->put('carrito', $carrito);
     }
 
-
-
-
-
-    public function actualizar(Request $request, $id)
-    {
-        $tipo = $request->input('tipo');
-        $carrito = session()->get('carrito', []);
-
-        if (isset($carrito[$id])) {
-            if ($tipo === 'sumar') {
-                $carrito[$id]['cantidad'] += 1;
-            } elseif ($tipo === 'restar' && $carrito[$id]['cantidad'] > 1) {
-                $carrito[$id]['cantidad'] -= 1;
-            }
-            session()->put('carrito', $carrito);
+    // Si es una solicitud AJAX
+    if ($request->ajax()) {
+        $total = 0;
+        foreach ($carrito as $item) {
+            $total += $item['precio'] * $item['cantidad'];
         }
 
-        $redirect = $request->input('redirect_back', url()->previous());
-        $desdeSidebar = $request->input('desde_sidebar', false);
-
-        $response = redirect($redirect);
-
-        if ($desdeSidebar) {
-            $response->with('abrir_sidebar', true);
-        }
-
-        return $response;
+        return response()->json([
+            'success' => true,
+            'mensaje' => 'Cantidad actualizada',
+            'producto_id' => $id,
+            'cantidad' => $carrito[$id]['cantidad'],
+            'carrito' => $carrito,
+            'total' => number_format($total, 2),
+            'ruta_carrito' => route('carrito.ver')
+        ]);
     }
+
+    // Si no es AJAX, redireccionar como antes
+    $redirect = $request->input('redirect_back', url()->previous());
+    $desdeSidebar = $request->input('desde_sidebar', false);
+
+    $response = redirect($redirect);
+
+    if ($desdeSidebar) {
+        $response->with('abrir_sidebar', true);
+    }
+
+    return $response;
+}
+
 
 
 
@@ -108,4 +134,23 @@ class CartController extends Controller
 
         return view('carrito.vercarrito', compact('carrito', 'total'));
     }
+   public function obtenerSidebarAjax()
+{
+    $carrito = session('carrito', []);
+    $total = 0;
+
+    foreach ($carrito as $item) {
+        $total += $item['precio'] * $item['cantidad'];
+    }
+
+    $itemsView = view('components.cart-items', compact('carrito'))->render();
+
+    return response()->json([
+        'items_html' => $itemsView,
+        'total' => number_format($total, 2)
+    ]);
+}
+
+
+
 }

@@ -131,3 +131,7 @@ Route::get('/pago/pendiente', function () {
 Route::get('/admin/ventas/pendientes', [VentaController::class, 'pendientes'])->name('admin.ventas.pendientes');
 Route::get('/admin/ventas/entregadas', [VentaController::class, 'ventasEntregadas'])->name('admin.ventas.entregadas');
 Route::put('/admin/ventas/{id}/entregar', [VentaController::class, 'marcarComoEntregada'])->name('admin.ventas.marcarEntregada');
+Route::get('/carrito/sidebar/dinamico', function () {
+    return view('components.cart-items');
+})->name('carrito.sidebar.ajax');
+Route::get('/carrito/sidebar/ajax', [CartController::class, 'obtenerSidebarAjax'])->name('carrito.sidebar.ajax');

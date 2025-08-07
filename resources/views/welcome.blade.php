@@ -139,6 +139,12 @@
 
 
 
+<div class="d-flex align-items-center justify-content-between" id="carrito-container-{{ $producto->id }}">
+    @php
+        $carrito = session('carrito', []);
+    @endphp
+
+  
 
                     <div class="d-flex align-items-center justify-content-between">
                       @php
@@ -195,6 +201,16 @@
 
 
 
+        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}" class="agregar-carrito-form">
+            @csrf
+            <input type="hidden" name="cantidad" value="1">
+            <button type="submit" class="button">
+                Agregar Carrito
+                <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
+            </button>
+        </form>
+    @endif
+
 
                     </div>
                   </div>
@@ -216,6 +232,9 @@
 
   <!-- ALERTAS -->
   @if (session('status'))
+
+
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       let mensaje = '';
@@ -317,3 +336,36 @@
 </style>
 
 @endsection
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const forms = document.querySelectorAll('.agregar-carrito-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const action = this.action;
+            const container = this.closest('[id^="carrito-container-"]');
+
+            fetch(action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value
+                },
+                body: formData
+            })
+            .then(res => res.ok ? res.text() : Promise.reject(res))
+            .then(() => {
+                container.innerHTML = `
+                    <a href="{{ route('carrito.ver') }}"
+                        class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
+                        style="font-size: 15px; font-weight: 100; padding: 25px;">
+                        Ver carrito
+                        <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 25px;"></span>
+                    </a>`;
+            })
+            .catch(err => console.error('Error al agregar al carrito:', err));
+        });
+    });
+});
+</script>

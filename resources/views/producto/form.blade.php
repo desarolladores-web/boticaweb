@@ -248,7 +248,7 @@
   <!-- 🔘 Botón Guardar -->
   <div class="d-flex justify-content-between text-center ">
                         <button type="button" class="btn btn-secondary">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn ">Guardar</button>
                     </div>
 
 

@@ -95,7 +95,7 @@
 
                     <div class="right">
 
-                        <form action="{{ route('productos.buscar') }}" method=" get" class="search-group mt-4">
+                        <form action="{{ route('productos.buscar') }}" method=" get" class="search-group ">
                             <input type="text" class="form-control" name="keyword" placeholder="Buscar"
                                 value="{{ request('keyword') }}">
                             <button type="submit" class="btn"><i class="bi bi-search"></i></button>

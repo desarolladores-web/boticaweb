@@ -3,35 +3,45 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="py-5 container">
+    <section class="py-5 container-fluid ">
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-uppercase" style="color: #198754; font-size: 2.2rem;">
+            <h2 class="fw-bold text-uppercase" style="color: #ff0000ff; font-size: 2.2rem;">
                 Catálogo de Productos
             </h2>
         </div>
 
         <div class="row">
             <!-- FILTRO LATERAL -->
-            <div class="col-md-3 mb-4">
-                <div class="filtro-categorias">
-                    <h5>Categorías</h5>
-                    <div style="max-height: 700px; overflow-y: auto;">
-                        {{-- Opción "Todos los productos" --}}
-                        <a href="{{ route('productos.filtro') }}"
-                            class="categoria-link {{ request('categorias') ? '' : 'active' }}">
-                            Todos
-                        </a>
+            <div class="col-md-2 mb-4 ms-5">
+                <div class="product-categories-widget widget-item">
+                    <h5 class="widget-title">Categorías</h5>
 
+                    <ul class="category-tree list-unstyled mb-0" style="max-height: 700px; overflow-y: auto;">
+                        {{-- Todos los productos --}}
+                        <li class="category-item">
+                            <div class="category-header">
+                                <a href="{{ route('productos.filtro') }}"
+                                    class="category-link {{ request('categorias') ? '' : 'fw-bold' }}">
+                                    Todos
+                                </a>
+                            </div>
+                        </li>
+
+                        {{-- Lista de categorías --}}
                         @foreach($categorias as $categoria)
                             @php
                                 $activa = is_array(request('categorias')) && in_array($categoria->id, request('categorias'));
                             @endphp
-                            <a href="{{ route('productos.filtro', array_merge(request()->except('page', 'categorias'), ['categorias[]' => $categoria->id])) }}"
-                                class="categoria-link {{ $activa ? 'active' : '' }}">
-                                {{ $categoria->nombre }}
-                            </a>
+                            <li class="category-item">
+                                <div class="category-header">
+                                    <a href="{{ route('productos.filtro', array_merge(request()->except('page', 'categorias'), ['categorias[]' => $categoria->id])) }}"
+                                        class="category-link {{ $activa ? 'fw-bold text-danger' : '' }}">
+                                        {{ $categoria->nombre }}
+                                    </a>
+                                </div>
+                            </li>
                         @endforeach
-                    </div>
+                    </ul>
                 </div>
             </div>
 
@@ -39,22 +49,38 @@
 
             <!-- PRODUCTOS -->
             <div class="col-md-9">
-                <form method="GET" action="{{ route('productos.filtro') }}" id="filtro-form">
-                    <div class="mb-3 d-flex justify-content-end">
-                        <select name="orden" class="form-select w-auto"
-                            onchange="document.getElementById('filtro-form').submit();">
-                            <option value="">Ordenar por</option>
-                            <option value="precio_asc" {{ request('orden') == 'precio_asc' ? 'selected' : '' }}>Precio: Menor
-                                a Mayor</option>
-                            <option value="precio_desc" {{ request('orden') == 'precio_desc' ? 'selected' : '' }}>Precio:
-                                Mayor a Menor</option>
-                            <option value="az" {{ request('orden') == 'az' ? 'selected' : '' }}>Nombre: A-Z</option>
-                            <option value="za" {{ request('orden') == 'za' ? 'selected' : '' }}>Nombre: Z-A</option>
-                        </select>
-                    </div>
-                </form>
+                <div class="d-flex align-items-center justify-content-start flex-wrap gap-3 mb-3">
 
-                <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                    {{-- Formulario de búsqueda --}}
+                    <form action="{{ route('productos.buscar') }}" method="get" class="w-100" style="max-width: 450px;">
+                        <div class="input-group shadow-sm">
+                            <input type="text" class="form-control bg-white border-secondary text-black" name="keyword"
+                                placeholder="Buscar productos..." value="{{ request('keyword') }}">
+                            <button class="btn btn-success" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    {{-- Formulario de ordenamiento --}}
+                    <form method="GET" action="{{ route('productos.filtro') }}" id="filtro-form">
+                        <select name="orden" class="form-select border-success text-dark w-auto shadow-sm"
+                            style="min-width: 220px;" onchange="document.getElementById('filtro-form').submit();">
+                            <option value="">Ordenar por</option>
+                            <option value="precio_asc" {{ request('orden') == 'precio_asc' ? 'selected' : '' }}>
+                                Precio: Menor a Mayor</option>
+                            <option value="precio_desc" {{ request('orden') == 'precio_desc' ? 'selected' : '' }}>
+                                Precio: Mayor a Menor</option>
+                            <option value="az" {{ request('orden') == 'az' ? 'selected' : '' }}>
+                                Nombre: A-Z</option>
+                            <option value="za" {{ request('orden') == 'za' ? 'selected' : '' }}>
+                                Nombre: Z-A</option>
+                        </select>
+                    </form>
+
+                </div>
+
+                <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
                     @php $carrito = session('carrito', []); @endphp
                     @forelse($productos as $producto)
                         <div class="col">
@@ -91,18 +117,22 @@
                                     @else
                                         <div class="input-group product-qty">
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus btn btn-danger btn-number"
-                                                    data-type="minus">
+                                                <!-- BOTÓN RESTAR (Rojo) -->
+                                                <button type="button" class="quantity-left-minus btn btn-number"
+                                                    style="background-color: #b10000; color: white;" data-type="minus">
                                                     <svg width="13" height="13">
                                                         <use xlink:href="#minus"></use>
                                                     </svg>
                                                 </button>
                                             </span>
+
                                             <input type="text" id="quantity" name="quantity" class="form-control input-number"
                                                 value="1">
+
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus btn btn-success btn-number"
-                                                    data-type="plus">
+                                                <!-- BOTÓN SUMAR (Verde) -->
+                                                <button type="button" class="quantity-right-plus btn btn-number"
+                                                    style="background-color: #198754; color: white;" data-type="plus">
                                                     <svg width="16" height="16">
                                                         <use xlink:href="#plus"></use>
                                                     </svg>
@@ -114,7 +144,7 @@
                                             @csrf
                                             <input type="hidden" name="cantidad" value="1">
                                             <button type="submit" class="button">
-                                                Agregar Carrito
+                                                Agregar <br> Carrito
                                                 <span class="iconify ms-2" data-icon="uil:shopping-cart"
                                                     style="font-size: 24px;"></span>
                                             </button>
@@ -128,6 +158,9 @@
                             <div class="alert alert-warning text-center">No hay productos disponibles.</div>
                         </div>
                     @endforelse
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $productos->appends(request()->except('page'))->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

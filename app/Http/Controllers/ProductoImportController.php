@@ -9,85 +9,69 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class ProductoImportController extends Controller
 {
     public function importarExcel(Request $request)
     {
-        // Mostrar errores en desarrollo
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
+        // Aumentar tiempo de ejecución y uso de memoria (opcional para archivos grandes)
+        ini_set('max_execution_time', 3600); // 1 hora
+        ini_set('memory_limit', '2048M');    // 2 GB
 
-        // Aumentar tiempo y memoria si es necesario
-        ini_set('max_execution_time', 1500); // 5 minutos
-        ini_set('memory_limit', '1000M');
-
+        // Validar que el archivo sea correcto
         $request->validate([
             'archivo' => 'required|file|mimes:xlsx,xls',
         ]);
 
+        // Cargar archivo
         $archivo = $request->file('archivo');
         $spreadsheet = IOFactory::load($archivo->getPathname());
         $hoja = $spreadsheet->getActiveSheet();
         $filas = $hoja->toArray();
 
-        $filasSinCabecera = array_slice($filas, 1);
-        $bloques = array_chunk($filasSinCabecera, 200);
+        // Saltar la cabecera (primera fila)
+        foreach (array_slice($filas, 1) as $fila) {
+            if (!is_numeric($fila[5]) || !is_numeric($fila[7])) {
+                continue;
+            }
 
-        foreach ($bloques as $bloque) {
-            DB::beginTransaction(); // transacción por bloque
+            $categoria = Categoria::firstOrCreate(['nombre' => $fila[1]]);
+            $laboratorio = Laboratorio::firstOrCreate(['nombre_laboratorio' => $fila[2]]);
 
-            try {
-                foreach ($bloque as $fila) {
-                    if (!is_numeric($fila[5]) || !is_numeric($fila[7])) {
-                        continue;
-                    }
+            $fecha = null;
 
-                    $categoria = Categoria::firstOrCreate(['nombre' => $fila[1]]);
-                    $laboratorio = Laboratorio::firstOrCreate(['nombre_laboratorio' => $fila[2]]);
-
-                    $fecha = null;
-                    if (!empty($fila[12])) {
-                        try {
-                            if (is_numeric($fila[12])) {
-                                $carbonDate = Date::excelToDateTimeObject($fila[12]);
-                                if ($carbonDate->format('Y') >= 1900) {
-                                    $fecha = $carbonDate->format('Y-m-d');
-                                }
-                            } else {
-                                $carbonDate = Carbon::parse($fila[12]);
-                                if ($carbonDate->format('Y') >= 1900) {
-                                    $fecha = $carbonDate->format('Y-m-d');
-                                }
-                            }
-                        } catch (\Exception $e) {
-                            $fecha = null;
+            if (!empty($fila[12])) {
+                try {
+                    if (is_numeric($fila[12])) {
+                        $carbonDate = Date::excelToDateTimeObject($fila[12]);
+                        if ($carbonDate->format('Y') >= 1900) {
+                            $fecha = $carbonDate->format('Y-m-d');
+                        }
+                    } else {
+                        $carbonDate = Carbon::parse($fila[12]);
+                        if ($carbonDate->format('Y') >= 1900) {
+                            $fecha = $carbonDate->format('Y-m-d');
                         }
                     }
-
-                    Producto::create([
-                        'codigo' => $fila[0],
-                        'categoria_id' => $categoria->id,
-                        'laboratorio_id' => $laboratorio->id,
-                        'nombre' => $fila[3],
-                        'pvp1' => floatval($fila[5]),
-                        'precio_costo_unitario' => floatval($fila[7]),
-                        'stock' => intval($fila[9]),
-                        'stock_min' => intval($fila[10]),
-                        'fecha_vencimiento' => $fecha,
-                        'principio_activo' => $fila[13],
-                    ]);
+                } catch (\Exception $e) {
+                    $fecha = null;
                 }
-
-                DB::commit(); // confirma el bloque
-            } catch (\Exception $e) {
-                DB::rollBack(); // revierte si falla el bloque
-                return redirect()->back()->with('error', 'Error al importar: ' . $e->getMessage());
             }
+
+            Producto::create([
+                'codigo' => $fila[0],
+                'categoria_id' => $categoria->id,
+                'laboratorio_id' => $laboratorio->id,
+                'nombre' => $fila[3],
+                'pvp1' => floatval($fila[5]),
+                'precio_costo_unitario' => floatval($fila[7]),
+                'stock' => intval($fila[9]),
+                'stock_min' => intval($fila[10]),
+                'fecha_vencimiento' => $fecha,
+                'principio_activo' => $fila[13],
+            ]);
         }
 
-        return redirect()->back()->with('success', 'Productos importados correctamente en bloques de 200 registros.');
+        return redirect()->back()->with('success', '✅ Productos importados correctamente.');
     }
 }

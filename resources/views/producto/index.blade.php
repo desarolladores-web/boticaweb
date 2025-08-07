@@ -68,21 +68,29 @@ Productos
                         </form>
 
            {{-- Formulario de importación --}}
-<form action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data" class="d-flex flex-wrap align-items-center gap-2">
+//<form id="importForm" action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data" class="d-flex flex-wrap align-items-center gap-2">
     @csrf
     <input type="file" name="archivo" class="form-control form-control-sm w-auto" required>
-    <button type="submit">
+    <button type="submit" >
         <i class="bi bi-upload me-1"></i> Importar
     </button>
 </form>
 
-<div id="loadingContainer" class="w-100 mt-2" style="display: none;">
+{{-- Indicador de carga --}}
+{{--<div id="loadingContainer" class="w-100 mt-2" style="display: none;">
     <div class="progress" style="height: 20px;">
-        <div id="progressBar" class="progress-bar bg-success progress-bar-striped" role="progressbar" style="width: 0%;">
+        <div id="progressBar" class="progress-bar bg-info progress-bar-striped" role="progressbar" style="width: 0%;">
             0%
         </div>
     </div>
-</div>
+    <div class="text-center mt-2">
+        <div class="spinner-border text-info" role="status">
+            <span class="visually-hidden">Importando productos...</span>
+        </div>
+        <p class="mt-1">Importando productos, por favor espera...</p>
+    </div>
+</div>--}}
+
 {{-- Formulario de creación --}}
 <form action="{{ route('productos.create') }}" method="GET" class="d-flex mt-3">
     <button type="submit" class="btn btn-success btn-sm">
@@ -345,9 +353,9 @@ Productos
 
 
                 <script src="https://cdn.tailwindcss.com"></script>
-<script>
+{{--<script>
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('form[action="{{ route('productos.importar') }}"]');
+    const form = document.getElementById('importForm');
     const loadingContainer = document.getElementById('loadingContainer');
     const progressBar = document.getElementById('progressBar');
 
@@ -369,16 +377,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    alert('Archivo importado correctamente.');
-                } else {
-                    alert('Error al importar el archivo.');
-                }
-                // Reset progress bar
-                progressBar.style.width = '0%';
-                progressBar.textContent = '0%';
-                loadingContainer.style.display = 'none';
-                form.reset();
+                // Oculta el indicador de carga después de un pequeño delay
+                setTimeout(() => {
+                    loadingContainer.style.display = 'none';
+                    progressBar.style.width = '0%';
+                    progressBar.textContent = '0%';
+                    form.reset();
+
+                    if (xhr.status === 200) {
+                        alert('Productos importados correctamente.');
+                        window.location.reload(); // Opcional si deseas refrescar la tabla/listado
+                    } else {
+                        alert('Error al importar: ' + xhr.responseText);
+                    }
+                }, 1000);
             }
         };
 
@@ -387,9 +399,7 @@ document.addEventListener('DOMContentLoaded', function () {
         xhr.send(formData);
     });
 });
-</script>
-
-
+</script>--}}
 
             </div>
         </div>

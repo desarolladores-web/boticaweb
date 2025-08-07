@@ -187,16 +187,7 @@
                                                 </button>
                                             </span>
                                         </div>
-                      <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
-                        class="agregar-carrito-form">
-                        @csrf
-                        <input type="hidden" name="cantidad" value="1">
-                        <button type="submit" class="button">
-                          Agregar Carrito
-                          <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
-                        </button>
-                      </form>
-                      @endif
+                   
 
 
 

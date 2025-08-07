@@ -1,8 +1,7 @@
 
-  
-  @extends('layouts.admin')
+@extends('layouts.admin')
 
-  {{-- @extends('admin.layauts.master') --}}
+@extends('admin.layauts.master') 
 
   @section('content')
   <section class="section">

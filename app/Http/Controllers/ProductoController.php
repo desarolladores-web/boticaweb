@@ -48,20 +48,17 @@ public function index(Request $request): View
 
     public function buscar(Request $request): View
 {
-    $keyword = $request->input('keyword');
+    $query = Producto::query();
 
-    $productos = Producto::query()
-        ->when($keyword, function ($query, $keyword) {
-            $query->where('nombre', 'like', "%{$keyword}%")
-                  ->orWhere('descripcion', 'like', "%{$keyword}%");
-        })
-        ->paginate(12);
+    if ($request->filled('keyword')) {
+        $query->where('nombre', 'like', '%' . $request->keyword . '%')
+              ->orWhere('descripcion', 'like', '%' . $request->keyword . '%');
+    }
 
-    return view('welcome', [
-        'productos' => $productos,
-        'i' => ($request->input('page', 1) - 1) * $productos->perPage()
-        
-    ]);
+    $productos = $query->paginate(20)->appends($request->query());
+    $categorias = Categoria::all();
+
+    return view('producto.filtro', compact('productos', 'categorias'));
 }
 
     /**

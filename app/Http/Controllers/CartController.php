@@ -74,7 +74,7 @@ if ($request->ajax()) {
 
 
 
-  public function actualizar(Request $request, $id)
+ public function actualizar(Request $request, $id)
 {
     $tipo = $request->input('tipo');
     $carrito = session()->get('carrito', []);
@@ -88,14 +88,13 @@ if ($request->ajax()) {
         session()->put('carrito', $carrito);
     }
 
-    // Si es una solicitud AJAX
     if ($request->ajax()) {
         $total = 0;
-        $contador = 0;
+        $totalItems = 0;
 
         foreach ($carrito as $item) {
             $total += $item['precio'] * $item['cantidad'];
-            $contador += $item['cantidad']; // total de productos
+            $totalItems += $item['cantidad'];
         }
 
         return response()->json([
@@ -103,14 +102,13 @@ if ($request->ajax()) {
             'mensaje' => 'Cantidad actualizada',
             'producto_id' => $id,
             'cantidad' => $carrito[$id]['cantidad'],
-            'carrito' => $carrito,
             'total' => number_format($total, 2),
-            'contador' => $contador,
-            'ruta_carrito' => route('carrito.ver')
+            'totalItems' => $totalItems,
+            'carrito' => $carrito,
         ]);
     }
 
-    // Si no es AJAX, redireccionar como antes
+    // Redirección normal si no es AJAX
     $redirect = $request->input('redirect_back', url()->previous());
     $desdeSidebar = $request->input('desde_sidebar', false);
 

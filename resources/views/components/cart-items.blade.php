@@ -2,7 +2,7 @@
 
 @if(count($carrito) > 0)
     @foreach($carrito as $id => $item)
-        <div class="mb-3 border-bottom pb-3 producto-item">
+        <div class="mb-3 border-bottom pb-3 producto-item" id="item-{{ $id }}">
             <div class="d-flex align-items-center">
                 @if($item['imagen'])
                     <img src="{{ $item['imagen'] }}" alt="{{ $item['nombre'] }}" class="me-3 cart-img"
@@ -15,21 +15,19 @@
                     <div class="text-danger fw-semibold mb-2">S/ {{ number_format($subtotal, 2) }}</div>
 
                     <div class="d-flex align-items-center mb-2" style="width: fit-content;">
-                        <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center me-1">
+                        <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center me-1 form-actualizar-cantidad">
                             @csrf
                             <input type="hidden" name="tipo" value="restar">
                             <input type="hidden" name="desde_sidebar" value="1">
-                            <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
                             <button type="submit" class="btn btn-outline-secondary btn-sm px-2">−</button>
                         </form>
 
-                        <div class="px-3">{{ $item['cantidad'] }}</div>
+                        <div class="px-3 cantidad-numero" id="cantidad-{{ $id }}">{{ $item['cantidad'] }}</div>
 
-                        <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center ms-1">
+                        <form method="POST" action="{{ route('carrito.actualizar', $id) }}" class="d-flex align-items-center ms-1 form-actualizar-cantidad">
                             @csrf
                             <input type="hidden" name="tipo" value="sumar">
                             <input type="hidden" name="desde_sidebar" value="1">
-                            <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
                             <button type="submit" class="btn btn-outline-secondary btn-sm px-2">+</button>
                         </form>
                     </div>
@@ -38,10 +36,8 @@
                     <form action="{{ route('carrito.eliminar', $id) }}" method="POST" class="form-eliminar-sidebar eliminar-item-form">
                         @csrf
                         <input type="hidden" name="desde_sidebar" value="1">
-                        <input type="hidden" name="redirect_back" value="{{ url()->current() }}">
                         <button type="submit" class="btn btn-danger rounded-pill btn-sm mt-1">Eliminar Producto</button>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -61,8 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Verificamos si es un formulario de eliminar, sumar o restar
             if (
                 form.classList.contains('eliminar-item-form') ||
-                (form.querySelector('input[name="tipo"]') && 
-                 ['sumar', 'restar'].includes(form.querySelector('input[name="tipo"]').value))
+                form.classList.contains('form-actualizar-cantidad')
             ) {
                 e.preventDefault();
 
@@ -85,17 +80,30 @@ document.addEventListener('DOMContentLoaded', function () {
                         contador.textContent = data.cantidadTotal;
                     }
 
-                    // ✅ Actualizar el contenido del sidebar
-                    if (typeof actualizarSidebarCarrito === 'function') {
-                        actualizarSidebarCarrito();
+                    // ✅ Actualizar cantidad del producto
+                    if (data.producto_id && data.cantidad !== undefined) {
+                        const cantidadElem = document.getElementById('cantidad-' + data.producto_id);
+                        if (cantidadElem) {
+                            cantidadElem.textContent = data.cantidad;
+                        }
                     }
 
-                    // ✅ Actualizar cantidad en pantalla sin recargar
-                    if (data.item_id && data.nuevaCantidad !== undefined) {
-                        const cantidadElemento = document.querySelector(`#cantidad-${data.item_id}`);
-                        if (cantidadElemento) {
-                            cantidadElemento.textContent = data.nuevaCantidad;
+                    // ✅ Si eliminar: quitar el producto del DOM
+                    if (data.eliminado && data.producto_id) {
+                        const itemElem = document.getElementById('item-' + data.producto_id);
+                        if (itemElem) {
+                            itemElem.remove();
                         }
+                    }
+
+                    // ✅ Si el carrito quedó vacío, mostrar mensaje
+                    if (data.vacio) {
+                        contenedor.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
+                    }
+
+                    // ✅ Refrescar contenido del sidebar si existe función
+                    if (typeof actualizarSidebarCarrito === 'function') {
+                        actualizarSidebarCarrito();
                     }
                 })
                 .catch(error => console.error('Error en acción del carrito:', error));

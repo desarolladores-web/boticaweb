@@ -27,13 +27,16 @@
                 <i class="bi bi-search"></i>
             </button>
 
-            <button class="btn btn-secondary">
+            <button type="submit" >
                 <i class="bi bi-x-circle"></i> Limpiar
             </button>
 
-            <a href="{{ route('admin.ventas.entregadas') }}" class="btn btn-primary ms-auto">
-                <i class="bi bi-truck"></i> Ver ventas entregadas
-            </a>
+           <form action="{{ route('admin.ventas.entregadas') }}" method="GET" class="ms-auto">
+    <button type="submit" 
+        <i class="bi bi-truck"></i> Ver ventas entregadas
+    </button>
+</form>
+
         </div>
     </div>
 

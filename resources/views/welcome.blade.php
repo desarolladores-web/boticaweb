@@ -144,53 +144,34 @@
         $carrito = session('carrito', []);
     @endphp
 
-  
+    @if(isset($carrito[$producto->id]))
+        <a href="{{ route('carrito.ver') }}"
+            class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
+            style="font-size: 15px; font-weight: 100; padding: 25px;">
+            Ver carrito
+            <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 25px;"></span>
+        </a>
+    @else
+        {{-- Mostrar controles de cantidad y botón agregar --}}
+        <div class="input-group product-qty">
+            <span class="input-group-btn">
+              <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
+                <svg width="13" height="13">
+                  <use xlink:href="#minus"></use>
+                </svg>
+              </button>
+            </span>
+            <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
+            <span class="input-group-btn">
+              <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
+                <svg width="16" height="16">
+                  <use xlink:href="#plus"></use>
+                </svg>
+              </button>
+            </span>
+        </div>
 
-                    <div class="d-flex align-items-center justify-content-between">
-                      @php
-                      $carrito = session('carrito', []);
-                      @endphp
-
-                      @if(isset($carrito[$producto->id]))
-                      {{-- Mostrar botón "Ver carrito" si el producto ya está en el carrito --}}
-                      <a href="{{ route('carrito.ver') }}"
-                        class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
-                        style="font-size: 15px; font-weight: 100; padding: 25px;">
-                        Ver carrito
-                        <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 25px;"></span>
-                      </a>
-
-
-                      @else
-                      {{-- Mostrar controles de cantidad y botón agregar --}}
-                      <div class="input-group product-qty">
-                                            <span class="input-group-btn">
-                                                <!-- BOTÓN RESTAR (Rojo) -->
-                                                <button type="button" class="quantity-left-minus btn btn-number"
-                                                    style="background-color: #b10000; color: white;" data-type="minus">
-                                                    <svg width="13" height="13">
-                                                        <use xlink:href="#minus"></use>
-                                                    </svg>
-                                                </button>
-                                            </span>
-
-                                            <input type="text" id="quantity" name="quantity" class="form-control input-number"
-                                                value="1">
-
-                                            <span class="input-group-btn">
-                                                <!-- BOTÓN SUMAR (Verde) -->
-                                                <button type="button" class="quantity-right-plus btn btn-number"
-                                                    style="background-color: #198754; color: white;" data-type="plus">
-                                                    <svg width="16" height="16">
-                                                        <use xlink:href="#plus"></use>
-                                                    </svg>
-                                                </button>
-                                            </span>
-                                        </div>
-                   
-
-
-
+                 
 
         <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}" class="agregar-carrito-form">
             @csrf

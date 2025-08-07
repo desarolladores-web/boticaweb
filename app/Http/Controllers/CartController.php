@@ -91,8 +91,11 @@ if ($request->ajax()) {
     // Si es una solicitud AJAX
     if ($request->ajax()) {
         $total = 0;
+        $contador = 0;
+
         foreach ($carrito as $item) {
             $total += $item['precio'] * $item['cantidad'];
+            $contador += $item['cantidad']; // total de productos
         }
 
         return response()->json([
@@ -102,6 +105,7 @@ if ($request->ajax()) {
             'cantidad' => $carrito[$id]['cantidad'],
             'carrito' => $carrito,
             'total' => number_format($total, 2),
+            'contador' => $contador,
             'ruta_carrito' => route('carrito.ver')
         ]);
     }
@@ -118,6 +122,7 @@ if ($request->ajax()) {
 
     return $response;
 }
+
 
 
 

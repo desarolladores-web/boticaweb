@@ -68,7 +68,7 @@ Productos
                         </form>
 
            {{-- Formulario de importación --}}
-//<form id="importForm" action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data" class="d-flex flex-wrap align-items-center gap-2">
+<form id="importForm" action="{{ route('productos.importar') }}" method="POST" enctype="multipart/form-data" class="d-flex flex-wrap align-items-center gap-2">
     @csrf
     <input type="file" name="archivo" class="form-control form-control-sm w-auto" required>
     <button type="submit" >

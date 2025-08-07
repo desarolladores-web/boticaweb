@@ -23,11 +23,11 @@
 <div class="container py-5">
     <div class="row g-5">
         <!-- Miniaturas laterales -->
-        <div class="col-md-1 d-none d-md-flex flex-column gap-3">
+       <!-- <div class="col-md-1 d-none d-md-flex flex-column gap-3">
             @for($i = 0; $i < 4; $i++)
                 <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" class="img-fluid rounded border" style="cursor:pointer;">
             @endfor
-        </div>
+        </div> -->
 
         <!-- Imagen principal -->
      

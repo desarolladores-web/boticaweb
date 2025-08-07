@@ -7,29 +7,35 @@ use App\Models\Producto;
 
 class CartController extends Controller
 {
-    public function agregar(Request $request, $id)
-    {
-        $producto = Producto::findOrFail($id);
-        $carrito = session()->get('carrito', []);
+  public function agregar(Request $request, $id)
+{
+    $producto = Producto::findOrFail($id);
+    $carrito = session()->get('carrito', []);
+    $cantidad = (int) $request->input('cantidad', 1);
 
-        if (isset($carrito[$id])) {
-            $carrito[$id]['cantidad'] += $request->input('cantidad', 1);
-        } else {
-            $carrito[$id] = [
-                "id" => $producto->id, // ✅ Esto es lo que falta
-                "nombre" => $producto->nombre,
-                "cantidad" => $request->input('cantidad', 1),
-                "precio" => $producto->pvp1,
-                "imagen" => $producto->imagen ? 'data:image/jpeg;base64,' . base64_encode($producto->imagen) : null,
-                "presentacion" => optional($producto->presentacion)->tipo_presentacion ?? '—'
-            ];
-        }
-
-
-        session()->put('carrito', $carrito);
-
-        return redirect()->back()->with('success', 'Producto agregado al carrito');
+    if (isset($carrito[$id])) {
+        $carrito[$id]['cantidad'] += $cantidad;
+    } else {
+        $carrito[$id] = [
+            "id" => $producto->id,
+            "nombre" => $producto->nombre,
+            "cantidad" => $cantidad,
+            "precio" => $producto->pvp1,
+            "imagen" => $producto->imagen ? 'data:image/jpeg;base64,' . base64_encode($producto->imagen) : null,
+            "presentacion" => optional($producto->presentacion)->tipo_presentacion ?? '—'
+        ];
     }
+
+    session()->put('carrito', $carrito);
+
+    if ($request->ajax()) {
+        return response()->json(['success' => true, 'message' => 'Producto agregado al carrito']);
+    }
+
+    return redirect()->back()->with('success', 'Producto agregado al carrito');
+}
+
+
 
     public function mostrar()
     {

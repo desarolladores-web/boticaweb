@@ -174,15 +174,15 @@
                           </button>
                         </span>
                       </div>
-                      <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
-                        class="agregar-carrito-form">
-                        @csrf
-                        <input type="hidden" name="cantidad" value="1">
-                        <button type="submit" class="button">
-                          Agregar Carrito
-                          <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
-                        </button>
-                      </form>
+                    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}" class="agregar-carrito-form">
+    @csrf
+    <input type="hidden" name="cantidad" value="1">
+    <button type="submit" class="button">
+        Agregar Carrito
+        <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
+    </button>
+</form>
+
                       @endif
 
 
@@ -209,6 +209,9 @@
 
   <!-- ALERTAS -->
   @if (session('status'))
+
+
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       let mensaje = '';
@@ -310,3 +313,41 @@
 </style>
 
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const forms = document.querySelectorAll('.agregar-carrito-form');
+
+        forms.forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Evita que la página se recargue
+
+                const action = form.getAttribute('action');
+                const formData = new FormData(form);
+
+                fetch(action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Actualiza el contador del carrito en el DOM
+                        const contador = document.querySelector('.icon-quantity');
+                        if (contador) {
+                            contador.textContent = data.cantidadTotal;
+                        }
+
+                        // Mensaje opcional
+                        alert('Producto agregado al carrito');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    });
+</script>

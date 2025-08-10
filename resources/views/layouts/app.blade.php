@@ -109,19 +109,19 @@
                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <!-- Si el usuario está autenticado, mostramos la imagen de perfil -->
                                         @auth
-                                            @if(Auth::user()->imagen)
-                                                <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
-                                                    alt="Avatar" class="rounded-circle"
-                                                    style="width: 30px; height: 30px; object-fit: cover;">
-                                            @else
-                                                <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                                                <!-- Icono por defecto si no tiene imagen -->
-                                            @endif
-                                            <span class="ms-2">{{ Auth::user()->name }}</span>
-                                            <!-- Nombre del usuario autenticado -->
+                                        @if(Auth::user()->imagen)
+                                        <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
+                                            alt="Avatar" class="rounded-circle"
+                                            style="width: 30px; height: 30px; object-fit: cover;">
                                         @else
-                                            <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
-                                            <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                                        <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                                        <!-- Icono por defecto si no tiene imagen -->
+                                        @endif
+                                        <span class="ms-2">{{ Auth::user()->name }}</span>
+                                        <!-- Nombre del usuario autenticado -->
+                                        @else
+                                        <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
+                                        <i class="bi bi-person" style="font-size: 1.5rem;"></i>
 
                                         @endauth
                                     </a>
@@ -134,51 +134,51 @@
                                     <!-- Menú desplegable -->
                                     <div class="dropdown-menu dropdown-menu-end">
                                         @guest
-                                            @if (Route::has('login'))
-                                                <a class="dropdown-item"
-                                                    href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
-                                            @endif
+                                        @if (Route::has('login'))
+                                        <a class="dropdown-item"
+                                            href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
+                                        @endif
 
-                                            @if (Route::has('register'))
-                                                <a class="dropdown-item"
-                                                    href="{{ route('register') }}">{{ __('Registrarse') }}</a>
-                                            @endif
+                                        @if (Route::has('register'))
+                                        <a class="dropdown-item"
+                                            href="{{ route('register') }}">{{ __('Registrarse') }}</a>
+                                        @endif
                                         @else
-                                            @php
-                                                $user = Auth::user();
-                                            @endphp
+                                        @php
+                                        $user = Auth::user();
+                                        @endphp
 
-                                            <!-- Mi cuenta con ícono -->
-                                            @if ($user->rol_id == 1)
-                                                <!-- Admin -->
-                                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                                    <i class="bi bi-person me-2"></i> Panel Admin
-                                                </a>
+                                        <!-- Mi cuenta con ícono -->
+                                        @if ($user->rol_id == 1)
+                                        <!-- Admin -->
+                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                            <i class="bi bi-person me-2"></i> Panel Admin
+                                        </a>
 
-                                            @else
-                                                <!-- Usuario normal -->
-                                                <a class="dropdown-item" href="{{ route('account.edit') }}">
-                                                    <i class="bi bi-person me-2"></i> Mi Cuenta
-                                                </a>
-                                            @endif
+                                        @else
+                                        <!-- Usuario normal -->
+                                        <a class="dropdown-item" href="{{ route('account.edit') }}">
+                                            <i class="bi bi-person me-2"></i> Mi Cuenta
+                                        </a>
+                                        @endif
 
-                                            <!-- Pedidos -->
-                                            <a class="dropdown-item" href="#">Pedidos</a>
+                                        <!-- Pedidos -->
+                                        <a class="dropdown-item" href="#">Pedidos</a>
 
-                                            <!-- Favoritos -->
-                                            <a class="dropdown-item" href="#">Favoritos</a>
+                                        <!-- Favoritos -->
+                                        <a class="dropdown-item" href="#">Favoritos</a>
 
-                                            <!-- Cerrar sesión -->
-                                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar sesión') }}
-                                            </a>
+                                        <!-- Cerrar sesión -->
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar sesión') }}
+                                        </a>
 
-                                            <!-- Formulario de cierre de sesión -->
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                            </form>
+                                        <!-- Formulario de cierre de sesión -->
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            class="d-none">
+                                            @csrf
+                                        </form>
                                         @endguest
                                     </div>
 
@@ -190,16 +190,16 @@
 
 
                         @php
-                            $carrito = session('carrito', []);
-                            $cantidadTotal = count($carrito);
+                        $carrito = session('carrito', []);
+                        $cantidadTotal = count($carrito);
                         @endphp
 
                         <div class="item ms-4">
                             <a href="#" class="header-cart-icon position-relative">
                                 <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
-  <span id="contador-carrito" class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-    {{ $cantidadTotal }}
-</span>
+                                <span id="contador-carrito" class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ $cantidadTotal }}
+                                </span>
 
 
                             </a>
@@ -209,18 +209,18 @@
                 </div>
             </div>
             <style>
-        #appHeader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
-        }
+                #appHeader {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 1030;
+                }
 
-        body {
-            padding-top: 115px;
-        }
-    </style>
+                body {
+                    padding-top: 115px;
+                }
+            </style>
         </header>
     </div>
 
@@ -263,26 +263,26 @@
             @php $carrito = session('carrito', []); @endphp
 
             @if(count($carrito) > 0)
-                <div class="cart-body p-3" id="cart-items">
-    @include('components.cart-items')
-</div>
+            <div class="cart-body p-3" id="cart-items">
+                @include('components.cart-items')
+            </div>
 
             @else
-                <p class="text-muted">Tu carrito está vacío.</p>
+            <p class="text-muted">Tu carrito está vacío.</p>
             @endif
         </div>
 
-       <div class="cart-footer p-3 border-top">
-    <div class="d-flex justify-content-between">
-        <strong>Total:</strong>
-        @php
-            $total = 0;
-            foreach ($carrito as $item) {
+        <div class="cart-footer p-3 border-top">
+            <div class="d-flex justify-content-between">
+                <strong>Total:</strong>
+                @php
+                $total = 0;
+                foreach ($carrito as $item) {
                 $total += $item['precio'] * $item['cantidad'];
-            }
-        @endphp
-        <span class="text-success" id="cart-total">S/. {{ number_format($total, 2) }}</span>
-    </div>
+                }
+                @endphp
+                <span class="text-success" id="cart-total">S/. {{ number_format($total, 2) }}</span>
+            </div>
             <button type="button" class="btn btn-danger rounded-pill  mt-3 w-100" data-bs-toggle="modal"
                 data-bs-target="#checkoutModal">
                 Comprar ahora
@@ -386,59 +386,60 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    document.querySelectorAll('.agregar-carrito-form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // evita que recargue la página
+    <script>
+        document.querySelectorAll('.agregar-carrito-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // evita que recargue la página
 
-            const url = this.action;
-            const formData = new FormData(this);
+                const url = this.action;
+                const formData = new FormData(this);
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': formData.get('_token'),
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // ✅ Actualizar contador del carrito
-                document.getElementById('contador-carrito').textContent = data.cantidadTotal;
+                fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': formData.get('_token'),
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // ✅ Actualizar contador del carrito
+                        document.getElementById('contador-carrito').textContent = data.cantidadTotal;
 
-                // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
-                if (typeof actualizarSidebarCarrito === 'function') {
-                    actualizarSidebarCarrito();
-                }
-            })
-            .catch(error => {
-                console.error('Error al agregar al carrito:', error);
+                        // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
+                        if (typeof actualizarSidebarCarrito === 'function') {
+                            actualizarSidebarCarrito();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al agregar al carrito:', error);
+                    });
             });
         });
-    });
-</script>
+    </script>
 
-<script>
-function actualizarSidebarCarrito() {
-    fetch('{{ route('carrito.sidebar.ajax') }}')
-        .then(res => res.json())
-        .then(data => {
-            // Actualizar los ítems del carrito
-            const sidebarItems = document.getElementById('cart-items');
-            if (sidebarItems) {
-                sidebarItems.innerHTML = data.items_html;
-            }
+    <script>
+        function actualizarSidebarCarrito() {
+            fetch('{{ route('
+                    carrito.sidebar.ajax ') }}')
+                .then(res => res.json())
+                .then(data => {
+                    // Actualizar los ítems del carrito
+                    const sidebarItems = document.getElementById('cart-items');
+                    if (sidebarItems) {
+                        sidebarItems.innerHTML = data.items_html;
+                    }
 
-            // Actualizar el total
-            const cartTotal = document.getElementById('cart-total');
-            if (cartTotal) {
-                cartTotal.textContent = 'S/. ' + data.total;
-            }
-        })
-        .catch(error => console.error('Error actualizando sidebar:', error));
-}
-</script>
+                    // Actualizar el total
+                    const cartTotal = document.getElementById('cart-total');
+                    if (cartTotal) {
+                        cartTotal.textContent = 'S/. ' + data.total;
+                    }
+                })
+                .catch(error => console.error('Error actualizando sidebar:', error));
+        }
+    </script>
 
 
 

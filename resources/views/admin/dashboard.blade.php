@@ -1,9 +1,10 @@
 
 @extends('layouts.admin')
 
-@extends('admin.layauts.master') 
+
 
   @section('content')
+  <h1>CHUPALO JURADO </h1>
   <section class="section">
             <div class="section-header">
               <h1>Dashboard</h1>

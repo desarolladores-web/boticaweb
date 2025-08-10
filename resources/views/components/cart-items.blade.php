@@ -54,11 +54,12 @@ document.addEventListener('DOMContentLoaded', function () {
         contenedor.addEventListener('submit', function (e) {
             const form = e.target;
 
-            // Verificamos si es un formulario de eliminar, sumar o restar
+            // Verificar si es un formulario de eliminar o actualizar cantidad
             if (
                 form.classList.contains('eliminar-item-form') ||
                 form.classList.contains('form-actualizar-cantidad')
             ) {
+                // 🚫 Siempre evitar recargar la página
                 e.preventDefault();
 
                 const url = form.action;
@@ -112,4 +113,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+
 

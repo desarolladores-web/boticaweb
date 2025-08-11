@@ -8,7 +8,8 @@ export default defineConfig({
             input: [
                 "resources/sass/app.scss",
                 "resources/js/app.js",
-                "resources/css/welcome.css", // <--- aquí lo agregas si usas ese CSS
+                "resources/css/welcome.css", // si usas este también
+                "resources/sass/footer.scss", // agrega este archivo aquí
             ],
 
             refresh: true,

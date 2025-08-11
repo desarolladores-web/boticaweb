@@ -20,5 +20,13 @@
     "names": [
       "app.css"
     ]
+  },
+  "resources/sass/footer.scss": {
+    "file": "assets/footer-ByPUTCNK.css",
+    "src": "resources/sass/footer.scss",
+    "isEntry": true,
+    "names": [
+      "footer.css"
+    ]
   }
 }

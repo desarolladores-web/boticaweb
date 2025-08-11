@@ -11,7 +11,8 @@ export default defineConfig({
                 "resources/css/welcome.css",
                 "resources/sass/footer.scss",
                 "resources/css/login.css",
-                "resources/css/admin.css", // <-- este nuevo
+                "resources/css/admin.css",
+                "resources/css/edit.css", // <--- agrega este
             ],
 
             refresh: true,

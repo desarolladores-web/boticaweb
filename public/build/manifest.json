@@ -7,6 +7,14 @@
       "admin.css"
     ]
   },
+  "resources/css/edit.css": {
+    "file": "assets/edit-BQwoEYMY.css",
+    "src": "resources/css/edit.css",
+    "isEntry": true,
+    "names": [
+      "edit.css"
+    ]
+  },
   "resources/css/login.css": {
     "file": "assets/login-CUe3WUQ5.css",
     "src": "resources/css/login.css",

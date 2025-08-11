@@ -39,25 +39,27 @@
     <div id="app">
         <!-- Header Section -->
         <header id="appHeader">
-            <div class="header-top" style="padding-top: 1px; padding-bottom: 13px;">
+            <div class="header-top bg-danger py-4">
+                <div class="container-fluid">
+                    <div class="row align-items-center text-white gy-2">
+                        <!-- Horario de atención -->
+                        <div class="col-12 col-md-auto text-center text-md-start">
+                            <i class="bi bi-clock me-1"></i> Lunes a Sábado: 8:00am - 9:00pm
+                        </div>
 
-                <div class="container-fluid d-flex justify-content-between align-items-center">
-                    <!-- Horario de atención -->
-                    <div class="header-schedule text-white">
-                        <i class="bi bi-clock me-1"></i> Lunes a Sábado: 8:00am - 9:00pm
-                    </div>
-
-                    <!-- Información de contacto -->
-                    <div class="top-info d-flex align-items-center gap-3">
-                        <a href="mailto:boticamyryan@gmail.com" class="text-white d-flex align-items-center">
-                            <i class="bi bi-envelope-fill me-1"></i> boticamyryan@gmail.com
-                        </a>
-                        <span class="text-white d-flex align-items-center">
-                            <i class="bi bi-telephone-outbound-fill me-1"></i> +51 973059257
-                        </span>
+                        <!-- Información de contacto -->
+                        <div class="col-12 col-md d-flex flex-wrap justify-content-center justify-content-md-end gap-3">
+                            <a href="mailto:boticamyryan@gmail.com" class="text-white d-flex align-items-center">
+                                <i class="bi bi-envelope-fill me-1"></i> boticamyryan@gmail.com
+                            </a>
+                            <span class="d-flex align-items-center">
+                                <i class="bi bi-telephone-outbound-fill me-1"></i> +51 973059257
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
+
 
             <nav class="navbar navbar-expand-md navbar-light bg-light ">
                 <div class="container">
@@ -67,49 +69,44 @@
                             style="height: 50px;">
                     </a>
 
-                    <!-- Botón hamburguesa -->
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                        aria-label="Toggle navigation">
+                    <input type="checkbox" id="menu-toggle" class="d-none">
+                    <label for="menu-toggle" class="navbar-toggler">
                         <span class="navbar-toggler-icon"></span>
-                    </button>
+                    </label>
 
                     <!-- Menú colapsable -->
-                    <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <div class="collapse navbar-collapse align-items-center " id="navbarResponsive">
+                        <ul class="navbar-nav me-auto mb-2 mb-md-0 gap-3 ">
                             <li class="nav-item">
-                                <a class="nav-link text-uppercase fw-bolder text-dark" href="{{ url('/') }}">Inicio</a>
+                                <a class="nav-link fw-bolder text-dark" href="{{ url('/') }}">Inicio</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-uppercase fw-bolder text-dark"
-                                    href="{{ url('/quienes-somos') }}">Quienes somos</a>
+                                <a class="nav-link  fw-bolder text-dark" href="{{ url('/quienes-somos') }}">Quienes
+                                    somos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-uppercase fw-bolder text-dark"
-                                    href="{{ url('/consejos') }}">Consejos</a>
+                                <a class="nav-link  fw-bolder text-dark" href="{{ url('/consejos') }}">Consejos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-uppercase fw-bolder text-dark"
+                                <a class="nav-link  fw-bolder text-dark"
                                     href="{{ url('/contactanos') }}">Contáctanos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-uppercase fw-bolder text-dark"
+                                <a class="nav-link  fw-bolder text-dark"
                                     href="{{ url('/producto-filtro') }}">Productos</a>
                             </li>
                         </ul>
-                        
+
 
                         <!-- Barra de búsqueda y otros íconos -->
                         <div class="d-flex align-items-center">
-                            <form action="{{ route('productos.buscar') }}" method="get" class="me-3"
+                            <form action="{{ route('productos.buscar') }}" method="get" class="search-group me-3"
                                 style="min-width: 200px;">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control border-secondary" name="keyword"
-                                        placeholder="Buscar" value="{{ request('keyword') }}">
-                                    <button class="btn btn-secondary" type="submit">
-                                        <i class="bi bi-search"></i>
-                                    </button>
-                                </div>
+                                <input type="text" class="form-control" name="keyword" placeholder="Buscar"
+                                    value="{{ request('keyword') }}">
+                                <button type="submit" class="btn border-0 shadow-none p-0">
+                                    <i class="bi bi-search"></i>
+                                </button>
                             </form>
 
 
@@ -121,7 +118,7 @@
                                             <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
                                                 alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px;">
                                         @else
-                                        
+
                                             <i class="bi bi-person" style="font-size: 1.5rem;"></i>
                                         @endif
                                         <span class="ms-2 d-none d-md-inline">{{ Auth::user()->name }}</span>
@@ -175,6 +172,7 @@
                 </div>
             </nav>
 
+
             <style>
                 #appHeader {
                     position: fixed;
@@ -187,6 +185,51 @@
                 body {
                     padding-top: 115px;
                 }
+
+                .navbar-nav .nav-link {
+                    position: relative;
+                    padding-bottom: 5px;
+                    /* espacio para la línea */
+                    transition: all 0.3s ease;
+                }
+
+                .navbar-nav .nav-link::after {
+                    content: "";
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 0%;
+                    height: 2px;
+                    /* grosor de la línea */
+                    background-color: red;
+                    transition: width 0.3s ease;
+                }
+
+                .navbar-nav .nav-link:hover::after,
+                .navbar-nav .nav-link.active::after {
+                    width: 100%;
+                    /* la línea aparece */
+                }
+
+                /* Estilos buscador */
+                .search-group {
+                    display: flex;
+                    align-items: center;
+                    margin: 0;
+                }
+
+                .search-group input {
+                    height: 38px;
+                }
+
+                .search-group button {
+                    height: 38px;
+                }
+
+                .btn.border-0.shadow-none.p-0 {
+                    margin-right: 11px;
+                }
+
 
                 @media (max-width: 768px) {
                     .search-group input {
@@ -204,6 +247,17 @@
 
                     .navbar .btn {
                         font-size: 0.9rem;
+                    }
+
+                    #navbarResponsive {
+                        display: none;
+                        flex-direction: column;
+                        background: #f8f9fa;
+                        padding: 1rem;
+                    }
+
+                    #menu-toggle:checked~#navbarResponsive {
+                        display: flex;
                     }
                 }
             </style>

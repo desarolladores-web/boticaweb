@@ -152,9 +152,9 @@ class CheckoutController extends Controller
 
 
         $preference->back_urls = [
-            'success' => route('pago.exito'),
-            'failure' => route('pago.fallo'),
-            'pending' => route('pago.pendiente'),
+            'success' => route('welcome') . '?status=approved',
+            'failure' => route('welcome') . '?status=failure',
+            'pending' => route('welcome') . '?status=pending',
         ];
 
         //recordarle a chat que todo esta en local 

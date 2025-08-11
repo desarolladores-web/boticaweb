@@ -61,7 +61,9 @@ if ($request->ajax()) {
         'mensaje' => 'Producto eliminado del carrito',
         'cantidadTotal' => count($carrito), // Para actualizar el contador
         'carrito' => $carrito,
-        'ruta_carrito' => route('carrito.ver') // <-- línea añadida
+        
+        'ruta_carrito' => route('carrito.ver') 
+        // <-- línea añadida
     ]);
 }
 
@@ -74,7 +76,7 @@ if ($request->ajax()) {
 
 
 
- public function actualizar(Request $request, $id)
+public function actualizar(Request $request, $id)
 {
     $tipo = $request->input('tipo');
     $carrito = session()->get('carrito', []);
@@ -88,37 +90,29 @@ if ($request->ajax()) {
         session()->put('carrito', $carrito);
     }
 
-    if ($request->ajax()) {
-        $total = 0;
-        $totalItems = 0;
+    // Calcular totales
+    $total = 0;
+    $totalItems = 0;
+    foreach ($carrito as $item) {
+        $total += $item['precio'] * $item['cantidad'];
+        $totalItems += $item['cantidad'];
+    }
 
-        foreach ($carrito as $item) {
-            $total += $item['precio'] * $item['cantidad'];
-            $totalItems += $item['cantidad'];
-        }
-
+    // Siempre devolver JSON si es AJAX
+    if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
         return response()->json([
             'success' => true,
             'mensaje' => 'Cantidad actualizada',
             'producto_id' => $id,
-            'cantidad' => $carrito[$id]['cantidad'],
+            'cantidad' => $carrito[$id]['cantidad'] ?? 0,
             'total' => number_format($total, 2),
             'totalItems' => $totalItems,
-            'carrito' => $carrito,
+            'cantidadTotal' => count($carrito)
         ]);
     }
 
-    // Redirección normal si no es AJAX
-    $redirect = $request->input('redirect_back', url()->previous());
-    $desdeSidebar = $request->input('desde_sidebar', false);
-
-    $response = redirect($redirect);
-
-    if ($desdeSidebar) {
-        $response->with('abrir_sidebar', true);
-    }
-
-    return $response;
+    // Si no es AJAX, redirigir (caso excepcional)
+    return redirect()->back();
 }
 
 

@@ -10,7 +10,8 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/css/welcome.css",
                 "resources/sass/footer.scss",
-                "resources/css/login.css", // <--- agrega esta línea
+                "resources/css/login.css",
+                "resources/css/admin.css", // <-- este nuevo
             ],
 
             refresh: true,

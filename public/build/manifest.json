@@ -1,4 +1,12 @@
 {
+  "resources/css/admin.css": {
+    "file": "assets/admin-B6FI1cYl.css",
+    "src": "resources/css/admin.css",
+    "isEntry": true,
+    "names": [
+      "admin.css"
+    ]
+  },
   "resources/css/login.css": {
     "file": "assets/login-CUe3WUQ5.css",
     "src": "resources/css/login.css",

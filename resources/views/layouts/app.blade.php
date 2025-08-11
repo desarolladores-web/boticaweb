@@ -429,7 +429,7 @@
                     });
             });
         });
-    </script>
+    </script> 
 
     <script>
         function actualizarSidebarCarrito() {

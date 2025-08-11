@@ -127,7 +127,8 @@
                 <div class="form-section">
                     <h4 class="mb-3 fw-bold">¡Ya falta poco para finalizar tu compra!</h4>
                     <p class="text-muted mb-4">
-                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a href="#">iniciar sesión</a>.
+                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a href="#">iniciar
+                            sesión</a>.
                     </p>
 
                     <!-- Dentro de tu vista: resources/views/ventas/checkout.blade.php -->
@@ -137,42 +138,64 @@
 
 
                         @csrf
+                        @php
+                            $cliente = auth()->check() ? auth()->user()->cliente : null;
+                        @endphp
+
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nombres *</label>
-                                <input type="text" class="form-control" name="nombres" required placeholder="Ej: Renato">
+                                <input type="text" class="form-control" name="nombres" required placeholder="Ej: Renato"
+                                    value="{{ $cliente?->nombre ?? auth()->user()->name ?? '' }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Apellido paterno *</label>
-                                <input type="text" class="form-control" name="apellido_paterno" required placeholder="Ej: Salas">
+                                <input type="text" class="form-control" name="apellido_paterno" required
+                                    placeholder="Ej: Salas" value="{{ $cliente?->apellido_paterno ?? '' }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Apellido materno *</label>
-                                <input type="text" class="form-control" name="apellido_materno" required placeholder="Ej: Torres">
+                                <input type="text" class="form-control" name="apellido_materno" required
+                                    placeholder="Ej: Torres" value="{{ $cliente?->apellido_materno ?? '' }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Correo electrónico *</label>
-                                <input type="email" class="form-control" name="correo" required placeholder="Ej: correo@dominio.com">
+                                <input type="email" class="form-control" name="correo" required
+                                    placeholder="Ej: correo@dominio.com"
+                                    value="{{ $cliente?->email ?? auth()->user()->email ?? '' }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Tipo de documento</label>
                                 <select class="form-select" name="tipo_documento_id" required>
-                                    <option value="" disabled selected>Seleccione tipo de documento</option>
-                                    @foreach ($tiposDocumento as $tipo)
-                                    <option value="{{ $tipo->id }}">{{ $tipo->nombre_documento }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                    <option value="" disabled
+                                    @if( empty($cliente?->tipo_documento_id) && empty(optional(auth()->user())->tipo_documento_id) )
+                                    selected
+                                    @endif
+                                    >
+                                    Seleccione tipo de documento
+                                </option>
+                                @foreach ($tiposDocumento as $tipo)
+                                <option value="{{ $tipo->id }}"
+                                @if( ($cliente?->tipo_documento_id ?? optional(auth()->user())->tipo_documento_id) == $tipo->id )
+                                selected
+                                @endif
+                                >
+                                {{ $tipo->nombre_documento }}
+                            </option>
+                            @endforeach
+                        </select></div>
                             <div class="col-md-6">
                                 <label class="form-label">Nro. de documento *</label>
-                                <input type="text" class="form-control" name="numero_documento" required placeholder="Ej: 12345678">
+                                <input type="text" class="form-control" name="numero_documento" required
+                                    placeholder="Ej: 12345678" value="{{ $cliente?->DNI ?? '' }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Celular *</label>
-                                <input type="text" class="form-control" name="celular" required placeholder="Ej: 999 000 000">
+                                <input type="text" class="form-control" name="celular" required
+                                    placeholder="Ej: 999 000 000" value="{{ $cliente?->telefono ?? '' }}">
                             </div>
                         </div>
-
+                        
                         <div class="form-check mt-3">
                             <input type="checkbox" class="form-check-input" id="termsCheck" required>
                             <label for="termsCheck" class="form-check-label">
@@ -183,12 +206,13 @@
                         <hr class="my-4">
 
                         <!-- Dirección o sucursal -->
-                        <h6><i class="bi bi-geo-alt-fill text-danger me-2"></i> Elige ubicación de recojo del producto</h6>
+                        <h6><i class="bi bi-geo-alt-fill text-danger me-2"></i> Elige ubicación de recojo del producto
+                        </h6>
                         <div class="mb-3">
                             <select class="form-select" name="sucursal_id" required>
                                 <option value="" disabled selected>Elige la dirección más cercana</option>
                                 @foreach ($sucursales as $sucursal)
-                                <option value="{{ $sucursal->id }}">{{ $sucursal->direccion }}</option>
+                                    <option value="{{ $sucursal->id }}">{{ $sucursal->direccion }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -196,14 +220,16 @@
 
                         <!-- Datos ocultos del carrito -->
                         @foreach ($carrito as $item)
-                        <input type="hidden" name="productos[{{ $item['id'] }}][cantidad]" value="{{ $item['cantidad'] }}">
+                            <input type="hidden" name="productos[{{ $item['id'] }}][cantidad]"
+                                value="{{ $item['cantidad'] }}">
                         @endforeach
 
                         <!-- Aceptar términos -->
                         <div class="form-check mt-3">
                             <input type="checkbox" class="form-check-input" id="finalTermsCheck" required>
                             <label for="finalTermsCheck" class="form-check-label">
-                                Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de Privacidad</a>.
+                                Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de
+                                    Privacidad</a>.
                             </label>
                         </div>
 
@@ -219,31 +245,32 @@
                     <hr>
 
                     @php
-                    $carrito = session('carrito', []);
-                    $total = 0;
+                        $carrito = session('carrito', []);
+                        $total = 0;
                     @endphp
 
                     @forelse ($carrito as $item)
-                    @php
-                    $subtotal = $item['precio'] * $item['cantidad'];
-                    $total += $subtotal;
-                    @endphp
-                    <div class="d-flex mb-3">
-                        <img src="{{ $item['imagen'] ?? 'https://via.placeholder.com/60' }}" class="me-2" style="width: 60px; height: 60px; object-fit: contain;">
-                        <div>
-                            <strong class="d-block">{{ $item['nombre'] }}</strong>
-                            <small class="text-muted">{{ $item['presentacion'] ?? '' }}</small><br>
-                            <small class="text-muted">Cantidad: {{ $item['cantidad'] }}</small>
-                            <div class="text-danger fw-semibold">S/ {{ number_format($subtotal, 2) }}</div>
+                        @php
+                            $subtotal = $item['precio'] * $item['cantidad'];
+                            $total += $subtotal;
+                        @endphp
+                        <div class="d-flex mb-3">
+                            <img src="{{ $item['imagen'] ?? 'https://via.placeholder.com/60' }}" class="me-2"
+                                style="width: 60px; height: 60px; object-fit: contain;">
+                            <div>
+                                <strong class="d-block">{{ $item['nombre'] }}</strong>
+                                <small class="text-muted">{{ $item['presentacion'] ?? '' }}</small><br>
+                                <small class="text-muted">Cantidad: {{ $item['cantidad'] }}</small>
+                                <div class="text-danger fw-semibold">S/ {{ number_format($subtotal, 2) }}</div>
+                            </div>
                         </div>
-                    </div>
                     @empty
-                    <p class="text-muted">No hay productos en el carrito.</p>
+                        <p class="text-muted">No hay productos en el carrito.</p>
                     @endforelse
 
                     @php
-                    $igv = round($total * 0.18, 2);
-                    $totalConIgv = $total + $igv;
+                        $igv = round($total * 0.18, 2);
+                        $totalConIgv = $total + $igv;
                     @endphp
 
                     <hr>
@@ -281,13 +308,13 @@
                 const formData = new FormData(formulario);
 
                 fetch("{{ route('checkout.guardar-datos') }}", {
-                        method: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: formData,
-                        credentials: 'same-origin' // 👈 ESTA LÍNEA ES CLAVE PARA QUE FUNCIONE LA SESIÓN
-                    })
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: formData,
+                    credentials: 'same-origin' // 👈 ESTA LÍNEA ES CLAVE PARA QUE FUNCIONE LA SESIÓN
+                })
                     .then(response => response.json())
                     .then(data => {
                         if (data.init_point) {

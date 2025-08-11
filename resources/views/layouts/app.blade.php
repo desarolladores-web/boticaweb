@@ -197,9 +197,10 @@
                         <div class="item ms-4">
                             <a href="#" class="header-cart-icon position-relative">
                                 <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
-  <span id="contador-carrito" class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-    {{ $cantidadTotal }}
-</span>
+                                <span id="contador-carrito"
+                                    class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ $cantidadTotal }}
+                                </span>
 
 
                             </a>
@@ -209,18 +210,18 @@
                 </div>
             </div>
             <style>
-        #appHeader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
-        }
+                #appHeader {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 1030;
+                }
 
-        body {
-            padding-top: 115px;
-        }
-    </style>
+                body {
+                    padding-top: 115px;
+                }
+            </style>
         </header>
     </div>
 
@@ -259,34 +260,44 @@
             <button id="closeCartBtn"
                 class="btn btn-sm btn-outline-secondary d-grid aling-items-center">&times;</button>
         </div>
+
         <div class="cart-body p-3" id="cart-items">
             @php $carrito = session('carrito', []); @endphp
 
             @if(count($carrito) > 0)
                 <div class="cart-body p-3" id="cart-items">
-    @include('components.cart-items')
-</div>
-
+                    @include('components.cart-items')
+                </div>
             @else
                 <p class="text-muted">Tu carrito está vacío.</p>
             @endif
         </div>
 
-       <div class="cart-footer p-3 border-top">
-    <div class="d-flex justify-content-between">
-        <strong>Total:</strong>
-        @php
-            $total = 0;
-            foreach ($carrito as $item) {
-                $total += $item['precio'] * $item['cantidad'];
-            }
-        @endphp
-        <span class="text-success" id="cart-total">S/. {{ number_format($total, 2) }}</span>
-    </div>
-            <button type="button" class="btn btn-danger rounded-pill  mt-3 w-100" data-bs-toggle="modal"
-                data-bs-target="#checkoutModal">
-                Comprar ahora
-            </button>
+        <div class="cart-footer p-3 border-top">
+            <div class="d-flex justify-content-between">
+                <strong>Total:</strong>
+                @php
+                    $total = 0;
+                    foreach ($carrito as $item) {
+                        $total += $item['precio'] * $item['cantidad'];
+                    }
+                @endphp
+                <span class="text-success" id="cart-total">S/. {{ number_format($total, 2) }}</span>
+            </div>
+
+            <!-- BOTÓN DIFERENTE SEGÚN LOGIN -->
+            @auth
+                <a href="{{ route('checkout.formulario') }}" class="btn btn-danger rounded-pill mt-3 w-100">
+                    Comprar ahora
+                </a>
+            @endauth
+
+            @guest
+                <button type="button" class="btn btn-danger rounded-pill mt-3 w-100" data-bs-toggle="modal"
+                    data-bs-target="#checkoutModal">
+                    Comprar ahora
+                </button>
+            @endguest
         </div>
 
         <a href="{{ route('carrito.ver') }}"
@@ -297,30 +308,31 @@
         </a>
     </div>
 
-    <!-- MODAL: ¿Iniciar sesión o continuar como invitado? -->
-    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-3">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title" id="checkoutModalLabel">¿Cómo deseas continuar?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <p>Para finalizar tu compra, puedes iniciar sesión o continuar sin cuenta.</p>
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('login') }}" class="btn btn-outline-primary">
-                            <i class="bi bi-person-circle me-2"></i> Iniciar sesión / Registrarse
-                        </a>
-                        <a href="{{ route('checkout.formulario') }}" class="btn btn-primary">
-                            <i class="bi bi-box-arrow-right me-2"></i> Continuar sin cuenta
-                        </a>
-
-
+    <!-- MODAL SOLO PARA INVITADOS -->
+    @guest
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content p-3">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title" id="checkoutModalLabel">¿Cómo deseas continuar?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>Para finalizar tu compra, puedes iniciar sesión o continuar sin cuenta.</p>
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('login') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-person-circle me-2"></i> Iniciar sesión / Registrarse
+                            </a>
+                            <a href="{{ route('checkout.formulario') }}" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-right me-2"></i> Continuar sin cuenta
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endguest
+
 
     <!-- BACKDROP -->
     <div id="cartBackdrop" class="cart-backdrop {{ session('abrir_sidebar') ? 'show' : '' }}"></div>
@@ -386,59 +398,59 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    document.querySelectorAll('.agregar-carrito-form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // evita que recargue la página
+    <script>
+        document.querySelectorAll('.agregar-carrito-form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // evita que recargue la página
 
-            const url = this.action;
-            const formData = new FormData(this);
+                const url = this.action;
+                const formData = new FormData(this);
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': formData.get('_token'),
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // ✅ Actualizar contador del carrito
-                document.getElementById('contador-carrito').textContent = data.cantidadTotal;
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': formData.get('_token'),
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // ✅ Actualizar contador del carrito
+                        document.getElementById('contador-carrito').textContent = data.cantidadTotal;
 
-                // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
-                if (typeof actualizarSidebarCarrito === 'function') {
-                    actualizarSidebarCarrito();
-                }
-            })
-            .catch(error => {
-                console.error('Error al agregar al carrito:', error);
+                        // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
+                        if (typeof actualizarSidebarCarrito === 'function') {
+                            actualizarSidebarCarrito();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al agregar al carrito:', error);
+                    });
             });
         });
-    });
-</script>
+    </script>
 
-<script>
-function actualizarSidebarCarrito() {
-    fetch('{{ route('carrito.sidebar.ajax') }}')
-        .then(res => res.json())
-        .then(data => {
-            // Actualizar los ítems del carrito
-            const sidebarItems = document.getElementById('cart-items');
-            if (sidebarItems) {
-                sidebarItems.innerHTML = data.items_html;
-            }
+    <script>
+        function actualizarSidebarCarrito() {
+            fetch('{{ route('carrito.sidebar.ajax') }}')
+                .then(res => res.json())
+                .then(data => {
+                    // Actualizar los ítems del carrito
+                    const sidebarItems = document.getElementById('cart-items');
+                    if (sidebarItems) {
+                        sidebarItems.innerHTML = data.items_html;
+                    }
 
-            // Actualizar el total
-            const cartTotal = document.getElementById('cart-total');
-            if (cartTotal) {
-                cartTotal.textContent = 'S/. ' + data.total;
-            }
-        })
-        .catch(error => console.error('Error actualizando sidebar:', error));
-}
-</script>
+                    // Actualizar el total
+                    const cartTotal = document.getElementById('cart-total');
+                    if (cartTotal) {
+                        cartTotal.textContent = 'S/. ' + data.total;
+                    }
+                })
+                .catch(error => console.error('Error actualizando sidebar:', error));
+        }
+    </script>
 
 
 

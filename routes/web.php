@@ -134,4 +134,5 @@ Route::put('/admin/ventas/{id}/entregar', [VentaController::class, 'marcarComoEn
 Route::get('/carrito/sidebar/dinamico', function () {
     return view('components.cart-items');
 })->name('carrito.sidebar.ajax');
-Route::get('/carrito/sidebar/ajax', [CartController::class, 'obtenerSidebarAjax'])->name('carrito.sidebar.ajax');
+Route::get('/carrito/sidebar/ajax', [CartController::class, 'obtenerSidebarAjax'])
+    ->name('carrito.sidebar.ajax');

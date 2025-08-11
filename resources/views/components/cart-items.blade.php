@@ -47,69 +47,77 @@
 @endif
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const contenedor = document.getElementById('cart-items');
+document.addEventListener('submit', function (e) {
+    if (e.target.matches('.form-actualizar-cantidad, .eliminar-item-form')) {
+        e.preventDefault();
 
-    if (contenedor) {
-        contenedor.addEventListener('submit', function (e) {
-            const form = e.target;
+        const form = e.target;
+        const url = form.action;
+        const formData = new FormData(form);
 
-            // Verificamos si es un formulario de eliminar, sumar o restar
-            if (
-                form.classList.contains('eliminar-item-form') ||
-                form.classList.contains('form-actualizar-cantidad')
-            ) {
-                e.preventDefault();
-
-                const url = form.action;
-                const formData = new FormData(form);
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': formData.get('_token'),
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: formData
-                })
-                .then(res => res.json())
-                .then(data => {
-                    // ✅ Actualizar contador del carrito
-                    const contador = document.getElementById('contador-carrito');
-                    if (contador && data.cantidadTotal !== undefined) {
-                        contador.textContent = data.cantidadTotal;
-                    }
-
-                    // ✅ Actualizar cantidad del producto
-                    if (data.producto_id && data.cantidad !== undefined) {
-                        const cantidadElem = document.getElementById('cantidad-' + data.producto_id);
-                        if (cantidadElem) {
-                            cantidadElem.textContent = data.cantidad;
-                        }
-                    }
-
-                    // ✅ Si eliminar: quitar el producto del DOM
-                    if (data.eliminado && data.producto_id) {
-                        const itemElem = document.getElementById('item-' + data.producto_id);
-                        if (itemElem) {
-                            itemElem.remove();
-                        }
-                    }
-
-                    // ✅ Si el carrito quedó vacío, mostrar mensaje
-                    if (data.vacio) {
-                        contenedor.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
-                    }
-
-                    // ✅ Refrescar contenido del sidebar si existe función
-                    if (typeof actualizarSidebarCarrito === 'function') {
-                        actualizarSidebarCarrito();
-                    }
-                })
-                .catch(error => console.error('Error en acción del carrito:', error));
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Actualizar contador
+            const contador = document.getElementById('contador-carrito');
+            if (contador && data.cantidadTotal !== undefined) {
+                contador.textContent = data.cantidadTotal;
             }
-        });
+
+            // Actualizar cantidad en sidebar
+            if (data.producto_id && data.cantidad !== undefined) {
+                const cantidadElem = document.getElementById('cantidad-' + data.producto_id);
+                if (cantidadElem) {
+                    cantidadElem.textContent = data.cantidad;
+                }
+            }
+
+            // Si eliminamos producto
+            if (data.eliminado && data.producto_id) {
+                // Quitar del sidebar
+                const itemElem = document.getElementById('item-' + data.producto_id);
+                if (itemElem) {
+                    itemElem.remove();
+                }
+
+                // Cambiar en welcome al botón "Agregar carrito"
+                const containerWelcome = document.getElementById('carrito-container-' + data.producto_id);
+                if (containerWelcome) {
+                    containerWelcome.innerHTML = `
+                        <form method="POST" action="/carrito/agregar/${data.producto_id}" class="agregar-carrito-form">
+                            <input type="hidden" name="_token" value="${formData.get('_token')}">
+                            <input type="hidden" name="cantidad" value="1">
+                            <button type="submit" class="button">
+                                Agregar Carrito
+                                <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
+                            </button>
+                        </form>
+                    `;
+                }
+            }
+
+            // Si el carrito queda vacío
+            if (data.vacio) {
+                const contenedor = document.getElementById('cart-items');
+                if (contenedor) {
+                    contenedor.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
+                }
+            }
+        })
+        .catch(error => console.error('Error en acción del carrito:', error));
     }
 });
 </script>
+
+
+
+
+
 

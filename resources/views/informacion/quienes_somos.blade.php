@@ -10,29 +10,31 @@
         </div>
 
         <div class="row mb-5">
-            <div class="col-md-4">
+            <div class="col-md-4 text-center ">
                 <p>
-                    La farmacia Arc de Triomf está situada al inicio del Paseo de San Juan, justo enfrente del emblemático
-                    monumento, del que toma el nombre.Tiene una larga historia que se remonta al año 1935, cuando estaba
-                    regentada por un farmacéutico
-                    conocido como Sr. Enric Ruax. En 1987, el padre de la actual titular compró la farmacia y desde entonces
-                    pertenece a la familia de Mª Àngels Salvadó.
+                    La Botica Myryan, registrada ante SUNAT como HUILLCAHUAMAN POMA MIRIAN CATALINA (RUC: 10434953397),
+                    inició operaciones el 1 de abril de 2019 en el distrito de La Tinguiña. Se dedica a la venta de
+                    medicamentos,
+                    productos médicos, cosméticos y artículos de tocador, cubriendo necesidades de salud y bienestar de la
+                    comunidad.
+                    Desde sus inicios, se ha caracterizado por brindar un servicio cercano, accesible y confiable.
                 </p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 text-center">
                 <p>
-                    La Dra. Mª Àngels Salvadó, farmacéutica titular de la farmacia, ha tomado el relevo. Profesora de
-                    Universidad, donde enseña la especialidad de galénica, su vocación didáctica le ha llevado a atender a
-                    sus clientes de forma muy personalizada, aclarando dudas y dando consejos de salud, explicando siempre
-                    el porqué de las cosas.
+                    Nuestra misión es ofrecer productos farmacéuticos y de cuidado personal con altos estándares de calidad,
+                    contribuyendo al bienestar de nuestros clientes con atención personalizada y empática. Aspiramos a ser
+                    una botica reconocida en el ámbito local por la confianza y la cercanía con la comunidad, garantizando
+                    un abastecimiento constante y cumpliendo rigurosamente las disposiciones legales sanitarias y
+                    tributarias.
                 </p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 text-center">
                 <p>
-                    Ahora, y aprovechando las ventajas de las nuevas tecnologías, ponemos en marcha la WEB de la farmacia,
-                    donde nuestros clientes podrán seguir disfrutando de los consejos de salud y al mismo tiempo podrán
-                    conocer las diferentes promociones que tenemos en la farmacia o incluso realizar pedidos desde casa para
-                    recoger sin esperas.
+                    Actualmente contamos con tres establecimientos en La Tinguiña y proyectamos expandirnos a Parcona. Nos
+                    diferenciamos por nuestro compromiso con la salud, la ética profesional, la responsabilidad social y la
+                    transparencia. Estamos implementando un sistema web para mejorar la gestión de inventarios, ventas y
+                    atención al cliente, fortaleciendo así nuestra presencia digital y optimizando la experiencia de compra.
                 </p>
             </div>
         </div>
@@ -43,30 +45,18 @@
             <h2 class="fw-bold">Nuestro equipo</h2>
         </div>
 
-        <div class="row text-center">
+        <div class="row text-center mt-5">
             <div class="col-md-4 mb-4">
-                <h5 class="fw-semibold mb-1">Dra. Mª Àngels Salvadó</h5>
-                <p class="text-muted mb-0">Farmacéutica Titular</p>
+                <h5 class="fw-semibold mb-1">Mirian Catalina Huillcahuaman Poma</h5>
+                <p class="text-muted mb-0">Propietaria / Administradora</p>
             </div>
             <div class="col-md-4 mb-4">
-                <h5 class="fw-semibold mb-1">Maria Salazar</h5>
-                <p class="text-muted mb-0">Farmacéutica Sustituta</p>
+                <h5 class="fw-semibold mb-1">Técnicos y Asistentes de Farmacia</h5>
+                <p class="text-muted mb-0">Atención al cliente y control de inventario</p>
             </div>
             <div class="col-md-4 mb-4">
-                <h5 class="fw-semibold mb-1">Jianing Zhou</h5>
-                <p class="text-muted mb-0">Farmacéutico Sustituto</p>
-            </div>
-            <div class="col-md-4 mb-4">
-                <h5 class="fw-semibold mb-1">David Cuello</h5>
-                <p class="text-muted mb-0">Técnico en Farmacia</p>
-            </div>
-            <div class="col-md-4 mb-4">
-                <h5 class="fw-semibold mb-1">Álex Miralles</h5>
-                <p class="text-muted mb-0">Auxiliar de Farmacia</p>
-            </div>
-            <div class="col-md-4 mb-4">
-                <h5 class="fw-semibold mb-1">Josep Salvadó</h5>
-                <p class="text-muted mb-0">Administración</p>
+                <h5 class="fw-semibold mb-1">Equipo de Desarrollo</h5>
+                <p class="text-muted mb-0">Encargados del sistema web y soporte tecnológico</p>
             </div>
         </div>
         <div class="container-fluid px-0">

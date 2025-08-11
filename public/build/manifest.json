@@ -1,4 +1,12 @@
 {
+  "resources/css/login.css": {
+    "file": "assets/login-CUe3WUQ5.css",
+    "src": "resources/css/login.css",
+    "isEntry": true,
+    "names": [
+      "login.css"
+    ]
+  },
   "resources/css/welcome.css": {
     "file": "assets/welcome-B-QXVQ0c.css",
     "src": "resources/css/welcome.css",

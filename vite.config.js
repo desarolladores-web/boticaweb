@@ -5,7 +5,12 @@ export default defineConfig({
     base: "",
     plugins: [
         laravel({
-            input: ["resources/sass/app.scss", "resources/js/app.js"],
+            input: [
+                "resources/sass/app.scss",
+                "resources/js/app.js",
+                "resources/css/welcome.css", // <--- aquí lo agregas si usas ese CSS
+            ],
+
             refresh: true,
             useBuildDirectory: false, // Evita la carpeta .vite
         }),

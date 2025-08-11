@@ -519,8 +519,8 @@ document.addEventListener('submit', function (e) {
 </script>
 
 
-
-
+<!-- 
+<script>
 
 
                         // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
@@ -533,7 +533,7 @@ document.addEventListener('submit', function (e) {
                     });
             });
         });
-    </script>
+    </script> -->
 
     <script>
         function actualizarSidebarCarrito() {
@@ -555,6 +555,10 @@ document.addEventListener('submit', function (e) {
         .catch(error => console.error('Error actualizando sidebar:', error));
 }
 </script>
+
+
+
+ <!-- Esto ponlo en tu layout principal, no en el partial -->
                     // Actualizar el total
                     const cartTotal = document.getElementById('cart-total');
                     if (cartTotal) {

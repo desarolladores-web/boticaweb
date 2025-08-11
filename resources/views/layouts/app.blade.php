@@ -59,156 +59,122 @@
                 </div>
             </div>
 
-            <div class="header-desktop"
-                style="background-color:rgb(224, 224, 224); padding-top: 10px; padding-bottom: 15px;">
-                <div class="container d-flex justify-content-between align-items-center">
-                    <div class="left">
-                        <h1 class="logo">
-                            <a href="{{ url('/') }}">
-                                <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo">
-                            </a>
-                        </h1>
+            <nav class="navbar navbar-expand-md navbar-light bg-light ">
+                <div class="container">
+                    <!-- Logo -->
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"
+                            style="height: 50px;">
+                    </a>
 
-                        <div class="menu">
-                            <nav class="navbar navbar-expand-md navbar-light">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ url('/') }}">Inicio</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ url('/quienes-somos') }}">Quienes somos</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ url('/consejos') }}">Consejos</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ url('/contactanos') }}">Contáctanos</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ url('/producto-filtro') }}">Productos</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
+                    <!-- Botón hamburguesa -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Menú colapsable -->
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                            <li class="nav-item">
+                                <a class="nav-link text-uppercase fw-bolder text-dark" href="{{ url('/') }}">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-uppercase fw-bolder text-dark"
+                                    href="{{ url('/quienes-somos') }}">Quienes somos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-uppercase fw-bolder text-dark"
+                                    href="{{ url('/consejos') }}">Consejos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-uppercase fw-bolder text-dark"
+                                    href="{{ url('/contactanos') }}">Contáctanos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-uppercase fw-bolder text-dark"
+                                    href="{{ url('/producto-filtro') }}">Productos</a>
+                            </li>
+                        </ul>
+                        
+
+                        <!-- Barra de búsqueda y otros íconos -->
+                        <div class="d-flex align-items-center">
+                            <form action="{{ route('productos.buscar') }}" method="get" class="me-3"
+                                style="min-width: 200px;">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control border-secondary" name="keyword"
+                                        placeholder="Buscar" value="{{ request('keyword') }}">
+                                    <button class="btn btn-secondary" type="submit">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </form>
 
 
-                    <div class="right">
-
-                        <form action="{{ route('productos.buscar') }}" method=" get" class="search-group">
-                            <input type="text" class="form-control" name="keyword" placeholder="Buscar"
-                                value="{{ request('keyword') }}">
-                            <button type="submit" class="btn"><i class="bi bi-search"></i></button>
-                        </form>
-
-                        <div class="icons">
-                            <div class="item">
-                                <div class="dropdown account-icon">
-                                    <!-- Ícono de usuario y nombre del cliente al lado -->
-                                    <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button"
-                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <!-- Si el usuario está autenticado, mostramos la imagen de perfil -->
-                                        @auth
-                                            @if(Auth::user()->imagen)
-                                                <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
-                                                    alt="Avatar" class="rounded-circle"
-                                                    style="width: 30px; height: 30px; object-fit: cover;">
-                                            @else
-                                                <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                                                <!-- Icono por defecto si no tiene imagen -->
-                                            @endif
-                                            <span class="ms-2">{{ Auth::user()->name }}</span>
-                                            <!-- Nombre del usuario autenticado -->
+                            <!-- Icono de cuenta -->
+                            <div class="dropdown me-3">
+                                <a class="btn dropdown-toggle px-0" href="#" role="button" data-bs-toggle="dropdown">
+                                    @auth
+                                        @if(Auth::user()->imagen)
+                                            <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
+                                                alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px;">
                                         @else
-                                            <!-- Si el usuario no está autenticado, mostramos el icono de perfil -->
+                                        
                                             <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-
-                                        @endauth
-                                    </a>
-
-
-
-
-
-                                    <!-- Menú desplegable -->
-                                    <!-- Menú desplegable -->
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        @guest
-                                            @if (Route::has('login'))
-                                                <a class="dropdown-item"
-                                                    href="{{ route('login') }}">{{ __('Inicia Sesión') }}</a>
-                                            @endif
-
-                                            @if (Route::has('register'))
-                                                <a class="dropdown-item"
-                                                    href="{{ route('register') }}">{{ __('Registrarse') }}</a>
-                                            @endif
+                                        @endif
+                                        <span class="ms-2 d-none d-md-inline">{{ Auth::user()->name }}</span>
+                                    @else
+                                        <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                                    @endauth
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    @guest
+                                        <a class="dropdown-item" href="{{ route('login') }}">Iniciar Sesión</a>
+                                        <a class="dropdown-item" href="{{ route('register') }}">Registrarse</a>
+                                    @else
+                                        @if (Auth::user()->rol_id == 1)
+                                            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Panel Admin</a>
                                         @else
-                                            @php
-                                                $user = Auth::user();
-                                            @endphp
-
-                                            <!-- Mi cuenta con ícono -->
-                                            @if ($user->rol_id == 1)
-                                                <!-- Admin -->
-                                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                                    <i class="bi bi-person me-2"></i> Panel Admin
-                                                </a>
-
-                                            @else
-                                                <!-- Usuario normal -->
-                                                <a class="dropdown-item" href="{{ route('account.edit') }}">
-                                                    <i class="bi bi-person me-2"></i> Mi Cuenta
-                                                </a>
-                                            @endif
-
-                                            <!-- Pedidos -->
-                                            <a class="dropdown-item" href="#">Pedidos</a>
-
-                                            <!-- Favoritos -->
-                                            <a class="dropdown-item" href="#">Favoritos</a>
-
-                                            <!-- Cerrar sesión -->
-                                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar sesión') }}
-                                            </a>
-
-                                            <!-- Formulario de cierre de sesión -->
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                            </form>
-                                        @endguest
-                                    </div>
-
+                                            <a class="dropdown-item" href="{{ route('account.edit') }}">Mi Cuenta</a>
+                                        @endif
+                                        <a class="dropdown-item" href="#">Pedidos</a>
+                                        <a class="dropdown-item" href="#">Favoritos</a>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            Cerrar sesión
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf</form>
+                                    @endguest
                                 </div>
                             </div>
+
+
+                            <!-- Carrito -->
+                            @php
+                                $carrito = session('carrito', []);
+                                $cantidadTotal = count($carrito);
+                            @endphp
+
+                            <div class="item ms-4">
+                                <a href="#" class="header-cart-icon position-relative">
+                                    <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
+                                    <span id="contador-carrito"
+                                        class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ $cantidadTotal }}
+                                    </span>
+
+
+                                </a>
+                            </div>
+
                         </div>
-
-
-
-
-                        @php
-                            $carrito = session('carrito', []);
-                            $cantidadTotal = count($carrito);
-                        @endphp
-
-                        <div class="item ms-4">
-                            <a href="#" class="header-cart-icon position-relative">
-                                <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
-                                <span id="contador-carrito"
-                                    class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ $cantidadTotal }}
-                                </span>
-
-
-                            </a>
-                        </div>
-
                     </div>
                 </div>
-            </div>
+            </nav>
+
             <style>
                 #appHeader {
                     position: fixed;
@@ -220,6 +186,25 @@
 
                 body {
                     padding-top: 115px;
+                }
+
+                @media (max-width: 768px) {
+                    .search-group input {
+                        width: 100%;
+                        margin-bottom: 10px;
+                    }
+
+                    .navbar .dropdown-toggle span {
+                        display: none;
+                    }
+
+                    .navbar .form-control {
+                        font-size: 0.9rem;
+                    }
+
+                    .navbar .btn {
+                        font-size: 0.9rem;
+                    }
                 }
             </style>
         </header>
@@ -429,7 +414,7 @@
                     });
             });
         });
-    </script> 
+    </script>
 
     <script>
         function actualizarSidebarCarrito() {
@@ -519,14 +504,14 @@
     </script>
 
 
-<script>
-    // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
-    if (typeof actualizarSidebarCarrito === 'function') {
-    actualizarSidebarCarrito();
-    }
-    .catch(error => {
-    console.error('Error al agregar al carrito:', error);
-    });
+    <script>
+        // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
+        if (typeof actualizarSidebarCarrito === 'function') {
+            actualizarSidebarCarrito();
+        }
+    .catch (error => {
+            console.error('Error al agregar al carrito:', error);
+        });
     </script>
 
     <script>
@@ -550,13 +535,13 @@
         }
     </script>
     <script>
-    // Actualizar el total
-    const cartTotal = document.getElementById('cart-total');
-    if (cartTotal) {
-    cartTotal.textContent = 'S/. ' + data.total;
-    }
-    .catch(error => console.error('Error actualizando sidebar:', error));
-    
+        // Actualizar el total
+        const cartTotal = document.getElementById('cart-total');
+        if (cartTotal) {
+            cartTotal.textContent = 'S/. ' + data.total;
+        }
+    .catch (error => console.error('Error actualizando sidebar:', error));
+
     </script>
 
 

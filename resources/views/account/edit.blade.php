@@ -42,10 +42,12 @@
                 <i class="bi bi-shield-lock" style="margin-right: 10px;"></i> <span>Contraseña</span>
               </a>
             </li>
-            <li class="mb-3">
-              <a href="#" class="sidebar-link">
-                <i class="bi bi-box" style="margin-right: 10px;"></i> <span>Pedidos</span>
-              </a>
+           <li class="mb-3">
+    <a href="{{ route('account', 'pedidos') }}" class="sidebar-link">
+        <i class="bi bi-box" style="margin-right: 10px;"></i> <span>Pedidos</span>
+    </a>
+</li>
+
             </li>
             <li class="mb-3">
               <a href="#" class="sidebar-link">
@@ -82,11 +84,14 @@
           </div>
 
           <!-- Mostrar contenido dinámico -->
-          @if($section == 'profile')
-            @include('account.edit_profile') <!-- Formulario para editar perfil -->
-          @elseif($section == 'password')
-            @include('account.edit_password') <!-- Formulario para editar contraseña -->
-          @endif
+         @if($section == 'profile')
+    @include('account.edit_profile') <!-- Formulario para editar perfil -->
+@elseif($section == 'password')
+    @include('account.edit_password') <!-- Formulario para editar contraseña -->
+@elseif($section == 'pedidos')
+    @include('account.pedidos') <!-- Vista de pedidos -->
+@endif
+
         </div>
       </div>
     </div>

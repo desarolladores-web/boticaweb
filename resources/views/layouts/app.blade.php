@@ -511,72 +511,92 @@
     </script>
     <!-- Esto ponlo en tu layout principal, no en el partial -->
     <script>
-        document.addEventListener('submit', function (e) {
-            if (e.target.matches('.form-actualizar-cantidad, .eliminar-item-form')) {
-                e.preventDefault();
+document.addEventListener('submit', function (e) {
+    // Solo intercepta formularios con estas clases específicas
+    if (e.target.matches('.form-actualizar-cantidad, .eliminar-item-form')) {
+        e.preventDefault();
 
-                const form = e.target;
-                const url = form.action;
-                const formData = new FormData(form);
+        const form = e.target;
+        const url = form.action;
+        const formData = new FormData(form);
 
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': formData.get('_token'),
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: formData
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        const contador = document.getElementById('contador-carrito');
-                        if (contador && data.cantidadTotal !== undefined) {
-                            contador.textContent = data.cantidadTotal;
-                        }
-
-                        if (data.producto_id && data.cantidad !== undefined) {
-                            const cantidadElem = document.getElementById('cantidad-' + data.producto_id);
-                            if (cantidadElem) {
-                                cantidadElem.textContent = data.cantidad;
-                            }
-                        }
-
-                        if (data.eliminado && data.producto_id) {
-                            const itemElem = document.getElementById('item-' + data.producto_id);
-                            if (itemElem) {
-                                itemElem.remove();
-                            }
-
-                            // 🔹 Recargar SOLO el bloque del welcome para que vuelva el HTML original
-                            fetch(window.location.href)
-                                .then(r => r.text())
-                                .then(html => {
-                                    const doc = new DOMParser().parseFromString(html, 'text/html');
-                                    const nuevoBloque = doc.querySelector('#carrito-container-' + data.producto_id);
-                                    const viejoBloque = document.getElementById('carrito-container-' + data.producto_id);
-                                    if (nuevoBloque && viejoBloque) {
-                                        viejoBloque.innerHTML = nuevoBloque.innerHTML;
-                                    }
-                                });
-                        }
-
-                        if (data.vacio) {
-                            const contenedor = document.getElementById('cart-items');
-                            if (contenedor) {
-                                contenedor.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
-                            }
-                        }
-
-                        if (typeof actualizarSidebarCarrito === 'function') {
-                            actualizarSidebarCarrito();
-                        }
-                    })
-                    .catch(error => console.error('Error en acción del carrito:', error));
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Actualiza el contador global del carrito
+            const contador = document.getElementById('contador-carrito');
+            if (contador && data.cantidadTotal !== undefined) {
+                contador.textContent = data.cantidadTotal;
             }
-        });
-    </script>
 
+            // Actualiza cantidad del producto (cuando sea una actualización)
+            if (data.producto_id && data.cantidad !== undefined) {
+                const cantidadElem = document.getElementById('cantidad-' + data.producto_id);
+                if (cantidadElem) {
+                    cantidadElem.textContent = data.cantidad;
+                }
+            }
 
+            // Cuando se elimina un producto
+            if (data.eliminado && data.producto_id) {
+                // Remueve el elemento del DOM del producto eliminado en la página principal
+                const itemElem = document.getElementById('item-' + data.producto_id);
+                if (itemElem) {
+                    itemElem.remove();
+                }
+
+                // También remueve el producto eliminado del sidebar
+                const sidebar = document.getElementById('cart-items');
+                if (sidebar) {
+                    // Suponiendo que en el sidebar cada producto tiene data-id con el producto id
+                    const productoSidebarElem = sidebar.querySelector(`[data-id="${data.producto_id}"]`);
+                    if (productoSidebarElem) {
+                        productoSidebarElem.remove();
+                    }
+                    
+                    // Si el sidebar queda vacío, mostrar mensaje
+                    if (sidebar.children.length === 0) {
+                        sidebar.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
+                    }
+                }
+
+                // Recarga sólo el bloque afectado para restaurar el HTML original si es necesario
+                fetch(window.location.href)
+                    .then(r => r.text())
+                    .then(html => {
+                        const doc = new DOMParser().parseFromString(html, 'text/html');
+                        const nuevoBloque = doc.querySelector('#carrito-container-' + data.producto_id);
+                        const viejoBloque = document.getElementById('carrito-container-' + data.producto_id);
+                        if (nuevoBloque && viejoBloque) {
+                            viejoBloque.innerHTML = nuevoBloque.innerHTML;
+                        }
+                    });
+            }
+
+            // Si el carrito queda vacío
+            if (data.vacio) {
+                const contenedor = document.getElementById('cart-items');
+                if (contenedor) {
+                    contenedor.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
+                }
+            }
+
+            // Actualiza el sidebar si existe función definida para ello
+            if (typeof actualizarSidebarCarrito === 'function') {
+                actualizarSidebarCarrito();
+            }
+        })
+        .catch(error => console.error('Error en acción del carrito:', error));
+    }
+});
+</script>
     <script>
         // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
         if (typeof actualizarSidebarCarrito === 'function') {

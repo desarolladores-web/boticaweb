@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Models\User; // Cambiado de Cliente a User
+use App\Models\User; 
+use App\Models\Venta;// Cambiado de Cliente a User
 
 class ProfileController extends Controller
 {
@@ -17,8 +18,15 @@ public function edit($section = 'profile')
     if (!$user) {
         return redirect()->back()->with('error', 'No se encontró el usuario autenticado.');
     }
+        $pedidos = null;
+    if ($section === 'pedidos') {
+        $pedidos = Venta::with('detalleVentas.producto', 'estadoVenta')
+            ->where('cliente_id', $user->id)
+            ->orderByDesc('fecha')
+            ->get();
+    }
 
-    return view('account.edit', compact('user', 'section'));
+    return view('account.edit', compact('user', 'section','pedidos'));
 }
 
 

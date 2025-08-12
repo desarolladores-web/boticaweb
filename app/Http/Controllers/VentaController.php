@@ -44,4 +44,7 @@ class VentaController extends Controller
 
         return view('admin.ventas.entregadas', compact('ventas'));
     }
+
+
+
 }

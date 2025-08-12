@@ -124,7 +124,7 @@
         /* Estilos para el mapa */
         .contact__map iframe {
             width: 90%;
-            height: 800px;
+            height: 390px;
             border-radius: 10px;
         }
 
@@ -158,74 +158,77 @@
 
 <body>
 
-    @extends('layouts.app')
-    @section('content')
+@extends('layouts.app')
 
+@section('content')
 
-    <section class="contact spad">
-        <div class="container">
-            <div class="contact-section">
-                <div class="col-lg-6">
-                    <div class="contact__content">
-                        <!-- Borde y la imagen como icono encima de la sección de información de contacto -->
-                        <div class="contact__header">
-                            <img src="imagenes/botica2.png" alt="Icono de Contacto" class="contact__icon" /> <!-- Aquí va tu imagen -->
-                        </div>
+<section class="contact spad">
+    <div class="container">
+        <div class="contact-section">
+            <div class="col-lg-6">
+                <div class="contact__content">
+                    <!-- Borde y la imagen como icono encima de la sección de información de contacto -->
+                    <div class="contact__header">
+                        <img src="{{ asset('imagenes/botica2.png') }}" alt="Icono de Contacto" class="contact__icon" />
+                    </div>
 
-                        <div class="contact__address">
-                            <h5>Contacto info</h5>
-                            <ul>
-                                <li>
-                                    <h6><i class="fa fa-map-marker-alt"></i> Dirección</h6>
-                                    <p>Caracas 498, Ica 11002</p>
-                                </li>
-                                <li>
-                                    <h6><i class="fa fa-phone-alt"></i> Teléfono</h6>
-                                    <p>985748483 | 125-668-886</p>
-                                </li>
-                                <li>
-                                    <h6><i class="fa fa-headphones"></i> Soporte</h6>
-                                    <p>boticamyryan@gmail.com</p>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="contact__address">
+                        <h5>Contacto info</h5>
+                        <ul>
+                            <li>
+                                <h6><i class="fa fa-map-marker-alt"></i> Dirección</h6>
+                                <p>Caracas 498, Ica 11002</p>
+                            </li>
+                            <li>
+                                <h6><i class="fa fa-phone-alt"></i> Teléfono</h6>
+                                <p>985748483 | 125-668-886</p>
+                            </li>
+                            <li>
+                                <h6><i class="fa fa-headphones"></i> Soporte</h6>
+                                <p>boticamyryan@gmail.com</p>
+                            </li>
+                        </ul>
+                    </div>
 
-                        <div class="contact__form">
-                            <h5>Enviar mensaje</h5>
-                            <form action="#">
-                                <input type="text" placeholder="Nombre">
-                                <input type="email" placeholder="Email">
+                    <div class="contact__form">
+                        <h5>Enviar mensaje</h5>
+                        <form action="#">
+                            <input type="text" placeholder="Nombre">
+                            <input type="email" placeholder="Email">
+                            <textarea placeholder="Mensaje"></textarea>
+                            <button type="submit" class="site-btn">Enviar mensaje</button>
+                        </form>
+                    </div>
 
-                                <textarea placeholder="Mensaje"></textarea>
-                                <button type="submit" class="site-btn">Enviar mensaje</button>
-                            </form>
-                        </div>
-
-                        <div class="footer__social">
-                            <a href="https://www.facebook.com/share/1C77FGP1bi/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        </div>
+                    <div class="footer__social">
+                        <a href="https://www.facebook.com/share/1C77FGP1bi/" target="_blank"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-lg-6">
-                    <div class="contact__map">
+            <div class="col-lg-6">
+                <div class="contact__map" style="display:flex; flex-direction: column; gap: 30px;">
+                    <div style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
+                        <h5 style="margin-bottom: 15px;">Primera sede</h5>
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5044.068751925154!2d-75.7056514938535!3d-14.036814810441033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9111033b8b9d0279%3A0xceb84290babbfbda!2sBOTICA%20MYRYAN!5e0!3m2!1ses-419!2spe!4v1749044707979!5m2!1ses-419!2spe"
-                            height="780" style="border:0" allowfullscreen="">
-                        </iframe>
+                            height="380" style="border:0; width: 100%; border-radius: 10px;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+
+                    <div style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
+                        <h5 style="margin-bottom: 15px;">Segunda sede</h5>
+                        <iframe
+                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d967.6791622753105!2d-75.70682693037172!3d-14.034802898078123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x911102aeeea34125%3A0xb08e4c3f4e5825ef!2sMexico%20251%2C%20Ica%2011003!5e0!3m2!1ses!2spe!4v1755013338732!5m2!1ses!2spe" 
+                            height="380" style="border:0; width: 100%; border-radius: 10px;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Contact Section End -->
+    </div>
+</section>
 
+@endsection
 
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    @endsection
 </body>
 
 </html>

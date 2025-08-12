@@ -111,42 +111,61 @@
 
 
                             <!-- Icono de cuenta -->
-                            <div class="dropdown me-3">
-                                <a class="btn dropdown-toggle px-0" href="#" role="button" data-bs-toggle="dropdown">
+                            <div class="dropdown me-3 ">
+                                <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button"
+                                    data-bs-toggle="dropdown" style="color: inherit;">
                                     @auth
                                         @if(Auth::user()->imagen)
                                             <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
-                                                alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px;">
+                                                alt="Avatar" class="rounded-circle shadow-sm"
+                                                style="width: 32px; height: 32px; object-fit: cover;">
                                         @else
 
                                             <i class="bi bi-person" style="font-size: 1.5rem;"></i>
                                         @endif
-                                        <span class="ms-2 d-none d-md-inline">{{ Auth::user()->name }}</span>
+                                        <span class="ms-2 fw-semibold d-none d-md-inline">{{ Auth::user()->name }}</span>
                                     @else
                                         <i class="bi bi-person" style="font-size: 1.5rem;"></i>
                                     @endauth
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-end">
+
+                                <div class="dropdown-menu dropdown-menu-end p-2 shadow rounded-3 "
+                                    style="min-width: 200px; left: 50%; transform: translateX(-50%);">
                                     @guest
-                                        <a class="dropdown-item" href="{{ route('login') }}">Iniciar Sesión</a>
-                                        <a class="dropdown-item" href="{{ route('register') }}">Registrarse</a>
+                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('login') }}">
+                                            <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+                                        </a>
+                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('register') }}">
+                                            <i class="bi bi-pencil-square me-2"></i> Registrarse
+                                        </a>
                                     @else
                                         @if (Auth::user()->rol_id == 1)
-                                            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Panel Admin</a>
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('admin.dashboard') }}">
+                                                <i class="bi bi-speedometer2 me-2"></i> Panel Admin
+                                            </a>
                                         @else
-                                            <a class="dropdown-item" href="{{ route('account.edit') }}">Mi Cuenta</a>
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('account.edit') }}">
+                                                <i class="bi bi-person-lines-fill me-2"></i> Mi Cuenta
+                                            </a>
                                         @endif
-                                        <a class="dropdown-item" href="#">Pedidos</a>
-                                        <a class="dropdown-item" href="#">Favoritos</a>
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <i class="bi bi-bag-check me-2"></i> Pedidos
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item d-flex align-items-center text-danger"
+                                            href="{{ route('logout') }}"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            Cerrar sesión
+                                            <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
                                         </a>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf</form>
+                                            @csrf
+                                        </form>
                                     @endguest
                                 </div>
                             </div>
+
 
 
                             <!-- Carrito -->
@@ -157,7 +176,7 @@
 
                             <div class="item ms-4">
                                 <a href="#" class="header-cart-icon position-relative">
-                                    <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black;"></i>
+                                    <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black; margi"></i>
                                     <span id="contador-carrito"
                                         class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ $cantidadTotal }}

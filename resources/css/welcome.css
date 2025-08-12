@@ -237,3 +237,30 @@
   color: #c0392b;
 }
 
+/* Ajuste de imágenes */
+.product-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Margen inferior del filtro en móviles */
+@media (max-width: 767.98px) {
+    .product-categories-widget {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* Scroll más corto de categorías en pantallas pequeñas */
+@media (max-width: 575.98px) {
+    .category-tree {
+        max-height: 300px !important;
+    }
+}
+
+/* Ajustar padding de las tarjetas en móviles */
+@media (max-width: 575.98px) {
+    .product-card {
+        padding: 0.5rem;
+    }
+}

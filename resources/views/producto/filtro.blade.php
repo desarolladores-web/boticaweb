@@ -18,7 +18,8 @@
                 <div class="col-12 col-md-4 col-lg-3 mb-4">
                     <div class="product-categories-widget widget-item card shadow-sm h-100">
                         <div class="card-body">
-                            <h5 class="widget-title mb-3">Categorías</h5>
+                            <h2 class="widget-title mb-3">🛍️ Categorías de Productos</h2>
+
 
                             <ul class="category-tree list-unstyled mb-0" style="max-height: 700px; overflow-y: auto;">
                                 {{-- Todos los productos --}}

@@ -18,16 +18,31 @@ public function edit($section = 'profile')
     if (!$user) {
         return redirect()->back()->with('error', 'No se encontró el usuario autenticado.');
     }
-        $pedidos = null;
+
+    $pedidos = collect();
+
     if ($section === 'pedidos') {
-        $pedidos = Venta::with('detalleVentas.producto', 'estadoVenta')
-            ->where('cliente_id', $user->id)
-            ->orderByDesc('fecha')
-            ->get();
+        $cliente = $user->cliente;
+
+        // DEBUG: Mostrar cliente
+        // dd($cliente);
+
+        if ($cliente) {
+            $pedidos = Venta::with('detalleVentas.producto', 'estadoVenta')
+                ->where('cliente_id', $cliente->id)
+                ->orderByDesc('fecha')
+                ->get();
+
+            // DEBUG: Mostrar pedidos
+            // dd($pedidos);
+        }
     }
 
-    return view('account.edit', compact('user', 'section','pedidos'));
+    return view('account.edit', compact('user', 'section', 'pedidos'));
 }
+
+
+
 
 
     // Actualizar perfil del usuario

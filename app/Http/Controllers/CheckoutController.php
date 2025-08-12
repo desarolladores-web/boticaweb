@@ -57,34 +57,36 @@ class CheckoutController extends Controller
         } catch (ValidationException $e) {
             return response()->json(['error' => $e->errors()], 422);
         }
+$user = auth()->user();
 
+if ($user && $user->cliente_id) {
+    $cliente_id = $user->cliente_id;
+} else {
+    $cliente = Cliente::create([
+        'nombre' => $validated['nombres'],
+        'apellido_paterno' => $validated['apellido_paterno'],
+        'apellido_materno' => $validated['apellido_materno'],
+        'email' => $validated['correo'],
+        'tipo_documento_id' => $validated['tipo_documento_id'],
+        'DNI' => $validated['numero_documento'],
+        'telefono' => $validated['celular'],
+    ]);
+    $cliente_id = $cliente->id;
+}
 
-        // 👉 Registrar cliente
-        $cliente = Cliente::create([
-            'nombre' => $validated['nombres'],
-            'apellido_paterno' => $validated['apellido_paterno'],
-            'apellido_materno' => $validated['apellido_materno'],
-            'email' => $validated['correo'],
-            'tipo_documento_id' => $validated['tipo_documento_id'],
-            'DNI' => $validated['numero_documento'],
-            'telefono' => $validated['celular'],
-        ]);
+$subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
+$igv = round($subtotal * 0.18, 2);
+$total = $subtotal + $igv;
 
-        // 👉 Calcular totales
-        $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
-        $igv = round($subtotal * 0.18, 2);
-        $total = $subtotal + $igv;
-
-        // 👉 Registrar venta
-        $venta = Venta::create([
-            'cliente_id' => $cliente->id,
-            'fecha' => now(),
-            'igv' => $igv,
-            'subtotal' => $subtotal,
-            'total' => $total,
-            'metodo_pago_id' => null,
-            'estado_venta_id' => 1,
-        ]);
+$venta = Venta::create([
+    'cliente_id' => $cliente_id,
+    'fecha' => now(),
+    'igv' => $igv,
+    'subtotal' => $subtotal,
+    'total' => $total,
+    'metodo_pago_id' => null,
+    'estado_venta_id' => 1,
+]);
 
         // 👉 Registrar detalles de la venta
         foreach ($carrito as $item) {

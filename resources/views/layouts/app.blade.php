@@ -615,15 +615,7 @@
             }
         });
     </script>
-    <script>
-        // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
-        if (typeof actualizarSidebarCarrito === 'function') {
-            actualizarSidebarCarrito();
-        }
-        .catch(error => {
-            console.error('Error al agregar al carrito:', error);
-        });
-    </script>
+  
 
     <script>
         function actualizarSidebarCarrito() {
@@ -645,14 +637,7 @@
                 .catch(error => console.error('Error actualizando sidebar:', error));
         }
     </script>
-    <script>
-        // Actualizar el total
-        const cartTotal = document.getElementById('cart-total');
-        if (cartTotal) {
-            cartTotal.textContent = 'S/. ' + data.total;
-        }
-        .catch(error => console.error('Error actualizando sidebar:', error));
-    </script>
+    
 
 
 

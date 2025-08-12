@@ -39,7 +39,7 @@
     <div id="app">
         <!-- Header Section -->
         <header id="appHeader">
-            <div class="header-top bg-danger py-4">
+            <div class="header-top py-4">
                 <div class="container-fluid">
                     <div class="row align-items-center text-white gy-2">
                         <!-- Horario de atención -->
@@ -66,7 +66,7 @@
                     <!-- Logo -->
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <img src="{{ asset('imagenes/botica2.png') }}" class="img-fluid" alt="Logo"
-                            style="height: 50px;">
+                            style="height: 60px;">
                     </a>
 
                     <input type="checkbox" id="menu-toggle" class="d-none">
@@ -75,212 +75,226 @@
                     </label>
 
                     <!-- Menú colapsable -->
-                    <div class="collapse navbar-collapse align-items-center " id="navbarResponsive">
-                        <ul class="navbar-nav me-auto mb-2 mb-md-0 gap-3 ">
+                    <div class="collapse navbar-collapse align-items-center" id="navbarResponsive">
+                        <ul class="navbar-nav me-auto mb-2 mb-md-0 gap-3">
                             <li class="nav-item">
-                                <a class="nav-link fw-bolder text-dark" href="{{ url('/') }}">Inicio</a>
+                                <a class="nav-link fw-bolder text-dark {{ request()->is('/') ? 'active' : '' }}"
+                                    href="{{ url('/') }}">
+                                    Inicio
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link  fw-bolder text-dark" href="{{ url('/quienes-somos') }}">Quienes
-                                    somos</a>
+                                <a class="nav-link fw-bolder text-dark {{ request()->is('quienes-somos') ? 'active' : '' }}"
+                                    href="{{ url('/quienes-somos') }}">
+                                    Quienes somos
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link  fw-bolder text-dark" href="{{ url('/consejos') }}">Consejos</a>
+                                <a class="nav-link fw-bolder text-dark {{ request()->is('consejos') ? 'active' : '' }}"
+                                    href="{{ url('/consejos') }}">
+                                    Consejos
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link  fw-bolder text-dark"
-                                    href="{{ url('/contactanos') }}">Contáctanos</a>
+                                <a class="nav-link fw-bolder text-dark {{ request()->is('contactanos') ? 'active' : '' }}"
+                                    href="{{ url('/contactanos') }}">
+                                    Contáctanos
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link  fw-bolder text-dark"
-                                    href="{{ url('/producto-filtro') }}">Productos</a>
+                                <a class="nav-link fw-bolder text-dark {{ request()->is('producto-filtro') ? 'active' : '' }}"
+                                    href="{{ url('/producto-filtro') }}">
+                                    Productos
+                                </a>
                             </li>
                         </ul>
+                    </div>
 
 
-                        <!-- Barra de búsqueda y otros íconos -->
-                        <div class="d-flex align-items-center">
-                            <form action="{{ route('productos.buscar') }}" method="get" class="search-group me-3"
-                                style="min-width: 200px;">
-                                <input type="text" class="form-control" name="keyword" placeholder="Buscar"
-                                    value="{{ request('keyword') }}">
-                                <button type="submit" class="btn border-0 shadow-none p-0">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </form>
+
+                    <!-- Barra de búsqueda y otros íconos -->
+                    <div class="d-flex align-items-center">
+                        <form action="{{ route('productos.buscar') }}" method="get" class="search-group me-3"
+                            style="min-width: 200px;">
+                            <input type="text" class="form-control" name="keyword" placeholder="Buscar"
+                                value="{{ request('keyword') }}">
+                            <button type="submit" class="btn border-0 shadow-none p-0">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </form>
 
 
-                            <!-- Icono de cuenta -->
-                            <div class="dropdown me-3 ">
-                                <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button"
-                                    data-bs-toggle="dropdown" style="color: inherit;">
-                                    @auth
-                                        @if(Auth::user()->imagen)
-                                            <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
-                                                alt="Avatar" class="rounded-circle shadow-sm"
-                                                style="width: 32px; height: 32px; object-fit: cover;">
-                                        @else
-
-                                            <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                                        @endif
-                                        <span class="ms-2 fw-semibold d-none d-md-inline">{{ Auth::user()->name }}</span>
+                        <!-- Icono de cuenta -->
+                        <div class="dropdown ms-2 ">
+                            <a class="btn dropdown-toggle px-0 d-flex align-items-center" href="#" role="button"
+                                data-bs-toggle="dropdown" style="color: inherit;">
+                                @auth
+                                    @if (Auth::user()->imagen)
+                                        <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
+                                            alt="Avatar" class="rounded-circle shadow-sm"
+                                            style="width: 32px; height: 32px; object-fit: cover;">
                                     @else
                                         <i class="bi bi-person" style="font-size: 1.5rem;"></i>
-                                    @endauth
-                                </a>
+                                    @endif
+                                    <span class="ms-2 fw-semibold d-none d-md-inline">{{ Auth::user()->name }}</span>
+                                @else
+                                    <i class="bi bi-person" style="font-size: 1.5rem;"></i>
+                                @endauth
+                            </a>
 
-                                <div class="dropdown-menu dropdown-menu-end p-2 shadow rounded-3 "
-                                    style="min-width: 200px; left: 50%; transform: translateX(-50%);">
-                                    @guest
-                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('login') }}">
-                                            <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('register') }}">
-                                            <i class="bi bi-pencil-square me-2"></i> Registrarse
+                            <div class="dropdown-menu dropdown-menu-end p-2 shadow rounded-3 "
+                                style="min-width: 200px; left: 50%; transform: translateX(-50%);">
+                                @guest
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('login') }}">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+                                    </a>
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('register') }}">
+                                        <i class="bi bi-pencil-square me-2"></i> Registrarse
+                                    </a>
+                                @else
+                                    @if (Auth::user()->rol_id == 1)
+                                        <a class="dropdown-item d-flex align-items-center"
+                                            href="{{ route('admin.dashboard') }}">
+                                            <i class="bi bi-speedometer2 me-2"></i> Panel Admin
                                         </a>
                                     @else
-                                        @if (Auth::user()->rol_id == 1)
-                                            <a class="dropdown-item d-flex align-items-center"
-                                                href="{{ route('admin.dashboard') }}">
-                                                <i class="bi bi-speedometer2 me-2"></i> Panel Admin
-                                            </a>
-                                        @else
-                                            <a class="dropdown-item d-flex align-items-center"
-                                                href="{{ route('account.edit') }}">
-                                                <i class="bi bi-person-lines-fill me-2"></i> Mi Cuenta
-                                            </a>
-                                        @endif
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <i class="bi bi-bag-check me-2"></i> Pedidos
+                                        <a class="dropdown-item d-flex align-items-center"
+                                            href="{{ route('account.edit') }}">
+                                            <i class="bi bi-person-lines-fill me-2"></i> Mi Cuenta
                                         </a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item d-flex align-items-center text-danger"
-                                            href="{{ route('logout') }}"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
-                                        </a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form>
-                                    @endguest
-                                </div>
+                                    @endif
+                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <i class="bi bi-bag-check me-2"></i> Pedidos
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item d-flex align-items-center text-danger"
+                                        href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
+                                        @csrf
+                                    </form>
+                                @endguest
                             </div>
-
-
-
-                            <!-- Carrito -->
-                            @php
-                                $carrito = session('carrito', []);
-                                $cantidadTotal = count($carrito);
-                            @endphp
-
-                            <div class="item ms-4">
-                                <a href="#" class="header-cart-icon position-relative">
-                                    <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black; margi"></i>
-                                    <span id="contador-carrito"
-                                        class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ $cantidadTotal }}
-                                    </span>
-
-
-                                </a>
-                            </div>
-
                         </div>
+
+
+
+                        <!-- Carrito -->
+                        @php
+                            $carrito = session('carrito', []);
+                            $cantidadTotal = count($carrito);
+                        @endphp
+
+                        <div class="item ms-4">
+                            <a href="#" class="header-cart-icon position-relative">
+                                <i class="bi bi-cart-fill" style="font-size: 1.5rem; color:black; margi"></i>
+                                <span id="contador-carrito"
+                                    class="icon-quantity position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ $cantidadTotal }}
+                                </span>
+
+
+                            </a>
+                        </div>
+
                     </div>
                 </div>
-            </nav>
+    </div>
+    </nav>
 
 
-            <style>
-                #appHeader {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    z-index: 1030;
-                }
+    <style>
+        #appHeader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
 
-                body {
-                    padding-top: 115px;
-                }
+        body {
+            padding-top: 115px;
+        }
 
-                .navbar-nav .nav-link {
-                    position: relative;
-                    padding-bottom: 5px;
-                    /* espacio para la línea */
-                    transition: all 0.3s ease;
-                }
+        .navbar-nav .nav-link {
+            position: relative;
+            padding-bottom: 5px;
+            /* espacio para la línea */
+            transition: all 0.3s ease;
+        }
 
-                .navbar-nav .nav-link::after {
-                    content: "";
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    width: 0%;
-                    height: 2px;
-                    /* grosor de la línea */
-                    background-color: red;
-                    transition: width 0.3s ease;
-                }
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            /* grosor de la línea */
+            background-color: red;
+            transition: width 0.3s ease;
+        }
 
-                .navbar-nav .nav-link:hover::after,
-                .navbar-nav .nav-link.active::after {
-                    width: 100%;
-                    /* la línea aparece */
-                }
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 100%;
+            /* la línea aparece */
+        }
 
-                /* Estilos buscador */
-                .search-group {
-                    display: flex;
-                    align-items: center;
-                    margin: 0;
-                }
+        /* Estilos buscador */
+        .search-group {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
 
-                .search-group input {
-                    height: 38px;
-                }
+        .search-group input {
+            height: 38px;
+        }
 
-                .search-group button {
-                    height: 38px;
-                }
+        .search-group button {
+            height: 38px;
+        }
 
-                .btn.border-0.shadow-none.p-0 {
-                    margin-right: 11px;
-                }
+        .btn.border-0.shadow-none.p-0 {
+            margin-right: 11px;
+        }
 
 
-                @media (max-width: 768px) {
-                    .search-group input {
-                        width: 100%;
-                        margin-bottom: 10px;
-                    }
+        @media (max-width: 768px) {
+            .search-group input {
+                width: 100%;
+                margin-bottom: 10px;
+            }
 
-                    .navbar .dropdown-toggle span {
-                        display: none;
-                    }
+            .navbar .dropdown-toggle span {
+                display: none;
+            }
 
-                    .navbar .form-control {
-                        font-size: 0.9rem;
-                    }
+            .navbar .form-control {
+                font-size: 0.9rem;
+            }
 
-                    .navbar .btn {
-                        font-size: 0.9rem;
-                    }
+            .navbar .btn {
+                font-size: 0.9rem;
+            }
 
-                    #navbarResponsive {
-                        display: none;
-                        flex-direction: column;
-                        background: #f8f9fa;
-                        padding: 1rem;
-                    }
+            #navbarResponsive {
+                display: none;
+                flex-direction: column;
+                background: #f8f9fa;
+                padding: 1rem;
+            }
 
-                    #menu-toggle:checked~#navbarResponsive {
-                        display: flex;
-                    }
-                }
-            </style>
-        </header>
+            #menu-toggle:checked~#navbarResponsive {
+                display: flex;
+            }
+        }
+    </style>
+    </header>
     </div>
 
     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -322,7 +336,7 @@
         <div class="cart-body p-3" id="cart-items">
             @php $carrito = session('carrito', []); @endphp
 
-            @if(count($carrito) > 0)
+            @if (count($carrito) > 0)
                 <div class="cart-body p-3" id="cart-items">
                     @include('components.cart-items')
                 </div>
@@ -368,7 +382,8 @@
 
     <!-- MODAL SOLO PARA INVITADOS -->
     @guest
-        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content p-3">
                     <div class="modal-header border-0">
@@ -458,20 +473,20 @@
 
     <script>
         document.querySelectorAll('.agregar-carrito-form').forEach(form => {
-            form.addEventListener('submit', function (e) {
+            form.addEventListener('submit', function(e) {
                 e.preventDefault(); // evita que recargue la página
 
                 const url = this.action;
                 const formData = new FormData(this);
 
                 fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': formData.get('_token'),
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    body: formData
-                })
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': formData.get('_token'),
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: formData
+                    })
                     .then(response => response.json())
                     .then(data => {
                         // ✅ Actualizar contador del carrito
@@ -511,7 +526,7 @@
     </script>
     <!-- Esto ponlo en tu layout principal, no en el partial -->
     <script>
-        document.addEventListener('submit', function (e) {
+        document.addEventListener('submit', function(e) {
             if (e.target.matches('.form-actualizar-cantidad, .eliminar-item-form')) {
                 e.preventDefault();
 
@@ -520,13 +535,13 @@
                 const formData = new FormData(form);
 
                 fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': formData.get('_token'),
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: formData
-                })
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': formData.get('_token'),
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    })
                     .then(res => res.json())
                     .then(data => {
                         const contador = document.getElementById('contador-carrito');
@@ -552,8 +567,10 @@
                                 .then(r => r.text())
                                 .then(html => {
                                     const doc = new DOMParser().parseFromString(html, 'text/html');
-                                    const nuevoBloque = doc.querySelector('#carrito-container-' + data.producto_id);
-                                    const viejoBloque = document.getElementById('carrito-container-' + data.producto_id);
+                                    const nuevoBloque = doc.querySelector('#carrito-container-' + data
+                                        .producto_id);
+                                    const viejoBloque = document.getElementById('carrito-container-' + data
+                                        .producto_id);
                                     if (nuevoBloque && viejoBloque) {
                                         viejoBloque.innerHTML = nuevoBloque.innerHTML;
                                     }
@@ -582,7 +599,7 @@
         if (typeof actualizarSidebarCarrito === 'function') {
             actualizarSidebarCarrito();
         }
-    .catch (error => {
+        .catch(error => {
             console.error('Error al agregar al carrito:', error);
         });
     </script>
@@ -613,8 +630,7 @@
         if (cartTotal) {
             cartTotal.textContent = 'S/. ' + data.total;
         }
-    .catch (error => console.error('Error actualizando sidebar:', error));
-
+        .catch(error => console.error('Error actualizando sidebar:', error));
     </script>
 
 

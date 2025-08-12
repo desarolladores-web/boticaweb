@@ -16,7 +16,7 @@
                     <div class="col-md-2">CANTIDAD</div>
                     <div class="col-md-2">PRECIO UNIDAD</div>
                     <div class="col-md-2">SUBTOTAL</div>
-
+                    <div class="col-md-1"></div>
                 </div>
 
                 @php
@@ -49,16 +49,18 @@
                     <!-- Cantidad -->
                     <div class="col-md-2 fw-semibold">
                         <div class="d-flex justify-content-center align-items-center">
-                            <form action="{{ route('carrito.actualizar', $id) }}" method="POST" class="me-1">
+                            <form action="{{ route('carrito.actualizar', $id) }}" method="POST" class="actualizar-cantidad-form me-1" data-id="{{ $id }}">
                                 @csrf
                                 <input type="hidden" name="tipo" value="restar">
-                                <button class="btn btn-outline-secondary btn-sm">−</button>
+                                <button class="btn btn-outline-secondary btn-sm" type="submit">−</button>
                             </form>
-                            <span class="px-2">{{ $item['cantidad'] }}</span>
-                            <form action="{{ route('carrito.actualizar', $id) }}" method="POST" class="ms-1">
+
+                            <span class="px-2 cantidad-texto" data-id="{{ $id }}">{{ $item['cantidad'] }}</span>
+
+                            <form action="{{ route('carrito.actualizar', $id) }}" method="POST" class="actualizar-cantidad-form ms-1" data-id="{{ $id }}">
                                 @csrf
                                 <input type="hidden" name="tipo" value="sumar">
-                                <button class="btn btn-outline-secondary btn-sm">+</button>
+                                <button class="btn btn-outline-secondary btn-sm" type="submit">+</button>
                             </form>
                         </div>
                     </div>
@@ -69,18 +71,17 @@
                     </div>
 
                     <!-- Subtotal -->
-                    <div class="col-md-2 fw-semibold">
-                        S/ {{ number_format($subtotal, 2) }}
+                    <div class="col-md-2 fw-semibold subtotal-producto" data-id="{{ $id }}">
+                        <span class="subtotal-valor">S/ {{ number_format($subtotal, 2) }}</span>
                     </div>
 
                     <!-- Eliminar -->
-                    <div class="col-md-1 ">
-                        <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
+                    <div class="col-md-1">
+                        <form action="{{ route('carrito.eliminar', $id) }}" method="POST" class="form-eliminar" data-id="{{ $id }}">
                             @csrf
                             <input type="hidden" name="redirect_back" value="{{ route('carrito.ver') }}">
                             <button type="submit" class="btn btn-link text-danger text-decoration-none p-0">Eliminar</button>
                         </form>
-
                     </div>
                 </div>
 
@@ -97,17 +98,17 @@
                 <h6 class="fw-bold mb-3">Resumen de compra</h6>
                 <div class="d-flex justify-content-between mb-2">
                     <span>Subtotal</span>
-                    <span>S/ {{ number_format($total, 2) }}</span>
+                    <span id="subtotal-general">S/ {{ number_format($total, 2) }}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                     <span>Total a pagar</span>
-                    <strong class="text-success">S/ {{ number_format($total, 2) }}</strong>
+                    <strong id="total-general" class="text-success">S/ {{ number_format($total, 2) }}</strong>
                 </div>
-
 
                 <button type="button" class="btn btn-danger rounded-pill mt-3 w-100" data-bs-toggle="modal" data-bs-target="#checkoutModal">
                     Comprar ahora
                 </button>
+
                 <!-- MODAL: ¿Iniciar sesión o continuar como invitado? -->
                 <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -131,10 +132,99 @@
                     </div>
                 </div>
 
-
-
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Actualizar cantidad
+    const formsActualizar = document.querySelectorAll('.actualizar-cantidad-form');
+    formsActualizar.forEach(form => {
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            const url = form.action;
+            const formData = new FormData(form);
+            const id = form.dataset.id;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': formData.get('_token'),
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Actualiza cantidad visible
+                    const cantidadSpan = document.querySelector(`.cantidad-texto[data-id="${id}"]`);
+                    if (cantidadSpan) cantidadSpan.textContent = data.cantidad;
+
+                    // Actualiza subtotal producto
+                    const subtotalValorElem = document.querySelector(`.subtotal-producto[data-id="${id}"] .subtotal-valor`);
+                    if (subtotalValorElem) subtotalValorElem.textContent = `S/ ${parseFloat(data.subtotal).toFixed(2)}`;
+
+                    // Actualiza subtotal y total general
+                    const subtotalGeneral = document.getElementById('subtotal-general');
+                    const totalGeneral = document.getElementById('total-general');
+                    if (subtotalGeneral) subtotalGeneral.textContent = `S/ ${parseFloat(data.total).toFixed(2)}`;
+                    if (totalGeneral) totalGeneral.textContent = `S/ ${parseFloat(data.total).toFixed(2)}`;
+                } else {
+                    alert('Error al actualizar el carrito');
+                }
+            } catch (error) {
+                alert('Error de comunicación con el servidor');
+                console.error(error);
+            }
+        });
+    });
+
+    // Eliminar producto sin recargar
+    const formsEliminar = document.querySelectorAll('.form-eliminar');
+    formsEliminar.forEach(form => {
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+
+            const url = form.action;
+            const formData = new FormData(form);
+            const id = form.dataset.id;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': formData.get('_token'),
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Eliminar visualmente el producto del DOM
+                    const productoElem = form.closest('.row.align-items-center');
+                    if (productoElem) productoElem.remove();
+
+                    // Actualiza subtotal y total general
+                    const subtotalGeneral = document.getElementById('subtotal-general');
+                    const totalGeneral = document.getElementById('total-general');
+                    if (subtotalGeneral && data.total !== undefined) subtotalGeneral.textContent = `S/ ${parseFloat(data.total).toFixed(2)}`;
+                    if (totalGeneral && data.total !== undefined) totalGeneral.textContent = `S/ ${parseFloat(data.total).toFixed(2)}`;
+                } else {
+                    alert('No se pudo eliminar el producto');
+                }
+            } catch (error) {
+                alert('Error en la comunicación con el servidor');
+                console.error(error);
+            }
+        });
+    });
+});
+</script>

@@ -44,6 +44,9 @@ class Venta extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+       protected $casts = [
+        'fecha' => 'datetime',
+    ];
     public function cliente()
     {
         return $this->belongsTo(\App\Models\Cliente::class, 'cliente_id', 'id');

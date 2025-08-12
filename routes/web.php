@@ -77,6 +77,12 @@ Route::middleware(['auth'])->group(function () {
 
     // Ruta para actualizar la contraseña
     Route::put('/account/password/update', [ProfileController::class, 'updatePassword'])->name('account.password.update');
+// Página de cuenta (perfil, contraseña, pedidos, etc.)
+Route::get('/account/{section?}', [ProfileController::class, 'edit'])
+    ->name('account')
+    ->middleware('auth');
+
+
 });
 
 // RUTAS EXCLUSIVAS PARA ADMIN

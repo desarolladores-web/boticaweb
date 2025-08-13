@@ -113,7 +113,7 @@
                 text: "¿Deseas marcar esta venta como entregada?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#198754',
+                confirmButtonColor: '#218838' ,
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Sí, marcar',
                 cancelButtonText: 'Cancelar'
@@ -128,10 +128,14 @@
 
 {{-- Estilos adicionales --}}
 <style>
-    .btn-confirmar-entrega.btn-hover-green:hover {
-        background-color: #28a745 !important;
+    .btn-confirmar-entrega {
+        background-color: #28a745 !important; /* Verde */
         border-color: #28a745 !important;
         color: white !important;
+    }
+    .btn-confirmar-entrega:hover {
+        background-color: #218838 !important; /* Verde más oscuro */
+        border-color: #1e7e34 !important;
     }
 </style>
 

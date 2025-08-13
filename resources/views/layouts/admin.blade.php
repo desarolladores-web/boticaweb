@@ -11,7 +11,7 @@
 
   <!-- Boxicons CSS -->
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-  <title>Side Navigation Bar in HTML CSS JavaScript</title>
+  <title>Panel de Administrador</title>
   <link rel="stylesheet" href="style.css" />
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -37,36 +37,80 @@
 
     <!-- Contenido del navbar -->
     <div class="navbar_content">
+      <a href= class="position-relative ms-3">
+  <i class='bx bx-package fs-4'></i>
+  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+    {{ $productosStockBajo ?? 0 }}
+  </span>
+</a>
+
 
       <i class='bx bx-sun' id="darkLight"></i>
-      <i class='bx bx-bell'></i>
+  <a href="{{ route('admin.ventas.pendientes') }}" class="position-relative">
+    <i id="iconoNotificacion" class='bx bx-bell fs-4'></i>
+    <span id="contadorVentas" 
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+    </span>
+</a>
 
-      @auth
-      <div class="dropdown">
-        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
-          id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-          @if(Auth::user()->imagen)
-          <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
-            alt="Avatar"
-            class="rounded-circle"
-            style="width: 40px; height: 40px; object-fit: cover;" />
-          @else
-          <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #555;"></i>
-          @endif
-        </a>
 
-        <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
-          <li>
+
+    @auth
+<div class="dropdown">
+    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+        id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative;">
+        
+        {{-- Avatar con punto verde --}}
+        <div style="position: relative; display: inline-block;">
+            @if(Auth::user()->imagen)
+                <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
+                    alt="Avatar"
+                    class="rounded-circle"
+                    style="width: 40px; height: 40px; object-fit: cover;" />
+            @else
+                <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #555;"></i>
+            @endif
+
+            {{-- Punto verde --}}
+            <span style="
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 12px;
+                height: 12px;
+                background-color: #28a745;
+                border-radius: 50%;
+                border: 2px solid white;">
+            </span>
+        </div>
+
+        {{-- Nombre y rol --}}
+        <div class="ms-2 d-none d-sm-block">
+            <div style="font-size: 0.9rem; font-weight: 500;">
+              {{ Auth::user()->name }} {{ Auth::user()->cliente->apellido_paterno ?? '' }}
+
+
+            </div>
+            <div style="font-size: 0.75rem; color: gray;">
+                 {{ Auth::user()->rol->tipo ?? 'N/A' }}
+            </div>
+        </div>
+    </a>
+
+    {{-- Menú desplegable --}}
+    <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
+        <li>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="m-0 p-0">
-              @csrf
-              <button type="submit" class="dropdown-item">
-                <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
-              </button>
+                @csrf
+                <button type="submit" class="dropdown-item">
+                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                </button>
             </form>
-          </li>
-        </ul>
-      </div>
-      @endauth
+        </li>
+    </ul>
+</div>
+@endauth
+
 
     </div>
   </nav>
@@ -155,7 +199,7 @@
               <span class="navlink_icon">
                 <i class="bx bx-user"></i>
               </span>
-              <span class="navlink">Clientes</span>
+              <span class="navlink">Usuarios</span>
             </a>
           </li>
         </ul>
@@ -297,6 +341,37 @@
       @endif
     });
   </script>
+
+
+
 </body>
 
 </html>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let contador = document.getElementById("contadorVentas");
+    let icono = document.getElementById("iconoNotificacion");
+
+    function verificarVentasPendientes() {
+        fetch('/ventas-pendientes-count')
+            .then(res => res.json())
+            .then(data => {
+                if (data.count > 0) {
+                    contador.textContent = data.count;
+                    contador.classList.remove('d-none');
+                    icono.classList.add('text-danger', 'bx-tada');
+                } else {
+                    contador.classList.add('d-none');
+                    icono.classList.remove('text-danger', 'bx-tada');
+                }
+            })
+            .catch(err => console.error(err));
+    }
+
+    setInterval(verificarVentasPendientes, 5000);
+    verificarVentasPendientes();
+});
+</script>
+
+
+

@@ -15,7 +15,7 @@ use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\CheckoutController;
 
-
+use App\Models\Venta;
 
 
 
@@ -99,6 +99,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
     Route::get('/usuarios/clientes', [UserController::class, 'clientes'])->name('usuarios.clientes');
     Route::resource('productos', ProductoController::class);
+
+
+
 });
 
 //INFORMACION 
@@ -137,10 +140,20 @@ Route::get('/pago/pendiente', function () {
 Route::get('/admin/ventas/pendientes', [VentaController::class, 'pendientes'])->name('admin.ventas.pendientes');
 Route::get('/admin/ventas/entregadas', [VentaController::class, 'ventasEntregadas'])->name('admin.ventas.entregadas');
 Route::put('/admin/ventas/{id}/entregar', [VentaController::class, 'marcarComoEntregada'])->name('admin.ventas.marcarEntregada');
+Route::get('/ventas-pendientes-count', function () {
+    $count = Venta::whereHas('estadoVenta', function ($q) {
+        $q->where('estado', 'venta pendiente'); // usando la columna real
+    })->count();
+
+    return response()->json(['count' => $count]);
+});
+
+
+
+
+
 
 Route::get('/carrito/sidebar/dinamico', function () {
     return view('components.cart-items');
-})->name('carrito.sidebar.dinamico');
-
-Route::get('/carrito/sidebar/ajax', [CartController::class, 'obtenerSidebarAjax'])
-    ->name('carrito.sidebar.ajax');
+})->name('carrito.sidebar.ajax');
+Route::get('/carrito/sidebar/ajax', [CartController::class, 'obtenerSidebarAjax'])->name('carrito.sidebar.ajax');

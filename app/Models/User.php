@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function cliente()
 {
-    return $this->belongsTo(Cliente::class);
+    return $this->belongsTo(Cliente::class,'cliente_id');
 }
 
 public function tipoDocumento()

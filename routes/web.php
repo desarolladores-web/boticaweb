@@ -155,5 +155,5 @@ Route::get('/ventas-pendientes-count', function () {
 
 Route::get('/carrito/sidebar/dinamico', function () {
     return view('components.cart-items');
-})->name('carrito.sidebar.ajax');
+})->name('carrito.sidebar.dinamico');
 Route::get('/carrito/sidebar/ajax', [CartController::class, 'obtenerSidebarAjax'])->name('carrito.sidebar.ajax');

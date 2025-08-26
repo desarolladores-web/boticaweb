@@ -1,5 +1,3 @@
-
-
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -13,6 +11,7 @@
 
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('imagenes/botica2.png') }}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -46,16 +45,17 @@
                     <div class="row align-items-center text-white gy-2">
                         <!-- Horario de atención -->
                         <div class="col-12 col-md-auto text-center text-md-start">
-                            <i class="bi bi-clock me-1"></i> Lunes a Sábado: 8:00am - 9:00pm
+                            <i class="bi bi-clock me-1"></i> Lunes a Domingo: 7:00am - 9:30pm
                         </div>
 
                         <!-- Información de contacto -->
                         <div class="col-12 col-md d-flex flex-wrap justify-content-center justify-content-md-end gap-3">
-                            <a href="mailto:boticamyryan@gmail.com" class="text-white d-flex align-items-center">
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=boticamyryan@gmail.com"
+                                target="_blank" class="text-white d-flex align-items-center">
                                 <i class="bi bi-envelope-fill me-1"></i> boticamyryan@gmail.com
                             </a>
                             <span class="d-flex align-items-center">
-                                <i class="bi bi-telephone-outbound-fill me-1"></i> +51 973059257
+                                <i class="bi bi-telephone-outbound-fill me-1"></i> +51 954187305
                             </span>
                         </div>
                     </div>
@@ -617,7 +617,7 @@
             }
         });
     </script>
-  
+
 
     <script>
         function actualizarSidebarCarrito() {
@@ -639,7 +639,7 @@
                 .catch(error => console.error('Error actualizando sidebar:', error));
         }
     </script>
-    
+
 
 
 

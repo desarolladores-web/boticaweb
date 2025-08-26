@@ -1,8 +1,9 @@
-@vite('resources/css/welcome.css')
-
+<title>Productos</title>
+<link rel="icon" type="image/png" href="{{ asset('imagenes/botica2.png') }}">
 @extends('layouts.app')
 
 @section('content')
+    @vite('resources/css/welcome.css')
     <section class="py-5">
         <div class="container" style="max-width: 1400px;">
 

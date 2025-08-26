@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Quienes somos</title>
 @section('content')
     <div class="container py-5">
 
@@ -62,8 +62,8 @@
         <div class="container-fluid px-0">
             <span class="d-block">
                 <div class="text-center">
-                    <img width="1920" height="1080" src="{{ asset('imagenes/boticamirianfisico.png') }}" alt="Botica Mirian"
-                        title="Botica Mirian" class="img-fluid w-50 mt-5">
+                    <img width="1920" height="1080" src="{{ asset('imagenes/boticamirianfisico.png') }}"
+                        alt="Botica Mirian" title="Botica Mirian" class="img-fluid w-50 mt-5">
                 </div>
             </span>
         </div>

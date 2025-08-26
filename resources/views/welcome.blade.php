@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<title>Botica Myryan</title>
 @section('content')
 
     <head>
@@ -82,8 +82,7 @@
                                 <h5 class="card-title fw-bold text-success">Entrega rápida</h5>
                                 <p class="card-text">Recibe tus medicamentos directamente en tu hogar con rapidez y
                                     seguridad.</p>
-                                <a href="#" class="text-success fw-medium text-decoration-underline">Más información
-                                    →</a>
+
                             </div>
                         </div>
                     </div>
@@ -95,8 +94,7 @@
                                 <div class="mb-3"><i class="bi bi-capsule fs-1 text-primary"></i></div>
                                 <h5 class="card-title fw-bold text-primary">Nuevas medicinas</h5>
                                 <p class="card-text">Actualizamos nuestro stock con productos modernos y certificados.</p>
-                                <a href="#" class="text-primary fw-medium text-decoration-underline">Ver novedades
-                                    →</a>
+
                             </div>
                         </div>
                     </div>
@@ -108,8 +106,6 @@
                                 <div class="mb-3"><i class="bi bi-shield-check fs-1 text-success"></i></div>
                                 <h5 class="card-title fw-bold text-success">Calidad garantizada</h5>
                                 <p class="card-text">Medicamentos seguros, con respaldo profesional y confianza total.</p>
-                                <a href="#" class="text-success fw-medium text-decoration-underline">Ver detalles
-                                    →</a>
                             </div>
                         </div>
                     </div>

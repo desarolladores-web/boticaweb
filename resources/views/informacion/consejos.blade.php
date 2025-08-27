@@ -5,7 +5,7 @@
     <div class="container py-5">
         <!-- Título -->
         <div class="text-center mb-5">
-            <h2 class="titulo-principal">Consejos de Salud - Botica Mirian</h2>
+            <h2 class="titulo-principal">Consejos de Salud - Botica Myryan</h2>
             <div class="linea-decorativa"></div>
             <p class="subtitulo-principal mt-3">
                 Los mejores consejos de salud para tu día a día. Aquí encontrarás cómo mejorar tus<br>

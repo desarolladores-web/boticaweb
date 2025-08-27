@@ -12,13 +12,10 @@ use App\Models\Sucursal;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 
-
 use MercadoPago\SDK;
 use MercadoPago\Preference;
 use MercadoPago\Item;
-
 use MercadoPago\Payer;
-
 
 class CheckoutController extends Controller
 {
@@ -36,7 +33,6 @@ class CheckoutController extends Controller
     // 👉 Guardar datos en BD directamente (sin MercadoPago)
     public function guardarDatosYRedirigir(Request $request)
     {
-
         $carrito = session()->get('carrito', []);
 
         if (empty($carrito)) {
@@ -57,36 +53,42 @@ class CheckoutController extends Controller
         } catch (ValidationException $e) {
             return response()->json(['error' => $e->errors()], 422);
         }
-$user = auth()->user();
 
-if ($user && $user->cliente_id) {
-    $cliente_id = $user->cliente_id;
-} else {
-    $cliente = Cliente::create([
-        'nombre' => $validated['nombres'],
-        'apellido_paterno' => $validated['apellido_paterno'],
-        'apellido_materno' => $validated['apellido_materno'],
-        'email' => $validated['correo'],
-        'tipo_documento_id' => $validated['tipo_documento_id'],
-        'DNI' => $validated['numero_documento'],
-        'telefono' => $validated['celular'],
-    ]);
-    $cliente_id = $cliente->id;
-}
+        $user = auth()->user();
+        if ($user && $user->cliente_id) {
+            $cliente_id = $user->cliente_id;
+        } else {
+            $cliente = Cliente::create([
+                'nombre' => $validated['nombres'],
+                'apellido_paterno' => $validated['apellido_paterno'],
+                'apellido_materno' => $validated['apellido_materno'],
+                'email' => $validated['correo'],
+                'tipo_documento_id' => $validated['tipo_documento_id'],
+                'DNI' => $validated['numero_documento'],
+                'telefono' => $validated['celular'],
+            ]);
+            $cliente_id = $cliente->id;
+        }
 
-$subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
-$igv = round($subtotal * 0.18, 2);
-$total = $subtotal + $igv;
+        // 👉 Calcular subtotal y comisión
+        $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
 
-$venta = Venta::create([
-    'cliente_id' => $cliente_id,
-    'fecha' => now(),
-    'igv' => $igv,
-    'subtotal' => $subtotal,
-    'total' => $total,
-    'metodo_pago_id' => null,
-    'estado_venta_id' => 1,
-]);
+        // Comisión Mercado Pago (3.79% aprox.)
+        $comision = round(($subtotal * 0.0399) + 1, 2);
+
+        // Total final
+        $total = $subtotal + $comision;
+
+        // 👉 Guardar venta en BD
+        $venta = Venta::create([
+            'cliente_id' => $cliente_id,
+            'fecha' => now(),
+            'igv' => $comision, // usamos este campo para guardar la comisión, ya que pediste no cambiar el nombre
+            'subtotal' => $subtotal,
+            'total' => $total,
+            'metodo_pago_id' => null,
+            'estado_venta_id' => 1,
+        ]);
 
         // 👉 Registrar detalles de la venta
         foreach ($carrito as $item) {
@@ -107,30 +109,50 @@ $venta = Venta::create([
             }
         }
 
-
-
         // ✅ Crear preferencia Mercado Pago
         SDK::setAccessToken(config('services.mercadopago.token'));
 
         $items = [];
+        $count = count($carrito);
+        $assigned_total = 0.0;
+        $i = 0;
+
         foreach ($carrito as $itemCarrito) {
-            $precioConIgv = round($itemCarrito['precio'] * 1.18, 2); // 👈 incluye IGV
+            $i++;
+            $quantity = (int) $itemCarrito['cantidad'];
+            $lineTotal = $itemCarrito['precio'] * $quantity;
+
+            // Parte proporcional de la comisión (en base al subtotal)
+            $lineCommission = ($subtotal > 0) ? ($lineTotal / $subtotal) * $comision : 0;
+
+            if ($i < $count) {
+                // Para todos menos el último
+                $lineWithCommission = round($lineTotal + $lineCommission, 2);
+                $unit_price = round($lineWithCommission / $quantity, 2);
+                $assigned_total += $unit_price * $quantity;
+            } else {
+                // Último ítem: ajusta para que cuadre exacto con $total
+                $remaining_total = round($total - $assigned_total, 2);
+                if ($remaining_total <= 0) {
+                    $lineWithCommission = round($lineTotal + $lineCommission, 2);
+                    $unit_price = round($lineWithCommission / $quantity, 2);
+                } else {
+                    $unit_price = round($remaining_total / $quantity, 2);
+                }
+            }
 
             $item = new Item();
             $item->title = $itemCarrito['nombre'] ?? 'Producto';
-            $item->quantity = (int) $itemCarrito['cantidad'];
-            $item->unit_price = (float) $precioConIgv;
+            $item->quantity = $quantity;
+            $item->unit_price = (float) $unit_price;
             $items[] = $item;
         }
-
-
 
         $preference = new Preference();
         $preference->items = $items;
 
 
-
-        // ✅ Agregar datos del cliente a la preferencia
+        // ✅ Agregar datos del cliente
         $payer = new Payer();
         $payer->name = $validated['nombres'];
         $payer->surname = $validated['apellido_paterno'] . ' ' . $validated['apellido_materno'];
@@ -153,20 +175,22 @@ $venta = Venta::create([
 
 
 
+
         $preference->back_urls = [
             'success' => route('welcome') . '?status=approved',
             'failure' => route('welcome') . '?status=failure',
             'pending' => route('welcome') . '?status=pending',
         ];
 
+
+
         //recordarle a chat que todo esta en local 
         //$preference->auto_return = 'approved';
+
         $preference->save();
 
         // 👉 Limpiar carrito
         session()->forget('carrito');
-
-
 
         return response()->json(['init_point' => $preference->init_point]);
     }

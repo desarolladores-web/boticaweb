@@ -166,16 +166,19 @@
                                 <h5>Contacto info</h5>
                                 <ul>
                                     <li>
-                                        <h6><i class="fa fa-map-marker-alt"></i> Direcciónes</h6>
-                                        <p>CALLE. CARACAS N° 498 MZ° 36 LT° 01 TINGUIÑA - ZONA C</p>
-
+                                        <h6><i class="fa fa-map-marker-alt"></i> Direcciones</h6>
+                                        <p style="margin-bottom: 2px;">Botica 1: CALLE. CARACAS N° 498 MZ° 36 LT° 01
+                                            TINGUIÑA
+                                        </p>
+                                        <p style="margin-top: 0;">Botica 2: CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA
+                                            TINGUIÑA</p>
                                     </li>
                                     <li>
                                         <h6><i class="fa fa-phone-alt"></i> Teléfono</h6>
-                                        <p>985748483</p>
+                                        <p>+51 954187305</p>
                                     </li>
                                     <li>
-                                        <h6><i class="fa fa-headphones"></i> Soporte</h6>
+                                        <h6><i class="bi bi-envelope-fill"></i> Correo</h6>
                                         <p>boticamyryan@gmail.com</p>
                                     </li>
                                 </ul>
@@ -202,7 +205,7 @@
                         <div class="contact__map" style="display:flex; flex-direction: column; gap: 30px;">
                             <div
                                 style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
-                                <h5 style="margin-bottom: 15px;">Primera sede</h5>
+                                <h5 style="margin-bottom: 15px;">Botica 1: CALLE. CARACAS N° 498 MZ° 36 LT° 01 TINGUIÑA</h5>
                                 <iframe
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5044.068751925154!2d-75.7056514938535!3d-14.036814810441033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9111033b8b9d0279%3A0xceb84290babbfbda!2sBOTICA%20MYRYAN!5e0!3m2!1ses-419!2spe!4v1749044707979!5m2!1ses-419!2spe"
                                     height="380" style="border:0; width: 100%; border-radius: 10px;" allowfullscreen=""
@@ -211,7 +214,8 @@
 
                             <div
                                 style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
-                                <h5 style="margin-bottom: 15px;">Segunda sede</h5>
+                                <h5 style="margin-bottom: 15px;">Botica 2: CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA TINGUIÑA
+                                </h5>
                                 <iframe
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d967.6791622753105!2d-75.70682693037172!3d-14.034802898078123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x911102aeeea34125%3A0xb08e4c3f4e5825ef!2sMexico%20251%2C%20Ica%2011003!5e0!3m2!1ses!2spe!4v1755013338732!5m2!1ses!2spe"
                                     height="380" style="border:0; width: 100%; border-radius: 10px;" allowfullscreen=""

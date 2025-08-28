@@ -127,7 +127,8 @@
                 <div class="form-section">
                     <h4 class="mb-3 fw-bold">¡Ya falta poco para finalizar tu compra!</h4>
                     <p class="text-muted mb-4">
-                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a href="#">iniciar
+                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a
+                            href="#">iniciar
                             sesión</a>.
                     </p>
 
@@ -145,8 +146,9 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nombres *</label>
-                                <input type="text" class="form-control" name="nombres" required placeholder="Ej: Renato"
-                                    value="{{ $cliente?->nombre ?? auth()->user()->name ?? '' }}">
+                                <input type="text" class="form-control" name="nombres" required
+                                    placeholder="Ej: Renato"
+                                    value="{{ $cliente?->nombre ?? (auth()->user()->name ?? '') }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Apellido paterno *</label>
@@ -162,28 +164,22 @@
                                 <label class="form-label">Correo electrónico *</label>
                                 <input type="email" class="form-control" name="correo" required
                                     placeholder="Ej: correo@dominio.com"
-                                    value="{{ $cliente?->email ?? auth()->user()->email ?? '' }}">
+                                    value="{{ $cliente?->email ?? (auth()->user()->email ?? '') }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Tipo de documento</label>
                                 <select class="form-select" name="tipo_documento_id" required>
-                                    <option value="" disabled
-                                    @if( empty($cliente?->tipo_documento_id) && empty(optional(auth()->user())->tipo_documento_id) )
-                                    selected
-                                    @endif
-                                    >
-                                    Seleccione tipo de documento
-                                </option>
-                                @foreach ($tiposDocumento as $tipo)
-                                <option value="{{ $tipo->id }}"
-                                @if( ($cliente?->tipo_documento_id ?? optional(auth()->user())->tipo_documento_id) == $tipo->id )
-                                selected
-                                @endif
-                                >
-                                {{ $tipo->nombre_documento }}
-                            </option>
-                            @endforeach
-                        </select></div>
+                                    <option value="" disabled @if (empty($cliente?->tipo_documento_id) && empty(optional(auth()->user())->tipo_documento_id)) selected @endif>
+                                        Seleccione tipo de documento
+                                    </option>
+                                    @foreach ($tiposDocumento as $tipo)
+                                        <option value="{{ $tipo->id }}"
+                                            @if (($cliente?->tipo_documento_id ?? optional(auth()->user())->tipo_documento_id) == $tipo->id) selected @endif>
+                                            {{ $tipo->nombre_documento }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="col-md-6">
                                 <label class="form-label">Nro. de documento *</label>
                                 <input type="text" class="form-control" name="numero_documento" required
@@ -195,7 +191,7 @@
                                     placeholder="Ej: 999 000 000" value="{{ $cliente?->telefono ?? '' }}">
                             </div>
                         </div>
-                        
+
                         <div class="form-check mt-3">
                             <input type="checkbox" class="form-check-input" id="termsCheck" required>
                             <label for="termsCheck" class="form-check-label">
@@ -228,7 +224,8 @@
                         <div class="form-check mt-3">
                             <input type="checkbox" class="form-check-input" id="finalTermsCheck" required>
                             <label for="finalTermsCheck" class="form-check-label">
-                                Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de
+                                Acepto los <a href="#">Términos y Condiciones</a> y la <a
+                                    href="#">Política de
                                     Privacidad</a>.
                             </label>
                         </div>
@@ -269,8 +266,9 @@
                     @endforelse
 
                     @php
-                        $igv = round($total * 0.18, 2);
-                        $totalConIgv = $total + $igv;
+                        // Comisión: 3.49% del total + 1 sol fijo
+                        $comision = round($total * 0.0399 + 1, 2);
+                        $totalConComision = $total + $comision;
                     @endphp
 
                     <hr>
@@ -280,19 +278,20 @@
                         <span>S/ {{ number_format($total, 2) }}</span>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <span>IGV (18%)</span>
-                        <span>S/ {{ number_format($igv, 2) }}</span>
+                        <span>Comisión</span>
+                        <span>S/ {{ number_format($comision, 2) }}</span>
                     </div>
                     <div class="d-flex justify-content-between">
                         <strong>Total</strong>
-                        <span class="text-danger fw-bold">S/ {{ number_format($totalConIgv, 2) }}</span>
+                        <span class="text-danger fw-bold">S/ {{ number_format($totalConComision, 2) }}</span>
                     </div>
 
                     <div class="mt-4">
                         <button type="button" class="btn btn-danger w-100" onclick="validarFormulario();">
-                            Comprar ahora gaaa
+                            Comprar ahora
                         </button>
                     </div>
+
 
                 </div>
 
@@ -308,13 +307,13 @@
                 const formData = new FormData(formulario);
 
                 fetch("{{ route('checkout.guardar-datos') }}", {
-                    method: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    body: formData,
-                    credentials: 'same-origin' // 👈 ESTA LÍNEA ES CLAVE PARA QUE FUNCIONE LA SESIÓN
-                })
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        },
+                        body: formData,
+                        credentials: 'same-origin' // 👈 ESTA LÍNEA ES CLAVE PARA QUE FUNCIONE LA SESIÓN
+                    })
                     .then(response => response.json())
                     .then(data => {
                         if (data.init_point) {

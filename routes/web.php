@@ -77,12 +77,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Ruta para actualizar la contraseña
     Route::put('/account/password/update', [ProfileController::class, 'updatePassword'])->name('account.password.update');
-// Página de cuenta (perfil, contraseña, pedidos, etc.)
-Route::get('/account/{section?}', [ProfileController::class, 'edit'])
-    ->name('account')
-    ->middleware('auth');
-
-
+    // Página de cuenta (perfil, contraseña, pedidos, etc.)
+    Route::get('/account/{section?}', [ProfileController::class, 'edit'])
+        ->name('account')
+        ->middleware('auth');
 });
 
 // RUTAS EXCLUSIVAS PARA ADMIN
@@ -102,6 +100,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
 
+    Route::get('/admin/ventas/pendientes', [VentaController::class, 'pendientes'])->name('admin.ventas.pendientes');
+    Route::get('/admin/ventas/entregadas', [VentaController::class, 'ventasEntregadas'])->name('admin.ventas.entregadas');
+    Route::put('/admin/ventas/{id}/entregar', [VentaController::class, 'marcarComoEntregada'])->name('admin.ventas.marcarEntregada');
+    Route::get('/ventas-pendientes-count', function () {
+        $count = Venta::whereHas('estadoVenta', function ($q) {
+            $q->where('estado', 'venta pendiente'); // usando la columna real
+        })->count();
+
+        return response()->json(['count' => $count]);
+    });
 });
 
 //INFORMACION 
@@ -136,17 +144,6 @@ Route::get('/pago/pendiente', function () {
 
 
 
-
-Route::get('/admin/ventas/pendientes', [VentaController::class, 'pendientes'])->name('admin.ventas.pendientes');
-Route::get('/admin/ventas/entregadas', [VentaController::class, 'ventasEntregadas'])->name('admin.ventas.entregadas');
-Route::put('/admin/ventas/{id}/entregar', [VentaController::class, 'marcarComoEntregada'])->name('admin.ventas.marcarEntregada');
-Route::get('/ventas-pendientes-count', function () {
-    $count = Venta::whereHas('estadoVenta', function ($q) {
-        $q->where('estado', 'venta pendiente'); // usando la columna real
-    })->count();
-
-    return response()->json(['count' => $count]);
-});
 
 
 

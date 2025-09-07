@@ -4,62 +4,84 @@
 <div class="container-fluid py-4">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">📦 Productos con alertas de stock</h5>
+            <h5 class="mb-0">📦 stock de productos</h5>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Código</th>
-                        <th>Nombre</th>
-                        <th>Stock</th>
-                        <th>Stock mínimo</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($productos as $producto)
-                        <tr>
-                            <td>{{ $producto->codigo }}</td>
-                            <td>{{ $producto->nombre }}</td>
-                            <td>{{ $producto->stock }}</td>
-                            <td>{{ $producto->stock_min }}</td>
-                            <td>
-                                @if($producto->stock <= 0)
-                                    <span class="badge bg-danger">Agotado</span>
-                                @elseif($producto->stock <= $producto->stock_min)
-                                    <span class="badge bg-warning text-dark">Bajo stock</span>
-                                @else
-                                    <span class="badge bg-success">Stock suficiente</span>
-                                @endif
-                            </td>
-                            <td>
-                                <!-- Botón para abrir el modal -->
-                                <button class="btn btn-sm btn-primary" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#editarStockModal" 
-                                        data-id="{{ $producto->id }}" 
-                                        data-nombre="{{ $producto->nombre }}" 
-                                        data-stock="{{ $producto->stock }}">
-                                    Editar Stock
-                                </button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
 
-            @if($productos->isEmpty())
-                <div class="alert alert-info text-center">
-                    ✅ No hay productos agotados ni con stock bajo.
+            <!-- 🔹 Filtro -->
+            <form method="GET" action="{{ route('admin.productos.agotados') }}" class="row g-3 mb-4">
+                <div class="col-md-4 rounded-4 ">
+                    <select name="estado" class="form-select" onchange="this.form.submit()">
+                        <option value=""> Filtro de stock </option>
+                        <option value="agotado" {{ request('estado') == 'agotado' ? 'selected' : '' }}>Agotado</option>
+                        <option value="bajo" {{ request('estado') == 'bajo' ? 'selected' : '' }}>Bajo stock</option>
+                        <option value="suficiente" {{ request('estado') == 'suficiente' ? 'selected' : '' }}>Stock suficiente</option>
+                    </select>
                 </div>
-            @endif
+            </form>
+
+            <!-- 🔹 Tabla -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Stock</th>
+                            <th>Stock mínimo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($productos as $producto)
+                            <tr class="text-center">
+                                <td>{{ $producto->codigo }}</td>
+                                <td class="text-start">{{ $producto->nombre }}</td>
+                                <td><span class="fw-bold">{{ $producto->stock }}</span></td>
+                                <td>{{ $producto->stock_min }}</td>
+                                <td>
+                                    @if($producto->stock <= 0)
+                                        <span class="badge bg-danger">Agotado</span>
+                                    @elseif($producto->stock <= $producto->stock_min)
+                                        <span class="badge bg-warning text-dark">Bajo stock</span>
+                                    @else
+                                        <span class="badge bg-success">Stock suficiente</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editarStockModal"
+                                            data-id="{{ $producto->id }}"
+                                            data-nombre="{{ $producto->nombre }}"
+                                            data-stock="{{ $producto->stock }}">
+                                        <i class="bi bi-pencil-square"></i> Editar
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <div class="alert alert-info m-0">
+                                        ✅ No hay productos en este estado.
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 🔹 Paginación -->
+            <div class="d-flex justify-content-center mt-3">
+                {{ $productos->links('pagination::bootstrap-5') }}
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Modal para editar stock -->
+<!-- 🔹 Modal para editar stock -->
 <div class="modal fade" id="editarStockModal" tabindex="-1" aria-labelledby="editarStockLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form method="POST" action="{{ route('admin.productos.updateStock') }}">
@@ -91,7 +113,7 @@
   </div>
 </div>
 
-<!-- Script para pasar datos al modal -->
+<!-- Script modal -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var editarStockModal = document.getElementById('editarStockModal');

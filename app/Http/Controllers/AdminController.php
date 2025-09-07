@@ -52,26 +52,42 @@ class AdminController extends Controller
             ->orderByDesc('total')
             ->limit(5)
             ->pluck('total', 'productos.nombre');
-            
-            
+
+
         return view('admin.dashboard', compact(
             'ventasHoy',
             'clientesNuevos',
             'productosAgotados',
             'productosCriticos',
-            
+
             'ventasMes',
             'topProductos'
         ));
     }
-    public function productosAgotados()
-    {
-        $productos = DB::table('productos')
-            ->select('id', 'codigo', 'nombre', 'stock', 'stock_min')
-            ->get();
+   public function productosAgotados(Request $request)
+{
+    $estado = $request->get('estado');
 
-        return view('admin.productos_agotados', compact('productos'));
+    $query = DB::table('productos')
+        ->select('id', 'codigo', 'nombre', 'stock', 'stock_min')
+        ->orderByRaw("CASE 
+            WHEN stock <= 0 THEN 1 
+            WHEN stock <= stock_min THEN 2 
+            ELSE 3 END");
+
+    if ($estado == 'agotado') {
+        $query->where('stock', '<=', 0);
+    } elseif ($estado == 'bajo') {
+        $query->whereColumn('stock', '<=', 'stock_min')
+              ->where('stock', '>', 0);
+    } elseif ($estado == 'suficiente') {
+        $query->whereColumn('stock', '>', 'stock_min');
     }
+
+    $productos = $query->paginate(20)->appends(['estado' => $estado]);
+
+    return view('admin.productos_agotados', compact('productos', 'estado'));
+}
 
     public function updateStock(Request $request)
     {

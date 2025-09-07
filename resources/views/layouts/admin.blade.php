@@ -37,79 +37,77 @@
 
     <!-- Contenido del navbar -->
     <div class="navbar_content">
-      <a href= class="position-relative ms-3">
-  <i class='bx bx-package fs-4'></i>
-  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-    {{ $productosStockBajo ?? 0 }}
-  </span>
-</a>
+      <a href=class="position-relative ms-3">
+        <i class='bx bx-package fs-4'></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+          {{ $productosStockBajo ?? 0 }}
+        </span>
+      </a>
 
 
       <i class='bx bx-sun' id="darkLight"></i>
-  <a href="{{ route('admin.ventas.pendientes') }}" class="position-relative">
-    <i id="iconoNotificacion" class='bx bx-bell fs-4'></i>
-    <span id="contadorVentas" 
+      <a href="{{ route('admin.ventas.pendientes') }}" class="position-relative">
+        <i id="iconoNotificacion" class='bx bx-bell fs-4'></i>
+        <span id="contadorVentas"
           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
-    </span>
-</a>
+        </span>
+      </a>
 
 
 
-    @auth
-<div class="dropdown">
-    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
-        id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative;">
-        
-        {{-- Avatar con punto verde --}}
-        <div style="position: relative; display: inline-block;">
-            @if(Auth::user()->imagen)
-                <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
-                    alt="Avatar"
-                    class="rounded-circle"
-                    style="width: 40px; height: 40px; object-fit: cover;" />
-            @else
+      @auth
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser"
+            data-bs-toggle="dropdown" aria-expanded="false" style="position: relative;">
+
+            {{-- Avatar con punto verde --}}
+            <div style="position: relative; display: inline-block;">
+              @if(Auth::user()->imagen)
+                <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}" alt="Avatar"
+                  class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+              @else
                 <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #555;"></i>
-            @endif
+              @endif
 
-            {{-- Punto verde --}}
-            <span style="
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                width: 12px;
-                height: 12px;
-                background-color: #28a745;
-                border-radius: 50%;
-                border: 2px solid white;">
-            </span>
-        </div>
-
-        {{-- Nombre y rol --}}
-        <div class="ms-2 d-none d-sm-block">
-            <div style="font-size: 0.9rem; font-weight: 500;">
-              {{ Auth::user()->name }} {{ Auth::user()->cliente->apellido_paterno ?? '' }}
-
-
+              {{-- Punto verde --}}
+              <span style="
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    width: 12px;
+                    height: 12px;
+                    background-color: #28a745;
+                    border-radius: 50%;
+                    border: 2px solid white;">
+              </span>
             </div>
-            <div style="font-size: 0.75rem; color: gray;">
-                 {{ Auth::user()->rol->tipo ?? 'N/A' }}
-            </div>
-        </div>
-    </a>
 
-    {{-- Menú desplegable --}}
-    <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
-        <li>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+            {{-- Nombre y rol --}}
+            <div class="ms-2 d-none d-sm-block">
+              <div style="font-size: 0.9rem; font-weight: 500;">
+                {{ Auth::user()->name }} {{ Auth::user()->cliente->apellido_paterno ?? '' }}
+
+
+              </div>
+              <div style="font-size: 0.75rem; color: gray;">
+                {{ Auth::user()->rol->tipo ?? 'N/A' }}
+              </div>
+            </div>
+          </a>
+
+          {{-- Menú desplegable --}}
+          <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
+            <li>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="m-0 p-0">
                 @csrf
                 <button type="submit" class="dropdown-item">
-                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                  <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
                 </button>
-            </form>
-        </li>
-    </ul>
-</div>
-@endauth
+              </form>
+            </li>
+          </ul>
+        </div>
+      @endauth
 
 
     </div>
@@ -120,147 +118,147 @@
   <!-- Contenedor principal con sidebar y contenido -->
   <div style="display: flex;">
     @if(View::hasSection('admin-sidebar'))
-    @yield('admin-sidebar')
+      @yield('admin-sidebar')
     @else
-    <nav class="sidebar">
-      <div class="menu_content">
-        <ul class="menu_items">
-          <div class="menu_title menu_dahsboard"></div>
-          <!-- start -->
-          <li class="item">
-            <a href="{{ route('welcome') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-home-alt"></i>
-              </span>
-              <span class="navlink">Inicio</span>
-            </a>
-          </li>
-          <li class="item">
-            <a href="{{ route('admin.dashboard') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-layout"></i>
-              </span>
-              <span class="navlink">Dashboard</span>
-            </a>
-          </li>
-          <!-- end -->
-          <li class="item">
-            <div href="" class="nav_link submenu_item">
-              <span class="navlink_icon">
-                <i class="bx bx-grid-alt"></i>
-              </span>
-              <span class="navlink">Overview</span>
-              <i class="bx bx-chevron-right arrow-left"></i>
+      <nav class="sidebar">
+        <div class="menu_content">
+          <ul class="menu_items">
+            <div class="menu_title menu_dahsboard"></div>
+            <!-- start -->
+            <li class="item">
+              <a href="{{ route('welcome') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-home-alt"></i>
+                </span>
+                <span class="navlink">Inicio</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="{{ route('admin.dashboard') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-layout"></i>
+                </span>
+                <span class="navlink">Dashboard</span>
+              </a>
+            </li>
+            <!-- end -->
+            <li class="item">
+              <div href="" class="nav_link submenu_item">
+                <span class="navlink_icon">
+                  <i class="bx bx-grid-alt"></i>
+                </span>
+                <span class="navlink">Overview</span>
+                <i class="bx bx-chevron-right arrow-left"></i>
+              </div>
+              <ul class="menu_items submenu">
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                <a href="#" class="nav_link sublink">Nav Sub Link</a>
+              </ul>
+            </li>
+          </ul>
+
+          <hr class="hr-rojo">
+
+          <ul class="menu_items">
+            <div class="menu_title menu_editor"></div>
+
+
+
+            <li class="item">
+              <a href="{{ route('empleados.create') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-user-plus ico"></i>
+                </span>
+                <span class="navlink">Crear Empleados</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="{{ route('usuarios.index') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-group"></i>
+                </span>
+                <span class="navlink">Empleados</span>
+              </a>
+            </li>
+
+            <li class="item">
+              <a href="{{ route('admin.account.edit') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-user-circle"></i>
+                </span>
+                <span class="navlink">Editar Perfil</span>
+              </a>
+            </li>
+
+            <li class="item">
+              <a href="{{ route('usuarios.clientes') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-user"></i>
+                </span>
+                <span class="navlink">Usuarios</span>
+              </a>
+            </li>
+          </ul>
+
+          <hr class="hr-rojo">
+
+          <ul class="menu_items">
+            <div class="menu_title menu_setting"></div>
+
+            <li class="item">
+              <a href="{{ route('productos.index') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-package icon"></i>
+                </span>
+                <span class="navlink">Productos</span>
+              </a>
+            </li>
+            <li class="item">
+              <a href="{{ route('admin.ventas.pendientes') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-time-five"></i>
+                </span>
+                <span class="navlink">Ventas pendientes</span>
+              </a>
+            </li>
+
+
+
+
+            <li class="item">
+              <a href="{{ route('admin.ventas.entregadas') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-check-circle"></i>
+                </span>
+                <span class="navlink">Ventas entregadas</span>
+              </a>
+            </li>
+
+
+            <li class="item">
+              <a href="{{ route('admin.productos.agotados') }}" class="nav_link">
+                <span class="navlink_icon">
+                  <i class="bx bx-layer"></i>
+                </span>
+                <span class="navlink">Productos Agotado</span>
+              </a>
+            </li> 
+          </ul>
+
+          <div class="bottom_content">
+            <div class="bottom expand_sidebar">
+              <span> Expand</span>
+              <i class='bx bx-log-in'></i>
             </div>
-            <ul class="menu_items submenu">
-              <a href="#" class="nav_link sublink">Nav Sub Link</a>
-              <a href="#" class="nav_link sublink">Nav Sub Link</a>
-              <a href="#" class="nav_link sublink">Nav Sub Link</a>
-              <a href="#" class="nav_link sublink">Nav Sub Link</a>
-            </ul>
-          </li>
-        </ul>
-
-        <hr class="hr-rojo">
-
-        <ul class="menu_items">
-          <div class="menu_title menu_editor"></div>
-
-
-
-          <li class="item">
-            <a href="{{ route('empleados.create') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-user-plus ico"></i>
-              </span>
-              <span class="navlink">Crear Empleados</span>
-            </a>
-          </li>
-          <li class="item">
-            <a href="{{ route('usuarios.index') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-group"></i>
-              </span>
-              <span class="navlink">Empleados</span>
-            </a>
-          </li>
-
-          <li class="item">
-            <a href="{{ route('admin.account.edit') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-user-circle"></i>
-              </span>
-              <span class="navlink">Editar Perfil</span>
-            </a>
-          </li>
-
-          <li class="item">
-            <a href="{{ route('usuarios.clientes') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-user"></i>
-              </span>
-              <span class="navlink">Usuarios</span>
-            </a>
-          </li>
-        </ul>
-
-        <hr class="hr-rojo">
-
-        <ul class="menu_items">
-          <div class="menu_title menu_setting"></div>
-
-          <li class="item">
-            <a href="{{ route('productos.index') }}" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-package icon"></i>
-              </span>
-              <span class="navlink">Productos</span>
-            </a>
-          </li>
-       <li class="item">
-  <a href="{{ route('admin.ventas.pendientes') }}" class="nav_link">
-    <span class="navlink_icon">
-      <i class="bx bx-time-five"></i>
-    </span>
-    <span class="navlink">Ventas pendientes</span>
-  </a>
-</li>
-
-
-
-
-         <li class="item">
-  <a href="{{ route('admin.ventas.entregadas') }}" class="nav_link">
-    <span class="navlink_icon">
-      <i class="bx bx-check-circle"></i>
-    </span>
-    <span class="navlink">Ventas entregadas</span>
-  </a>
-</li>
-
-
-          <li class="item">
-            <a href="#" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-layer"></i>
-              </span>
-              <span class="navlink">Null</span>
-            </a>
-          </li>
-        </ul>
-
-        <div class="bottom_content">
-          <div class="bottom expand_sidebar">
-            <span> Expand</span>
-            <i class='bx bx-log-in'></i>
-          </div>
-          <div class="bottom collapse_sidebar">
-            <span> Collapse</span>
-            <i class='bx bx-log-out'></i>
+            <div class="bottom collapse_sidebar">
+              <span> Collapse</span>
+              <i class='bx bx-log-out'></i>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
     @endif
   </div>
 
@@ -272,7 +270,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  
+
   <!-- JavaScript -->
   <script>
     const body = document.querySelector("body");
@@ -324,20 +322,20 @@
       sidebar.classList.remove("close");
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       @if(session('success'))
-      Swal.fire({
-        icon: 'success',
-        title: '¡Éxito!',
-        text: '{{ session('
-        success ') }}',
-        confirmButtonColor: '#198754', // verde Bootstrap
-        background: '#f0f8ff', // color de fondo suave (opcional)
-        color: '#000', // texto en negro
-        timer: 2500,
-        showConfirmButton: false,
-        position: 'center' // 👈 Esto asegura que sea centrado
-      });
+        Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: '{{ session('
+            success ') }}',
+          confirmButtonColor: '#198754', // verde Bootstrap
+          background: '#f0f8ff', // color de fondo suave (opcional)
+          color: '#000', // texto en negro
+          timer: 2500,
+          showConfirmButton: false,
+          position: 'center' // 👈 Esto asegura que sea centrado
+        });
       @endif
     });
   </script>
@@ -348,30 +346,27 @@
 
 </html>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function () {
     let contador = document.getElementById("contadorVentas");
     let icono = document.getElementById("iconoNotificacion");
 
     function verificarVentasPendientes() {
-        fetch('/ventas-pendientes-count')
-            .then(res => res.json())
-            .then(data => {
-                if (data.count > 0) {
-                    contador.textContent = data.count;
-                    contador.classList.remove('d-none');
-                    icono.classList.add('text-danger', 'bx-tada');
-                } else {
-                    contador.classList.add('d-none');
-                    icono.classList.remove('text-danger', 'bx-tada');
-                }
-            })
-            .catch(err => console.error(err));
+      fetch('/ventas-pendientes-count')
+        .then(res => res.json())
+        .then(data => {
+          if (data.count > 0) {
+            contador.textContent = data.count;
+            contador.classList.remove('d-none');
+            icono.classList.add('text-danger', 'bx-tada');
+          } else {
+            contador.classList.add('d-none');
+            icono.classList.remove('text-danger', 'bx-tada');
+          }
+        })
+        .catch(err => console.error(err));
     }
 
     setInterval(verificarVentasPendientes, 5000);
     verificarVentasPendientes();
-});
+  });
 </script>
-
-
-

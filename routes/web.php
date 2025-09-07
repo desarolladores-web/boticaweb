@@ -77,10 +77,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Ruta para actualizar la contraseña
     Route::put('/account/password/update', [ProfileController::class, 'updatePassword'])->name('account.password.update');
-// Página de cuenta (perfil, contraseña, pedidos, etc.)
-Route::get('/account/{section?}', [ProfileController::class, 'edit'])
-    ->name('account')
-    ->middleware('auth');
+    // Página de cuenta (perfil, contraseña, pedidos, etc.)
+    Route::get('/account/{section?}', [ProfileController::class, 'edit'])
+        ->name('account')
+        ->middleware('auth');
 
 
 });
@@ -99,6 +99,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
     Route::get('/usuarios/clientes', [UserController::class, 'clientes'])->name('usuarios.clientes');
     Route::resource('productos', ProductoController::class);
+
+    Route::get('/admin/productos-agotados', [AdminController::class, 'productosAgotados'])
+        ->name('admin.productos.agotados');
+
+    Route::put('/admin/productos/update-stock', [AdminController::class, 'updateStock'])
+    ->name('admin.productos.updateStock');
 
 
 

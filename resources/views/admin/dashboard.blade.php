@@ -1,7 +1,6 @@
 
 @extends('layouts.admin')
 
-  
 
 @section('content')
   <div class="container-fluid py-4">
@@ -23,22 +22,25 @@
           </div>
         </div>
       </div>
+
       <div class="col-md-3 mb-3">
         <div class="card shadow-sm text-center">
           <div class="card-body">
-            <h6 class="text-muted">Productos Críticos</h6>
-            <h4 class="fw-bold text-danger">{{ $productosCriticos }}</h4>
+            <h6 class="text-muted">Stock mínimo</h6>
+            <h4 class="fw-bold text-warning">{{ $productosCriticos }}</h4>
           </div>
         </div>
       </div>
+
       <div class="col-md-3 mb-3">
         <div class="card shadow-sm text-center">
           <div class="card-body">
-            <h6 class="text-muted">Reclamos Pendientes</h6>
-            <h4 class="fw-bold text-warning">{{ $reclamosPendientes }}</h4>
+            <h6 class="text-muted">Productos vendidos hoy</h6>
+            <h4 class="fw-bold text-success">{{ $ventasHoy }}</h4>
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- Gráficos -->
@@ -61,24 +63,7 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-info text-white">Métodos de Pago</div>
-          <div class="card-body">
-            <canvas id="metodoPago"></canvas>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-warning text-white">Reclamos por Estado</div>
-          <div class="card-body">
-            <canvas id="reclamosEstado"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -112,7 +97,7 @@
       options: {
         indexAxis: 'y', // <- Esto lo hace horizontal
         responsive: true,
-        plugins: {  
+        plugins: {
           legend: {
             position: 'top',
           },
@@ -128,28 +113,6 @@
       }
     });
 
-    // Métodos de pago
-    new Chart(document.getElementById('metodoPago'), {
-      type: 'doughnut',
-      data: {
-        labels: {!! json_encode(array_keys($metodosPago->toArray())) !!},
-        datasets: [{
-          data: {!! json_encode(array_values($metodosPago->toArray())) !!},
-          backgroundColor: ['#0dcaf0', '#6610f2', '#fd7e14']
-        }]
-      }
-    });
-
-    // Reclamos por estado
-    new Chart(document.getElementById('reclamosEstado'), {
-      type: 'pie',
-      data: {
-        labels: {!! json_encode(array_keys($reclamosEstado->toArray())) !!},
-        datasets: [{
-          data: {!! json_encode(array_values($reclamosEstado->toArray())) !!},
-          backgroundColor: ['#ffc107', '#198754', '#0d6efd']
-        }]
-      }
-    });
+    
   </script>
 @endsection

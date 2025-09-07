@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -19,15 +20,22 @@ class AdminController extends Controller
             ->whereDate('created_at', today())
             ->count();
 
-        // Productos críticos (stock < 10 por ejemplo)
-        $productosCriticos = DB::table('productos')
-            ->where('stock', '<', 10)
+        // Productos agotados (stock = 0)
+        $productosAgotados = DB::table('productos')
+            ->where('stock', '<=', 0)
             ->count();
 
-        // Reclamos pendientes
-        $reclamosPendientes = DB::table('reclamos')
-            ->where('estado', 'Pendiente')
+        // Productos críticos (stock <= stock_min)  
+        $productosCriticos = DB::table('productos')
+            ->whereColumn('stock', '<=', 'stock_min')
             ->count();
+
+        // Ventas de hoy (depende de tus tablas: ventas/detalle_ventas)
+        $ventasHoy = DB::table('detalle_ventas as dv')
+            ->join('ventas as v', 'dv.venta_id', '=', 'v.id')
+            ->whereDate('v.created_at', Carbon::today())
+            ->sum('dv.cantidad');
+
 
         // Ventas por mes (últimos 6 meses)
         $ventasMes = DB::table('ventas')
@@ -44,28 +52,43 @@ class AdminController extends Controller
             ->orderByDesc('total')
             ->limit(5)
             ->pluck('total', 'productos.nombre');
-
-        // Métodos de pago
-        $metodosPago = DB::table('ventas')
-            ->join('metodo_pagos', 'ventas.metodo_pago_id', '=', 'metodo_pagos.id')
-            ->select('metodo_pagos.nombre as metodo_pago', DB::raw('COUNT(*) as total'))
-            ->groupBy('metodo_pagos.nombre')
-            ->pluck('total', 'metodo_pago');
-        // Reclamos por estado
-        $reclamosEstado = DB::table('reclamos')
-            ->select('estado', DB::raw('COUNT(*) as total'))
-            ->groupBy('estado')
-            ->pluck('total', 'estado');
-
+            
+            
         return view('admin.dashboard', compact(
             'ventasHoy',
             'clientesNuevos',
+            'productosAgotados',
             'productosCriticos',
-            'reclamosPendientes',
+            
             'ventasMes',
-            'topProductos',
-            'metodosPago',
-            'reclamosEstado'
+            'topProductos'
         ));
+    }
+    public function productosAgotados()
+    {
+        $productos = DB::table('productos')
+            ->select('id', 'codigo', 'nombre', 'stock', 'stock_min')
+            ->get();
+
+        return view('admin.productos_agotados', compact('productos'));
+    }
+
+    public function updateStock(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:productos,id',
+            'stock' => 'required|integer|min:0'
+        ]);
+
+        DB::table('productos')
+            ->where('id', $request->id)
+            ->update([
+                'stock' => $request->stock,
+                'updated_at' => now()
+            ]);
+
+        return redirect()
+            ->route('admin.productos.agotados')
+            ->with('success', '✅ Stock actualizado correctamente.');
     }
 }

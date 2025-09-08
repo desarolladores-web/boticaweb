@@ -16,7 +16,6 @@ export default defineConfig({
             ],
 
             refresh: true,
-            useBuildDirectory: false, // Evita la carpeta .vite
         }),
     ],
     build: {

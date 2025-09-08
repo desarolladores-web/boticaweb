@@ -20,8 +20,8 @@ export default defineConfig({
     ],
     build: {
         outDir: "public/build",
-        manifest: true,
         emptyOutDir: true,
+        manifest: "manifest.json", // 👈 fuerza nombre
         rollupOptions: {
             output: {
                 entryFileNames: "assets/[name]-[hash].js",

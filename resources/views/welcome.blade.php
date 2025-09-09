@@ -33,8 +33,8 @@
                         style="min-height: 65vh; background: url('{{ asset('imagenes/hero_bg.jpg') }}') no-repeat center center / cover;">
                         <div class="overlay"></div>
                         <div class="container px-3 position-relative">
-                            <h1 class="display-5 fw-bold text-white">Rouse <span class="text-success">Niña hermosa </span>
-                            </h1>
+                            <h1 class="display-5 fw-bold text-white">Tu salud, <span class="text-success">nuestra
+                                    prioridad</span></h1>
                             <p class="lead text-white mb-4">Atención personalizada y medicamentos confiables <br
                                     class="d-none d-md-block">para ti y tu familia, cada día.</p>
                             <a href="{{ url('/producto-filtro') }}" class="btn btn-light btn-lg px-4 fw-semibold">Ver

@@ -266,9 +266,12 @@
                     @endforelse
 
                     @php
-                        // Comisión: 3.49% del total + 1 sol fijo
-                        $comision = round($total * 0.0399 + 1, 2);
-                        $totalConComision = $total + $comision;
+                        // Cálculo de comisión corregido (igual que en el controlador)
+                        $tarifa = 0.0399; // 3.99%
+                        $fijo = 1.0; // fijo en soles
+
+                        $totalConComision = ($total + $fijo) / (1 - $tarifa);
+                        $comision = $totalConComision - $total;
                     @endphp
 
                     <hr>
@@ -285,6 +288,7 @@
                         <strong>Total</strong>
                         <span class="text-danger fw-bold">S/ {{ number_format($totalConComision, 2) }}</span>
                     </div>
+
 
                     <div class="mt-4">
                         <button type="button" class="btn btn-danger w-100" onclick="validarFormulario();">

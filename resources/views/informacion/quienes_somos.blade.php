@@ -73,8 +73,8 @@
 
                 <!-- Columna 2 -->
                 <div class="col-md-6 mb-4">
-                    <h6 class="mb-3 text-muted">Niña linda a 10 metros de tu corazon </h6>
-                    <img src="{{ asset('imagenes/rose.jpeg') }}" alt="Botica Myryan" title="Botica Myryan"
+                    <h6 class="mb-3 text-muted">Botica 2: CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA TINGUIÑA</h6>
+                    <img src="{{ asset('imagenes/boticamirianfisico.png') }}" alt="Botica Myryan" title="Botica Myryan"
                         class="img-fluid w-75">
                 </div>
             </div>

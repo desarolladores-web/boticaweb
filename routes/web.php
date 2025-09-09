@@ -77,12 +77,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Ruta para actualizar la contraseña
     Route::put('/account/password/update', [ProfileController::class, 'updatePassword'])->name('account.password.update');
-// Página de cuenta (perfil, contraseña, pedidos, etc.)
-Route::get('/account/{section?}', [ProfileController::class, 'edit'])
-    ->name('account')
-    ->middleware('auth');
-
-
+    // Página de cuenta (perfil, contraseña, pedidos, etc.)
+    Route::get('/account/{section?}', [ProfileController::class, 'edit'])
+        ->name('account')
+        ->middleware('auth');
 });
 
 // RUTAS EXCLUSIVAS PARA ADMIN
@@ -104,7 +102,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         ->name('admin.productos.agotados');
 
     Route::put('/admin/productos/update-stock', [AdminController::class, 'updateStock'])
-    ->name('admin.productos.updateStock');
+        ->name('admin.productos.updateStock');
 
 
 
@@ -138,18 +136,10 @@ Route::post('/checkout/guardar-datos', [CheckoutController::class, 'guardarDatos
 
 
 
-Route::get('/pago/exito', function () {
-    return 'Pago exitoso';
-})->name('pago.exito');
-
-Route::get('/pago/fallo', function () {
-    return 'Pago fallido';
-})->name('pago.fallo');
-
-Route::get('/pago/pendiente', function () {
-    return 'Pago pendiente';
-})->name('pago.pendiente');
-
+// Rutas de callbacks de Mercado Pago
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::get('/checkout/failure', [CheckoutController::class, 'failure'])->name('checkout.failure');
+Route::get('/checkout/pending', [CheckoutController::class, 'pending'])->name('checkout.pending');
 
 
 

@@ -30,10 +30,10 @@
                 <div class="carousel-item active">
                     <section
                         class="hero-section d-flex align-items-center justify-content-center text-center text-white position-relative"
-                        style="min-height: 65vh; background: url('{{ asset('imagenes/hero_bg.jpg') }}') no-repeat center center / cover;">
+                        style="min-height: 65vh; background: url('{{ asset('imagenes/rose.jpeg') }}') no-repeat center center / cover;">
                         <div class="overlay"></div>
                         <div class="container px-3 position-relative">
-                            <h1 class="display-5 fw-bold text-white">Tu salud, <span class="text-success">nuestra
+                            <h1 class="display-5 fw-bold text-white">niña linda <span class="text-success">nuestra
                                     prioridad</span></h1>
                             <p class="lead text-white mb-4">Atención personalizada y medicamentos confiables <br
                                     class="d-none d-md-block">para ti y tu familia, cada día.</p>

@@ -58,10 +58,14 @@ class CheckoutController extends Controller
             'checkout_carrito' => $carrito
         ]);
 
-        // 👉 Calcular subtotal y comisión (Perú)
+        // 👉 Calcular subtotal y comisión (fórmula inversa para Perú)
         $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
-        $comision = round(($subtotal * 0.0349 * 1.18) + 1.18, 2);
-        $total = $subtotal + $comision;
+        $porcentaje = 0.0349;
+        $igv = 1.18;
+        $fijo = 1.18;
+
+        $total = round(($subtotal + $fijo) / (1 - ($porcentaje * $igv)), 2);
+        $comision = $total - $subtotal;
 
         // 👉 Crear preferencia Mercado Pago
         SDK::setAccessToken(config('services.mercadopago.token'));
@@ -80,12 +84,10 @@ class CheckoutController extends Controller
             $lineCommission = ($subtotal > 0) ? ($lineTotal / $subtotal) * $comision : 0;
 
             if ($i < $count) {
-                // todos menos el último
                 $lineWithCommission = round($lineTotal + $lineCommission, 2);
                 $unit_price = round($lineWithCommission / $quantity, 2);
                 $assigned_total += $unit_price * $quantity;
             } else {
-                // último item ajusta para cuadrar con el total exacto
                 $remaining_total = round($total - $assigned_total, 2);
                 if ($remaining_total <= 0) {
                     $lineWithCommission = round($lineTotal + $lineCommission, 2);
@@ -157,10 +159,14 @@ class CheckoutController extends Controller
             $cliente_id = $cliente->id;
         }
 
-        // 👉 Totales (Perú)
+        // 👉 Totales (misma fórmula inversa)
         $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
-        $comision = round(($subtotal * 0.0349 * 1.18) + 1.18, 2);
-        $total = $subtotal + $comision;
+        $porcentaje = 0.0349;
+        $igv = 1.18;
+        $fijo = 1.18;
+
+        $total = round(($subtotal + $fijo) / (1 - ($porcentaje * $igv)), 2);
+        $comision = $total - $subtotal;
 
         // 👉 Guardar venta
         $venta = Venta::create([

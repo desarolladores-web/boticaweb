@@ -58,9 +58,9 @@ class CheckoutController extends Controller
             'checkout_carrito' => $carrito
         ]);
 
-        // 👉 Calcular subtotal y comisión
+        // 👉 Calcular subtotal y comisión (Perú)
         $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
-        $comision = round(($subtotal * 0.0399) + 1, 2); // comisión + 1 sol
+        $comision = round(($subtotal * 0.0349 * 1.18) + 1.18, 2);
         $total = $subtotal + $comision;
 
         // 👉 Crear preferencia Mercado Pago
@@ -157,9 +157,9 @@ class CheckoutController extends Controller
             $cliente_id = $cliente->id;
         }
 
-        // 👉 Totales
+        // 👉 Totales (Perú)
         $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
-        $comision = round(($subtotal * 0.0399) + 1, 2);
+        $comision = round(($subtotal * 0.0349 * 1.18) + 1.18, 2);
         $total = $subtotal + $comision;
 
         // 👉 Guardar venta

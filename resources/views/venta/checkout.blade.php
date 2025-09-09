@@ -266,12 +266,28 @@
                     @endforelse
 
                     @php
-                        // Cálculo de comisión corregido (igual que en el controlador)
-                        $tarifa = 0.0399; // 3.99%
-                        $fijo = 1.0; // fijo en soles
+                        /**
+                         * CÁLCULOS ALINEADOS CON EL CONTROLADOR (fórmula inversa usada ahí)
+                         *
+                         * Por el controlador que tienes:
+                         * $porcentaje = 0.0349; // 3.49%
+                         * $igv = 1.18;          // IGV aplicado sobre la comisión
+                         * $fijo = 1.18;         // monto fijo en soles
+                         *
+                         * totalConComision = round( (subtotal + fijo) / (1 - (porcentaje * igv)), 2 )
+                         * comision = totalConComision - subtotal
+                         */
+                        $porcentaje = 0.0349;
+                        $igv = 1.18;
+                        $fijo = 1.18;
 
-                        $totalConComision = ($total + $fijo) / (1 - $tarifa);
-                        $comision = $totalConComision - $total;
+                        if ($total > 0) {
+                            $totalConComision = round(($total + $fijo) / (1 - $porcentaje * $igv), 2);
+                            $comision = round($totalConComision - $total, 2);
+                        } else {
+                            $totalConComision = 0.0;
+                            $comision = 0.0;
+                        }
                     @endphp
 
                     <hr>
@@ -289,17 +305,15 @@
                         <span class="text-danger fw-bold">S/ {{ number_format($totalConComision, 2) }}</span>
                     </div>
 
-
                     <div class="mt-4">
                         <button type="button" class="btn btn-danger w-100" onclick="validarFormulario();">
                             Comprar ahora
                         </button>
                     </div>
 
-
                 </div>
-
             </div>
+
         </div>
     </div>
     </div>

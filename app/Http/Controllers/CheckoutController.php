@@ -52,32 +52,60 @@ class CheckoutController extends Controller
             return response()->json(['error' => $e->errors()], 422);
         }
 
-        // Guardamos los datos en sesión para usarlos al confirmar el pago
+        // Guardamos datos en sesión
         session([
             'checkout_cliente' => $validated,
             'checkout_carrito' => $carrito
         ]);
 
-        // Calcular subtotal y comisión
+        // 👉 Calcular subtotal y comisión
         $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
-        $comision = round(($subtotal * 0.0399) + 1, 2);
+        $comision = round(($subtotal * 0.0399) + 1, 2); // comisión + 1 sol
         $total = $subtotal + $comision;
 
-        // Crear preferencia de MercadoPago
+        // 👉 Crear preferencia Mercado Pago
         SDK::setAccessToken(config('services.mercadopago.token'));
 
         $items = [];
+        $count = count($carrito);
+        $assigned_total = 0.0;
+        $i = 0;
+
         foreach ($carrito as $itemCarrito) {
+            $i++;
+            $quantity = (int) $itemCarrito['cantidad'];
+            $lineTotal = $itemCarrito['precio'] * $quantity;
+
+            // Parte proporcional de la comisión
+            $lineCommission = ($subtotal > 0) ? ($lineTotal / $subtotal) * $comision : 0;
+
+            if ($i < $count) {
+                // todos menos el último
+                $lineWithCommission = round($lineTotal + $lineCommission, 2);
+                $unit_price = round($lineWithCommission / $quantity, 2);
+                $assigned_total += $unit_price * $quantity;
+            } else {
+                // último item ajusta para cuadrar con el total exacto
+                $remaining_total = round($total - $assigned_total, 2);
+                if ($remaining_total <= 0) {
+                    $lineWithCommission = round($lineTotal + $lineCommission, 2);
+                    $unit_price = round($lineWithCommission / $quantity, 2);
+                } else {
+                    $unit_price = round($remaining_total / $quantity, 2);
+                }
+            }
+
             $item = new Item();
             $item->title = $itemCarrito['nombre'] ?? 'Producto';
-            $item->quantity = (int) $itemCarrito['cantidad'];
-            $item->unit_price = (float) $itemCarrito['precio'];
+            $item->quantity = $quantity;
+            $item->unit_price = (float) $unit_price;
             $items[] = $item;
         }
 
         $preference = new Preference();
         $preference->items = $items;
 
+        // 👉 Datos del cliente
         $payer = new Payer();
         $payer->name = $validated['nombres'];
         $payer->surname = $validated['apellido_paterno'] . ' ' . $validated['apellido_materno'];
@@ -112,7 +140,7 @@ class CheckoutController extends Controller
             return redirect()->route('welcome')->with('error', 'No se encontraron datos del pedido.');
         }
 
-        // Crear o recuperar cliente
+        // 👉 Crear o recuperar cliente
         $user = auth()->user();
         if ($user && $user->cliente_id) {
             $cliente_id = $user->cliente_id;
@@ -129,12 +157,12 @@ class CheckoutController extends Controller
             $cliente_id = $cliente->id;
         }
 
-        // Calcular totales
+        // 👉 Totales
         $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
         $comision = round(($subtotal * 0.0399) + 1, 2);
         $total = $subtotal + $comision;
 
-        // Guardar venta
+        // 👉 Guardar venta
         $venta = Venta::create([
             'cliente_id' => $cliente_id,
             'fecha' => now(),
@@ -145,7 +173,7 @@ class CheckoutController extends Controller
             'estado_venta_id' => 1,
         ]);
 
-        // Guardar detalles
+        // 👉 Detalles
         foreach ($carrito as $item) {
             DetalleVenta::create([
                 'venta_id' => $venta->id,
@@ -163,7 +191,6 @@ class CheckoutController extends Controller
             }
         }
 
-        // Limpiar sesiones
         session()->forget(['checkout_cliente', 'checkout_carrito', 'carrito']);
 
         return redirect()->route('welcome')->with('success', '¡Compra realizada con éxito!');

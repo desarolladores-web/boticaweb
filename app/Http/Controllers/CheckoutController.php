@@ -9,7 +9,6 @@ use App\Models\Venta;
 use App\Models\DetalleVenta;
 use App\Models\TipoDocumento;
 use App\Models\Sucursal;
-use App\Models\Producto;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 
@@ -31,8 +30,8 @@ class CheckoutController extends Controller
         return view('venta.checkout', compact('sucursales', 'tiposDocumento', 'carrito', 'total'));
     }
 
-    // 🔹 Paso 1: Crear preferencia de Mercado Pago
-    public function crearPreferencia(Request $request)
+    // 👉 Guardar datos en BD directamente (sin MercadoPago)
+    public function guardarDatosYRedirigir(Request $request)
     {
         $carrito = session()->get('carrito', []);
 
@@ -55,18 +54,62 @@ class CheckoutController extends Controller
             return response()->json(['error' => $e->errors()], 422);
         }
 
-        // Guardamos temporalmente datos en sesión para usarlos después
-        session([
-            'checkout_datos' => $validated,
-            'checkout_carrito' => $carrito
-        ]);
+        $user = auth()->user();
+        if ($user && $user->cliente_id) {
+            $cliente_id = $user->cliente_id;
+        } else {
+            $cliente = Cliente::create([
+                'nombre' => $validated['nombres'],
+                'apellido_paterno' => $validated['apellido_paterno'],
+                'apellido_materno' => $validated['apellido_materno'],
+                'email' => $validated['correo'],
+                'tipo_documento_id' => $validated['tipo_documento_id'],
+                'DNI' => $validated['numero_documento'],
+                'telefono' => $validated['celular'],
+            ]);
+            $cliente_id = $cliente->id;
+        }
 
-        // Calcular subtotal y comisión
+        // 👉 Calcular subtotal y comisión
         $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
+
+        // Comisión Mercado Pago (3.79% aprox.)
         $comision = round(($subtotal * 0.0399) + 1, 2);
+
+        // Total final
         $total = $subtotal + $comision;
 
-        // Configurar SDK
+        // 👉 Guardar venta en BD
+        $venta = Venta::create([
+            'cliente_id' => $cliente_id,
+            'fecha' => now(),
+            'igv' => $comision, // usamos este campo para guardar la comisión, ya que pediste no cambiar el nombre
+            'subtotal' => $subtotal,
+            'total' => $total,
+            'metodo_pago_id' => null,
+            'estado_venta_id' => 1,
+        ]);
+
+        // 👉 Registrar detalles de la venta
+        foreach ($carrito as $item) {
+            DetalleVenta::create([
+                'venta_id' => $venta->id,
+                'producto_id' => $item['id'],
+                'cantidad' => $item['cantidad'],
+                'precio_venta' => $item['precio'],
+                'sucursal_id' => $validated['sucursal_id'],
+                'user_id' => auth()->check() ? auth()->id() : null,
+            ]);
+
+            // 👉 Reducir stock
+            $producto = \App\Models\Producto::find($item['id']);
+            if ($producto) {
+                $producto->stock = max(0, $producto->stock - $item['cantidad']);
+                $producto->save();
+            }
+        }
+
+        // ✅ Crear preferencia Mercado Pago
         SDK::setAccessToken(config('services.mercadopago.token'));
 
         $items = [];
@@ -79,13 +122,16 @@ class CheckoutController extends Controller
             $quantity = (int) $itemCarrito['cantidad'];
             $lineTotal = $itemCarrito['precio'] * $quantity;
 
+            // Parte proporcional de la comisión (en base al subtotal)
             $lineCommission = ($subtotal > 0) ? ($lineTotal / $subtotal) * $comision : 0;
 
             if ($i < $count) {
+                // Para todos menos el último
                 $lineWithCommission = round($lineTotal + $lineCommission, 2);
                 $unit_price = round($lineWithCommission / $quantity, 2);
                 $assigned_total += $unit_price * $quantity;
             } else {
+                // Último ítem: ajusta para que cuadre exacto con $total
                 $remaining_total = round($total - $assigned_total, 2);
                 if ($remaining_total <= 0) {
                     $lineWithCommission = round($lineTotal + $lineCommission, 2);
@@ -105,7 +151,8 @@ class CheckoutController extends Controller
         $preference = new Preference();
         $preference->items = $items;
 
-        // Datos del comprador
+
+        // ✅ Agregar datos del cliente
         $payer = new Payer();
         $payer->name = $validated['nombres'];
         $payer->surname = $validated['apellido_paterno'] . ' ' . $validated['apellido_materno'];
@@ -124,90 +171,27 @@ class CheckoutController extends Controller
         ];
         $preference->payer = $payer;
 
-        // URLs de retorno
+
+
+
+
+
         $preference->back_urls = [
-            'success' => route('checkout.procesarPago', ['status' => 'approved']),
-            'failure' => route('checkout.procesarPago', ['status' => 'failure']),
-            'pending' => route('checkout.procesarPago', ['status' => 'pending']),
+            'success' => route('welcome') . '?status=approved',
+            'failure' => route('welcome') . '?status=failure',
+            'pending' => route('welcome') . '?status=pending',
         ];
 
-        $preference->auto_return = 'approved';
+
+
+        //recordarle a chat que todo esta en local 
+        //$preference->auto_return = 'approved';
+
         $preference->save();
 
+        // 👉 Limpiar carrito
+        session()->forget('carrito');
+
         return response()->json(['init_point' => $preference->init_point]);
-    }
-
-    // 🔹 Paso 2: Confirmar pago y guardar en BD
-    public function procesarPago(Request $request)
-    {
-        $status = $request->query('status'); // approved / failure / pending
-
-        if ($status !== 'approved') {
-            return redirect()->route('welcome')->with('error', 'El pago no fue aprobado.');
-        }
-
-        $validated = session('checkout_datos');
-        $carrito = session('checkout_carrito', []);
-
-        if (!$validated || empty($carrito)) {
-            return redirect()->route('welcome')->with('error', 'Datos de checkout no encontrados.');
-        }
-
-        // Crear cliente si no existe
-        $user = auth()->user();
-        if ($user && $user->cliente_id) {
-            $cliente_id = $user->cliente_id;
-        } else {
-            $cliente = Cliente::create([
-                'nombre' => $validated['nombres'],
-                'apellido_paterno' => $validated['apellido_paterno'],
-                'apellido_materno' => $validated['apellido_materno'],
-                'email' => $validated['correo'],
-                'tipo_documento_id' => $validated['tipo_documento_id'],
-                'DNI' => $validated['numero_documento'],
-                'telefono' => $validated['celular'],
-            ]);
-            $cliente_id = $cliente->id;
-        }
-
-        // Calcular subtotal y comisión
-        $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
-        $comision = round(($subtotal * 0.0399) + 1, 2);
-        $total = $subtotal + $comision;
-
-        // Crear venta
-        $venta = Venta::create([
-            'cliente_id' => $cliente_id,
-            'fecha' => now(),
-            'igv' => $comision,
-            'subtotal' => $subtotal,
-            'total' => $total,
-            'metodo_pago_id' => null,
-            'estado_venta_id' => 1,
-        ]);
-
-        // Crear detalle de venta
-        foreach ($carrito as $item) {
-            DetalleVenta::create([
-                'venta_id' => $venta->id,
-                'producto_id' => $item['id'],
-                'cantidad' => $item['cantidad'],
-                'precio_venta' => $item['precio'],
-                'sucursal_id' => $validated['sucursal_id'],
-                'user_id' => auth()->check() ? auth()->id() : null,
-            ]);
-
-            // Reducir stock
-            $producto = Producto::find($item['id']);
-            if ($producto) {
-                $producto->stock = max(0, $producto->stock - $item['cantidad']);
-                $producto->save();
-            }
-        }
-
-        // Limpiar sesión
-        session()->forget(['carrito', 'checkout_datos', 'checkout_carrito']);
-
-        return redirect()->route('welcome')->with('success', 'Pago confirmado y venta registrada correctamente.');
     }
 }

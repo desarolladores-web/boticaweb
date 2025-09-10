@@ -313,7 +313,7 @@
                     </div>
 
                     <div class="mt-4">
-                        <button type="button" id="btnComprar" class="btn btn-danger w-100 d-none"
+                        <button type="button" id="btnComprar" class="btn btn-danger w-100"
                             onclick="validarFormulario();">
                             Comprar ahora
                         </button>
@@ -408,105 +408,68 @@
     <script>
         function validarFormulario() {
             const formulario = document.getElementById('formCheckout');
-
-            if (formulario.checkValidity()) {
-                const formData = new FormData(formulario);
-
-                fetch("{{ route('checkout.guardar-datos') }}", {
-                    method: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    body: formData,
-                    credentials: 'same-origin' // 👈 ESTA LÍNEA ES CLAVE PARA QUE FUNCIONE LA SESIÓN
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.init_point) {
-                            window.location.href = data.init_point; // Redirige a Mercado Pago
-                        } else if (data.mensaje) {
-                            alert(data.mensaje);
-                        } else if (data.error) {
-                            alert("Error: " + data.error);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error al enviar los datos:', error);
-                        alert("Error al enviar los datos. Revisa la consola.");
-                    });
-            } else {
-                formulario.reportValidity();
-            }
-        }
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+            const celular = document.getElementById("celular").value.trim();
+            const numeroDoc = document.getElementById("numero_documento").value.trim();
             const tipoDoc = document.getElementById("tipo_documento");
-            const numeroDoc = document.getElementById("numero_documento");
-            const celular = document.getElementById("celular");
-            const btnComprar = document.getElementById("btnComprar");
-            const form = document.getElementById("formCheckout");
 
-            // Forzar solo números
-            [numeroDoc, celular].forEach(input => {
-                input.addEventListener("input", function () {
-                    this.value = this.value.replace(/\D/g, "");
-                    validarCampos();
-                });
-            });
-
-            // Validación dinámica de documento según tipo
-            tipoDoc.addEventListener("change", function () {
-                let selected = this.options[this.selectedIndex].text.toLowerCase();
-
-                if (selected.includes("dni")) {
-                    numeroDoc.maxLength = 8;
-                    numeroDoc.placeholder = "Ej: 12345678";
-                } else if (selected.includes("carnet")) {
-                    numeroDoc.maxLength = 8;
-                    numeroDoc.placeholder = "Ej: 12345678";
-                } else {
-                    numeroDoc.removeAttribute("maxlength");
-                    numeroDoc.placeholder = "Número de documento";
-                }
-                validarCampos();
-            });
-
-            // Función que valida todos los campos requeridos
-            function validarCampos() {
-                let valido = true;
-
-                // Validar nombres y apellidos no vacíos
-                form.querySelectorAll("input[required], select[required]").forEach(input => {
-                    if (!input.value.trim()) {
-                        valido = false;
-                    }
-                });
-
-                // Validar longitudes específicas
-                if (celular.value.length !== 9) valido = false;
-
-                let selected = tipoDoc.options[tipoDoc.selectedIndex]?.text?.toLowerCase() || "";
-                if (selected.includes("dni") && numeroDoc.value.length !== 8) valido = false;
-                if (selected.includes("carnet") && numeroDoc.value.length !== 8) valido = false;
-
-                // Validar checkboxes
-                if (!document.getElementById("termsCheck").checked) valido = false;
-                if (!document.getElementById("finalTermsCheck").checked) valido = false;
-
-                // Mostrar u ocultar botón
-                btnComprar.classList.toggle("d-none", !valido);
+            // Validar celular
+            if (celular.length !== 9) {
+                alert("El número de celular debe tener 9 dígitos.");
+                return;
             }
 
-            // Ejecutar validación inicial
-            validarCampos();
+            // Validar documento según tipo
+            let selected = tipoDoc.options[tipoDoc.selectedIndex]?.text?.toLowerCase() || "";
+            if ((selected.includes("dni") || selected.includes("carnet")) && numeroDoc.length !== 8) {
+                alert("El número de documento debe tener 8 dígitos.");
+                return;
+            }
 
-            // Escuchar cambios en todo el formulario
-            form.addEventListener("input", validarCampos);
-            form.addEventListener("change", validarCampos);
+            // Validación HTML5 normal
+            if (!formulario.checkValidity()) {
+                formulario.reportValidity();
+                return;
+            }
+
+            // Si todo está OK -> enviar
+            const formData = new FormData(formulario);
+
+            fetch("{{ route('checkout.guardar-datos') }}", {
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                body: formData,
+                credentials: 'same-origin'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.init_point) {
+                        window.location.href = data.init_point; // Redirige a Mercado Pago
+                    } else if (data.mensaje) {
+                        alert(data.mensaje);
+                    } else if (data.error) {
+                        alert("Error: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al enviar los datos:', error);
+                    alert("Error al enviar los datos. Revisa la consola.");
+                });
+        }
+
+        // Forzar solo números y máximo de dígitos
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("celular").addEventListener("input", function () {
+                this.value = this.value.replace(/\D/g, "").slice(0, 9); // solo números y máx 9 dígitos
+            });
+
+            document.getElementById("numero_documento").addEventListener("input", function () {
+                this.value = this.value.replace(/\D/g, "").slice(0, 8); // solo números y máx 8 dígitos
+            });
         });
     </script>
+
 
     <!-- Bootstrap 5 JS (necesario para que funcionen los modales, dropdowns, tooltips, etc.) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

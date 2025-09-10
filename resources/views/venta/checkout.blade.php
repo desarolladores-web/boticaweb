@@ -127,8 +127,7 @@
                 <div class="form-section">
                     <h4 class="mb-3 fw-bold">¡Ya falta poco para finalizar tu compra!</h4>
                     <p class="text-muted mb-4">
-                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a
-                            href="#">iniciar
+                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a href="#">iniciar
                             sesión</a>.
                     </p>
 
@@ -146,8 +145,7 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nombres *</label>
-                                <input type="text" class="form-control" name="nombres" required
-                                    placeholder="Ej: Renato"
+                                <input type="text" class="form-control" name="nombres" required placeholder="Ej: Renato"
                                     value="{{ $cliente?->nombre ?? (auth()->user()->name ?? '') }}">
                             </div>
                             <div class="col-md-6">
@@ -166,36 +164,42 @@
                                     placeholder="Ej: correo@dominio.com"
                                     value="{{ $cliente?->email ?? (auth()->user()->email ?? '') }}">
                             </div>
+                            <!-- Campo tipo documento -->
                             <div class="col-md-6">
                                 <label class="form-label">Tipo de documento</label>
-                                <select class="form-select" name="tipo_documento_id" required>
+                                <select class="form-select" name="tipo_documento_id" id="tipo_documento" required>
                                     <option value="" disabled @if (empty($cliente?->tipo_documento_id) && empty(optional(auth()->user())->tipo_documento_id)) selected @endif>
                                         Seleccione tipo de documento
                                     </option>
                                     @foreach ($tiposDocumento as $tipo)
-                                        <option value="{{ $tipo->id }}"
-                                            @if (($cliente?->tipo_documento_id ?? optional(auth()->user())->tipo_documento_id) == $tipo->id) selected @endif>
+                                        <option value="{{ $tipo->id }}" @if (($cliente?->tipo_documento_id ?? optional(auth()->user())->tipo_documento_id) == $tipo->id) selected @endif>
                                             {{ $tipo->nombre_documento }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
+                            <!-- Nro documento -->
                             <div class="col-md-6">
                                 <label class="form-label">Nro. de documento *</label>
-                                <input type="text" class="form-control" name="numero_documento" required
-                                    placeholder="Ej: 12345678" value="{{ $cliente?->DNI ?? '' }}">
+                                <input type="text" class="form-control" id="numero_documento" name="numero_documento"
+                                    required placeholder="Ej: 12345678" value="{{ $cliente?->DNI ?? '' }}">
                             </div>
+                            <!-- Celular -->
                             <div class="col-md-6">
                                 <label class="form-label">Celular *</label>
-                                <input type="text" class="form-control" name="celular" required
-                                    placeholder="Ej: 999 000 000" value="{{ $cliente?->telefono ?? '' }}">
+                                <input type="text" class="form-control" id="celular" name="celular" required
+                                    placeholder="Ej: 999000000" maxlength="9" value="{{ $cliente?->telefono ?? '' }}">
                             </div>
+
                         </div>
 
                         <div class="form-check mt-3">
                             <input type="checkbox" class="form-check-input" id="termsCheck" required>
                             <label for="termsCheck" class="form-check-label">
-                                He leído y acepto el <a href="#">tratamiento de mis datos personales</a>.
+                                He leído y acepto el
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#datosModal">
+                                    tratamiento de mis datos personales
+                                </a>.
                             </label>
                         </div>
 
@@ -220,12 +224,15 @@
                                 value="{{ $item['cantidad'] }}">
                         @endforeach
 
-                        <!-- Aceptar términos -->
+
                         <div class="form-check mt-3">
                             <input type="checkbox" class="form-check-input" id="finalTermsCheck" required>
                             <label for="finalTermsCheck" class="form-check-label">
-                                Acepto los <a href="#">Términos y Condiciones</a> y la <a
-                                    href="#">Política de
+                                Acepto los
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#terminosModal">Términos y
+                                    Condiciones</a>
+                                y la
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#privacidadModal">Política de
                                     Privacidad</a>.
                             </label>
                         </div>
@@ -306,7 +313,8 @@
                     </div>
 
                     <div class="mt-4">
-                        <button type="button" class="btn btn-danger w-100" onclick="validarFormulario();">
+                        <button type="button" id="btnComprar" class="btn btn-danger w-100 d-none"
+                            onclick="validarFormulario();">
                             Comprar ahora
                         </button>
                     </div>
@@ -316,6 +324,86 @@
 
         </div>
     </div>
+    <!-- Modal Tratamiento de Datos -->
+    <div class="modal fade" id="datosModal" tabindex="-1" aria-labelledby="datosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="datosLabel">Tratamiento de Datos Personales</h5>
+                    <!-- X en negro -->
+                    <button type="button" class="btn-close" style="filter: brightness(0);"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>
+                        En <strong>Botica Mirian</strong> respetamos la Ley de Protección de Datos Personales (Ley N°
+                        29733).
+                        Los datos que nos brindes serán utilizados únicamente para procesar tu compra, brindarte el
+                        servicio
+                        y mejorar tu experiencia.
+                    </p>
+                    <ul>
+                        <li>No compartimos tus datos con terceros sin tu consentimiento.</li>
+                        <li>Puedes solicitar la actualización o eliminación de tu información en cualquier momento.</li>
+                        <li>Implementamos medidas de seguridad para proteger tu privacidad.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Términos y Condiciones -->
+    <div class="modal fade" id="terminosModal" tabindex="-1" aria-labelledby="terminosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="terminosLabel">Términos y Condiciones</h5>
+                    <!-- X en negro -->
+                    <button type="button" class="btn-close" style="filter: brightness(0);"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>
+                        Al comprar en <strong>Botica Mirian</strong> aceptas los siguientes términos:
+                    </p>
+                    <ul>
+                        <li>Los precios y promociones están sujetos a cambios sin previo aviso.</li>
+                        <li>La venta de medicamentos se realiza según normativa vigente en Perú.</li>
+                        <li>Los productos estarán disponibles de acuerdo al stock de cada sucursal.</li>
+                        <li>No se permite el uso indebido de la plataforma con fines fraudulentos.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Política de Privacidad -->
+    <div class="modal fade" id="privacidadModal" tabindex="-1" aria-labelledby="privacidadLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="privacidadLabel">Política de Privacidad</h5>
+                    <!-- X en negro -->
+                    <button type="button" class="btn-close" style="filter: brightness(0);"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>
+                        En <strong>Botica Mirian</strong> valoramos tu privacidad:
+                    </p>
+                    <ul>
+                        <li>La información proporcionada se usará exclusivamente para gestionar tus pedidos.</li>
+                        <li>No venderemos ni compartiremos tus datos con terceros sin autorización.</li>
+                        <li>Nos comprometemos a proteger tu información con altos estándares de seguridad.</li>
+                    </ul>
+                    <p>
+                        Al continuar con tu compra, aceptas nuestra política de privacidad.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
     <script>
         function validarFormulario() {
@@ -325,13 +413,13 @@
                 const formData = new FormData(formulario);
 
                 fetch("{{ route('checkout.guardar-datos') }}", {
-                        method: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: formData,
-                        credentials: 'same-origin' // 👈 ESTA LÍNEA ES CLAVE PARA QUE FUNCIONE LA SESIÓN
-                    })
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: formData,
+                    credentials: 'same-origin' // 👈 ESTA LÍNEA ES CLAVE PARA QUE FUNCIONE LA SESIÓN
+                })
                     .then(response => response.json())
                     .then(data => {
                         if (data.init_point) {
@@ -352,9 +440,81 @@
         }
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tipoDoc = document.getElementById("tipo_documento");
+            const numeroDoc = document.getElementById("numero_documento");
+            const celular = document.getElementById("celular");
+            const btnComprar = document.getElementById("btnComprar");
+            const form = document.getElementById("formCheckout");
+
+            // Forzar solo números
+            [numeroDoc, celular].forEach(input => {
+                input.addEventListener("input", function () {
+                    this.value = this.value.replace(/\D/g, "");
+                    validarCampos();
+                });
+            });
+
+            // Validación dinámica de documento según tipo
+            tipoDoc.addEventListener("change", function () {
+                let selected = this.options[this.selectedIndex].text.toLowerCase();
+
+                if (selected.includes("dni")) {
+                    numeroDoc.maxLength = 8;
+                    numeroDoc.placeholder = "Ej: 12345678";
+                } else if (selected.includes("carnet")) {
+                    numeroDoc.maxLength = 8;
+                    numeroDoc.placeholder = "Ej: 12345678";
+                } else {
+                    numeroDoc.removeAttribute("maxlength");
+                    numeroDoc.placeholder = "Número de documento";
+                }
+                validarCampos();
+            });
+
+            // Función que valida todos los campos requeridos
+            function validarCampos() {
+                let valido = true;
+
+                // Validar nombres y apellidos no vacíos
+                form.querySelectorAll("input[required], select[required]").forEach(input => {
+                    if (!input.value.trim()) {
+                        valido = false;
+                    }
+                });
+
+                // Validar longitudes específicas
+                if (celular.value.length !== 9) valido = false;
+
+                let selected = tipoDoc.options[tipoDoc.selectedIndex]?.text?.toLowerCase() || "";
+                if (selected.includes("dni") && numeroDoc.value.length !== 8) valido = false;
+                if (selected.includes("carnet") && numeroDoc.value.length !== 8) valido = false;
+
+                // Validar checkboxes
+                if (!document.getElementById("termsCheck").checked) valido = false;
+                if (!document.getElementById("finalTermsCheck").checked) valido = false;
+
+                // Mostrar u ocultar botón
+                btnComprar.classList.toggle("d-none", !valido);
+            }
+
+            // Ejecutar validación inicial
+            validarCampos();
+
+            // Escuchar cambios en todo el formulario
+            form.addEventListener("input", validarCampos);
+            form.addEventListener("change", validarCampos);
+        });
+    </script>
+
+    <!-- Bootstrap 5 JS (necesario para que funcionen los modales, dropdowns, tooltips, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
 
 
 </body>
+
 
 </html>

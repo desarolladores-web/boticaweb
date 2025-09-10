@@ -62,8 +62,6 @@ document.body.addEventListener("click", function (e) {
     }
 });
 
-
-
 // Funcionalidad de botones + y - para cantidad
 document.addEventListener("click", function (e) {
     const minusBtn = e.target.closest(".quantity-left-minus");
@@ -73,7 +71,7 @@ document.addEventListener("click", function (e) {
         const container = e.target.closest(".product-qty");
         if (!container) return;
 
-        const inputVisible = container.querySelector("input[name='quantity']");
+        const inputVisible = container.querySelector("input[name='cantidad']");
         let cantidad = parseInt(inputVisible.value);
 
         if (plusBtn) {
@@ -86,7 +84,7 @@ document.addEventListener("click", function (e) {
 
         // Actualizar el input oculto del formulario siguiente
         const form = container.nextElementSibling; // formulario está justo después del div con los botones
-        if (form && form.classList.contains('agregar-carrito-form')) {
+        if (form && form.classList.contains("agregar-carrito-form")) {
             const inputOculto = form.querySelector("input[name='cantidad']");
             if (inputOculto) {
                 inputOculto.value = cantidad;

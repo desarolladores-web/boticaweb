@@ -118,141 +118,152 @@
             <h1 class="text-danger fw-bold display-4">Productos</h1>
         </div>
 
-      <!-- PRODUCTOS -->
-<section class="py-5 container">
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
-                        <!-- Product Grid -->
-                        <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
-                            @forelse($productos as $producto)
-                                <div class="col mb-4">
-                                    <div class="product-item product-card">
-                                        <figure>
-                                            <a href="{{ route('productos.especificaciones', $producto->id) }}"
-                                                title="{{ $producto->nombre }}">
-                                                @if ($producto->imagen)
-                                                    <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}"
-                                                        class="tab-image" alt="{{ $producto->nombre }}">
-                                                @else
-                                                    <img src="https://via.placeholder.com/300x200?text=Sin+Imagen"
-                                                        class="tab-image" alt="Sin Imagen">
-                                                @endif
-                                            </a>
-                                        </figure>
-                                        <h3>{{ $producto->nombre }}</h3>
-                                        <span class="qty">
-                                            {{ $producto->presentacion?->tipo_presentacion ?? 'Sin presentación' }}
-                                        </span>
+        <!-- PRODUCTOS -->
+        <section class="py-5 container">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-all" role="tabpanel"
+                                aria-labelledby="nav-all-tab">
+                                <!-- Product Grid -->
+                                <div
+                                    class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
+                                    @forelse($productos as $producto)   
+                                        <div class="col mb-4">
+                                            <div class="product-item product-card">
+                                                <figure>
+                                                    <a href="{{ route('productos.especificaciones', $producto->id) }}"
+                                                        title="{{ $producto->nombre }}">
+                                                        @if ($producto->imagen)
+                                                            <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}"
+                                                                class="tab-image" alt="{{ $producto->nombre }}">
+                                                        @else
+                                                            <img src="https://via.placeholder.com/300x200?text=Sin+Imagen"
+                                                                class="tab-image" alt="Sin Imag en">
+                                                        @endif
+                                                    </a>
+                                                </figure>
+                                                <h3>{{ $producto->nombre }}</h3>
+                                                <span class="qty">
+                                                    {{ $producto->presentacion?->tipo_presentacion ?? 'Sin presentación' }}
+                                                </span>
 
-                                        <span class="rating">
-                                            <svg width="24" height="24" class="text-primary"></svg>
-                                        </span>
-                                        <span class="price">S/. {{ number_format($producto->pvp1, 2) }}</span>
+                                                <span class="rating">
+                                                    <svg width="24" height="24" class="text-primary"></svg>
+                                                </span>
+                                                <span class="price">S/. {{ number_format($producto->pvp1, 2) }}</span>
 
-                                        {{-- Contenedor dinámico --}}
-                                        <div class="d-flex align-items-center justify-content-between"
-                                            id="carrito-container-{{ $producto->id }}">
-                                            @php
-                                                $carrito = session('carrito', []);
-                                            @endphp
+                                                {{-- Contenedor dinámico --}}
+                                                <div class="d-flex align-items-center justify-content-between"
+                                                    id="carrito-container-{{ $producto->id }}">
+                                                    @php
+                                                        $carrito = session('carrito', []);
+                                                    @endphp
 
-                                            @if (isset($carrito[$producto->id]))
-                                                <a href="{{ route('carrito.ver') }}"
-                                                    class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
-                                                    style="font-size: 15px; font-weight: 100; padding: 25px;">
-                                                    Ver carrito
-                                                    <span class="iconify ms-2" data-icon="bi:cart-check-fill"
-                                                        style="font-size: 25px;"></span>
-                                                </a>
-                                            @else
-                                                {{-- Inyectamos el bloque inicial --}}
-                                                <div class="input-group product-qty">
-                                                    <span class="input-group-btn">
-                                                        <button type="button"
-                                                            class="quantity-left-minus btn btn-danger btn-number"
-                                                            data-type="minus">
-                                                            <svg width="13" height="13"><use xlink:href="#minus"></use></svg>
-                                                        </button>
-                                                    </span>
-                                                    <input type="text" name="cantidad" class="form-control input-number" value="1">
-                                                    <span class="input-group-btn">
-                                                        <button type="button"
-                                                            class="quantity-right-plus btn btn-success btn-number"
-                                                            data-type="plus">
-                                                            <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                                        </button>
-                                                    </span>
+                                                    @if (isset($carrito[$producto->id]))
+                                                        <a href="{{ route('carrito.ver') }}"
+                                                            class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
+                                                            style="font-size: 15px; font-weight: 100; padding: 25px;">
+                                                            Ver carrito
+                                                            <span class="iconify ms-2" data-icon="bi:cart-check-fill"
+                                                                style="font-size: 25px;"></span>
+                                                        </a>
+                                                    @else
+                                                        {{-- Inyectamos el bloque inicial --}}
+                                                        <div class="input-group product-qty">
+                                                            <span class="input-group-btn">
+                                                                <button type="button"
+                                                                    class="quantity-left-minus btn  btn-number"
+                                                                    data-type="minus">
+                                                                    <svg width="13" height="13">
+                                                                        <use xlink:href="#minus"></use>
+                                                                    </svg>
+                                                                </button>
+                                                            </span>
+                                                            <input type="text" id="quantity" name="quantity"
+                                                                class="form-control input-number" value="1">
+                                                            <span class="input-group-btn">
+                                                                <button type="button"
+                                                                    class="quantity-right-plus btn  btn-number"
+                                                                    data-type="plus">
+                                                                    <svg width="16" height="16">
+                                                                        <use xlink:href="#plus"></use>
+                                                                    </svg>
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                                            class="agregar-carrito-form">
+                                                            @csrf
+                                                            <input type="hidden" name="cantidad" value="1">
+                                                            <button type="submit" class="button">
+                                                                Agregar Carrito
+                                                                <span class="iconify ms-2" data-icon="uil:shopping-cart"
+                                                                    style="font-size: 24px;"></span>
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </div>
 
-                                                <form method="POST"
-                                                    action="{{ route('carrito.agregar', $producto->id) }}"
-                                                    class="agregar-carrito-form">
-                                                    @csrf
-                                                    <input type="hidden" name="cantidad" value="1">
-                                                    <button type="submit" class="button">
-                                                        Agregar Carrito
-                                                        <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
-                                                    </button>
-                                                </form>
-                                            @endif
-                                        </div>
+                                                {{-- 🔹 Template oculto para restaurar después de eliminar --}}
+                                                <template id="form-agregar-{{ $producto->id }}">
+                                                    <div class="input-group product-qty">
+                                                        <span class="input-group-btn">
+                                                            <button type="button"
+                                                                class="quantity-left-minus btn btn-danger btn-number"
+                                                                data-type="minus">
+                                                                <svg width="13" height="13">
+                                                                    <use xlink:href="#minus"></use>
+                                                                </svg>
+                                                            </button>
+                                                        </span>
+                                                        <input type="text" name="cantidad" class="form-control input-number"
+                                                            value="1">
+                                                        <span class="input-group-btn">
+                                                            <button type="button"
+                                                                class="quantity-right-plus btn btn-success btn-number"
+                                                                data-type="plus">
+                                                                <svg width="16" height="16">
+                                                                    <use xlink:href="#plus"></use>
+                                                                </svg>
+                                                            </button>
+                                                        </span>
+                                                    </div>
 
-                                        {{-- 🔹 Template oculto para restaurar después de eliminar --}}
-                                        <template id="form-agregar-{{ $producto->id }}">
-                                            <div class="input-group product-qty">
-                                                <span class="input-group-btn">
-                                                    <button type="button"
-                                                        class="quantity-left-minus btn btn-danger btn-number"
-                                                        data-type="minus">
-                                                        <svg width="13" height="13"><use xlink:href="#minus"></use></svg>
-                                                    </button>
-                                                </span>
-                                                <input type="text" name="cantidad" class="form-control input-number" value="1">
-                                                <span class="input-group-btn">
-                                                    <button type="button"
-                                                        class="quantity-right-plus btn btn-success btn-number"
-                                                        data-type="plus">
-                                                        <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                                    </button>
-                                                </span>
+                                                    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        class="agregar-carrito-form">
+                                                        @csrf
+                                                        <input type="hidden" name="cantidad" value="1">
+                                                        <button type="submit" class="button">
+                                                            Agregar Carrito
+                                                            <span class="iconify ms-2" data-icon="uil:shopping-cart"
+                                                                style="font-size: 24px;"></span>
+                                                        </button>
+                                                    </form>
+                                                </template>
                                             </div>
-
-                                            <form method="POST"
-                                                action="{{ route('carrito.agregar', $producto->id) }}"
-                                                class="agregar-carrito-form">
-                                                @csrf
-                                                <input type="hidden" name="cantidad" value="1">
-                                                <button type="submit" class="button">
-                                                    Agregar Carrito
-                                                    <span class="iconify ms-2" data-icon="uil:shopping-cart" style="font-size: 24px;"></span>
-                                                </button>
-                                            </form>
-                                        </template>
-                                    </div>
+                                        </div>
+                                    @empty
+                                        <div class="col-12">
+                                            <div class="alert alert-warning text-center">
+                                                No hay productos disponibles.
+                                            </div>
+                                        </div>
+                                    @endforelse
                                 </div>
-                            @empty
-                                <div class="col-12">
-                                    <div class="alert alert-warning text-center">
-                                        No hay productos disponibles.
-                                    </div>
-                                </div>
-                            @endforelse
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
 
         <!-- ALERTAS -->
         @if (session('status'))
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
+                document.addEventListener('DOMContentLoaded', function () {
                     let mensaje = '';
                     let tipo = '';
                     switch ("{{ session('status') }}") {
@@ -281,29 +292,29 @@
 
         <!-- SCRIPT DE CANTIDAD -->
         <script>
-            $(document).ready(function() {
-                $('.product-card').each(function() {
+            $(document).ready(function () {
+                $('.product-card').each(function () {
                     const $card = $(this);
                     const $qtyInput = $card.find('.input-number');
                     const $btnPlus = $card.find('.quantity-right-plus');
                     const $btnMinus = $card.find('.quantity-left-minus');
                     const $hiddenInput = $card.find('input[name="cantidad"]');
 
-                    $btnPlus.on('click', function(e) {
+                    $btnPlus.on('click', function (e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 0;
                         $qtyInput.val(++currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $btnMinus.on('click', function(e) {
+                    $btnMinus.on('click', function (e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 1;
                         if (currentQty > 1) $qtyInput.val(--currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $qtyInput.on('input', function() {
+                    $qtyInput.on('input', function () {
                         let currentQty = parseInt($(this).val()) || 1;
                         if (currentQty < 1) currentQty = 1;
                         $(this).val(currentQty);
@@ -349,13 +360,27 @@
         .hero-section .container {
             z-index: 2;
         }
+
+        .input-group .btn {
+            border-radius: 0.375rem !important;
+            /* 🔹 Mantiene esquinas redondeadas */
+            border: 1px solid #dee2e6 !important;
+            /* 🔹 Restaura los bordes */
+        }
+
+        .input-group .form-control {
+            text-align: center;
+            max-width: 60px;
+            border: 1px solid #dee2e6 !important;
+            /* 🔹 Borde igual que los botones */
+        }
     </style>
 @endsection
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const forms = document.querySelectorAll('.agregar-carrito-form');
         forms.forEach(form => {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
                 const formData = new FormData(this);
@@ -363,12 +388,12 @@
                 const container = this.closest('[id^="carrito-container-"]');
 
                 fetch(action, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value
-                        },
-                        body: formData
-                    })
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value
+                    },
+                    body: formData
+                })
                     .then(res => res.ok ? res.text() : Promise.reject(res))
                     .then(() => {
                         container.innerHTML = `

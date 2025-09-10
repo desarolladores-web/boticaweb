@@ -528,96 +528,115 @@
         }
     </script>
     <!-- Esto ponlo en tu layout principal, no en el partial -->
-    <script>
-        document.addEventListener('submit', function(e) {
-            // Solo intercepta formularios con estas clases específicas
-            if (e.target.matches('.form-actualizar-cantidad, .eliminar-item-form')) {
-                e.preventDefault();
+ <script>
+document.addEventListener('submit', function(e) {
+    if (e.target.matches('.form-actualizar-cantidad, .eliminar-item-form, .agregar-carrito-form')) {
+        e.preventDefault();
 
-                const form = e.target;
-                const url = form.action;
-                const formData = new FormData(form);
+        const form = e.target;
+        const url = form.action;
+        const formData = new FormData(form);
 
-                fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': formData.get('_token'),
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: formData
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        // Actualiza el contador global del carrito
-                        const contador = document.getElementById('contador-carrito');
-                        if (contador && data.cantidadTotal !== undefined) {
-                            contador.textContent = data.cantidadTotal;
-                        }
-
-                        // Actualiza cantidad del producto (cuando sea una actualización)
-                        if (data.producto_id && data.cantidad !== undefined) {
-                            const cantidadElem = document.getElementById('cantidad-' + data.producto_id);
-                            if (cantidadElem) {
-                                cantidadElem.textContent = data.cantidad;
-                            }
-                        }
-
-                        // Cuando se elimina un producto
-                        if (data.eliminado && data.producto_id) {
-                            // Remueve el elemento del DOM del producto eliminado en la página principal
-                            const itemElem = document.getElementById('item-' + data.producto_id);
-                            if (itemElem) {
-                                itemElem.remove();
-                            }
-
-                            // También remueve el producto eliminado del sidebar
-                            const sidebar = document.getElementById('cart-items');
-                            if (sidebar) {
-                                // Suponiendo que en el sidebar cada producto tiene data-id con el producto id
-                                const productoSidebarElem = sidebar.querySelector(
-                                    `[data-id="${data.producto_id}"]`);
-                                if (productoSidebarElem) {
-                                    productoSidebarElem.remove();
-                                }
-
-                                // Si el sidebar queda vacío, mostrar mensaje
-                                if (sidebar.children.length === 0) {
-                                    sidebar.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
-                                }
-                            }
-
-                            // Recarga sólo el bloque afectado para restaurar el HTML original si es necesario
-                            fetch(window.location.href)
-                                .then(r => r.text())
-                                .then(html => {
-                                    const doc = new DOMParser().parseFromString(html, 'text/html');
-                                    const nuevoBloque = doc.querySelector('#carrito-container-' + data
-                                        .producto_id);
-                                    const viejoBloque = document.getElementById('carrito-container-' + data
-                                        .producto_id);
-                                    if (nuevoBloque && viejoBloque) {
-                                        viejoBloque.innerHTML = nuevoBloque.innerHTML;
-                                    }
-                                });
-                        }
-
-                        // Si el carrito queda vacío
-                        if (data.vacio) {
-                            const contenedor = document.getElementById('cart-items');
-                            if (contenedor) {
-                                contenedor.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
-                            }
-                        }
-
-                        // Actualiza el sidebar si existe función definida para ello
-                        if (typeof actualizarSidebarCarrito === 'function') {
-                            actualizarSidebarCarrito();
-                        }
-                    })
-                    .catch(error => console.error('Error en acción del carrito:', error));
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            // 🔹 Actualizar contador global
+            const contador = document.getElementById('contador-carrito');
+            if (contador && data.cantidadTotal !== undefined) {
+                contador.textContent = data.cantidadTotal;
             }
+
+            // 🔹 Cambiar bloque por "Ver carrito"
+            if (data.success && form.classList.contains('agregar-carrito-form')) {
+                const tarjetaContainer = form.closest('[id^="carrito-container-"]');
+                if (tarjetaContainer) {
+                    tarjetaContainer.innerHTML = `
+                        <a href="{{ route('carrito.ver') }}"
+                            class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
+                            style="font-size: 15px; font-weight: 100; padding: 25px;">
+                            Ver carrito
+                            <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 25px;"></span>
+                        </a>
+                    `;
+                }
+            }
+
+            // 🔹 Restaurar template al eliminar
+            if (data.eliminado && data.producto_id) {
+                const sidebar = document.getElementById('cart-items');
+                if (sidebar) {
+                    const productoSidebarElem = sidebar.querySelector(`[data-id="${data.producto_id}"]`);
+                    if (productoSidebarElem) productoSidebarElem.remove();
+                    if (sidebar.children.length === 0) {
+                        sidebar.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
+                    }
+                }
+
+                const tarjetaContainer = document.getElementById('carrito-container-' + data.producto_id);
+                const template = document.getElementById('form-agregar-' + data.producto_id);
+                if (tarjetaContainer && template) {
+                    tarjetaContainer.innerHTML = template.innerHTML;
+                    inicializarBotonesCantidad(tarjetaContainer); // reactivar botones e input
+                }
+            }
+
+            // 🔹 Carrito vacío
+            if (data.vacio) {
+                const contenedor = document.getElementById('cart-items');
+                if (contenedor) {
+                    contenedor.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
+                }
+            }
+
+            if (typeof actualizarSidebarCarrito === 'function') {
+                actualizarSidebarCarrito();
+            }
+        })
+        .catch(error => console.error('Error en acción del carrito:', error));
+    }
+});
+
+/**
+ * 🔹 Inicializa los controles de cantidad (+, -, input manual)
+ */
+function inicializarBotonesCantidad(scope = document) {
+    scope.querySelectorAll('.product-qty').forEach(group => {
+        const input = group.querySelector('.input-number');
+        const form = group.parentElement.querySelector('form');
+        const hiddenInput = form ? form.querySelector('input[name="cantidad"]') : null;
+
+        // Botones ➕ y ➖
+        group.querySelectorAll('button[data-type="minus"], button[data-type="plus"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                let value = parseInt(input.value) || 1;
+                if (this.dataset.type === 'minus' && value > 1) value--;
+                if (this.dataset.type === 'plus') value++;
+                input.value = value;
+                if (hiddenInput) hiddenInput.value = value;
+            });
         });
-    </script>
+
+        // Escritura manual en el input
+        input.addEventListener('input', function() {
+            let value = parseInt(input.value) || 1;
+            if (value < 1) value = 1;
+            input.value = value;
+            if (hiddenInput) hiddenInput.value = value;
+        });
+    });
+}
+
+// Inicializar en carga
+document.addEventListener('DOMContentLoaded', () => inicializarBotonesCantidad());
+</script>
+
 
 
     <script>

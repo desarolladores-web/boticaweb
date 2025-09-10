@@ -47,7 +47,7 @@ class CartController extends Controller
         return view('carrito.sidebar', compact('carrito'));
     }
 
-   public function eliminar(Request $request, $id)
+  public function eliminar(Request $request, $id)
 {
     $carrito = session()->get('carrito', []);
 
@@ -66,20 +66,23 @@ class CartController extends Controller
     $sidebarHtml = view('components.cart-items', compact('carrito'))->render();
 
     if ($request->ajax()) {
-        return response()->json([
-            'success' => true,
-            'mensaje' => 'Producto eliminado del carrito',
-            'cantidadTotal' => count($carrito),
-            'carrito' => $carrito,
-            'ruta_carrito' => route('carrito.ver'),
-            'total' => $total,
-            'sidebar_html' => $sidebarHtml, // <-- agregar aquí
-        ]);
+    return response()->json([
+        'success' => true,
+        'mensaje' => 'Producto eliminado del carrito',
+        'producto_id' => $id,   // 🔹 para restaurar
+        'eliminado' => true,    // 🔹 flag para script
+        'cantidadTotal' => count($carrito),
+        'carrito' => $carrito,
+        'ruta_carrito' => route('carrito.ver'),
+        'total' => $total,
+        'sidebar_html' => $sidebarHtml,
+    ]);
     }
 
     $redirect = $request->input('redirect_back', url()->previous());
     return redirect($redirect)->with('success', 'Producto eliminado del carrito');
 }
+
 
 
 

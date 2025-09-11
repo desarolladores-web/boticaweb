@@ -129,7 +129,7 @@
                                 <!-- Product Grid -->
                                 <div
                                     class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
-                                    @forelse($productos as $producto)   
+                                    @forelse($productos as $producto)
                                         <div class="col mb-4">
                                             <div class="product-item product-card">
                                                 <figure>
@@ -193,7 +193,8 @@
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        <form method="POST"
+                                                            action="{{ route('carrito.agregar', $producto->id) }}"
                                                             class="agregar-carrito-form">
                                                             @csrf
                                                             <input type="hidden" name="cantidad" value="1">
@@ -218,8 +219,8 @@
                                                                 </svg>
                                                             </button>
                                                         </span>
-                                                        <input type="text" name="cantidad" class="form-control input-number"
-                                                            value="1">
+                                                        <input type="text" name="cantidad"
+                                                            class="form-control input-number" value="1">
                                                         <span class="input-group-btn">
                                                             <button type="button"
                                                                 class="quantity-right-plus btn btn-success btn-number"
@@ -231,7 +232,8 @@
                                                         </span>
                                                     </div>
 
-                                                    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                                    <form method="POST"
+                                                        action="{{ route('carrito.agregar', $producto->id) }}"
                                                         class="agregar-carrito-form">
                                                         @csrf
                                                         <input type="hidden" name="cantidad" value="1">
@@ -263,7 +265,7 @@
         <!-- ALERTAS -->
         @if (session('status'))
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
+                document.addEventListener('DOMContentLoaded', function() {
                     let mensaje = '';
                     let tipo = '';
                     switch ("{{ session('status') }}") {
@@ -292,29 +294,29 @@
 
         <!-- SCRIPT DE CANTIDAD -->
         <script>
-            $(document).ready(function () {
-                $('.product-card').each(function () {
+            $(document).ready(function() {
+                $('.product-card').each(function() {
                     const $card = $(this);
                     const $qtyInput = $card.find('.input-number');
                     const $btnPlus = $card.find('.quantity-right-plus');
                     const $btnMinus = $card.find('.quantity-left-minus');
                     const $hiddenInput = $card.find('input[name="cantidad"]');
 
-                    $btnPlus.on('click', function (e) {
+                    $btnPlus.on('click', function(e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 0;
                         $qtyInput.val(++currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $btnMinus.on('click', function (e) {
+                    $btnMinus.on('click', function(e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 1;
                         if (currentQty > 1) $qtyInput.val(--currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $qtyInput.on('input', function () {
+                    $qtyInput.on('input', function() {
                         let currentQty = parseInt($(this).val()) || 1;
                         if (currentQty < 1) currentQty = 1;
                         $(this).val(currentQty);
@@ -376,36 +378,3 @@
         }
     </style>
 @endsection
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const forms = document.querySelectorAll('.agregar-carrito-form');
-        forms.forEach(form => {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                const action = this.action;
-                const container = this.closest('[id^="carrito-container-"]');
-
-                fetch(action, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value
-                    },
-                    body: formData
-                })
-                    .then(res => res.ok ? res.text() : Promise.reject(res))
-                    .then(() => {
-                        container.innerHTML = `
-                    <a href="{{ route('carrito.ver') }}"
-                        class="button w-100 d-flex align-items-center justify-content-center text-decoration-none"
-                        style="font-size: 15px; font-weight: 100; padding: 25px;">
-                        Ver carrito
-                        <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 25px;"></span>
-                    </a>`;
-                    })
-                    .catch(err => console.error('Error al agregar al carrito:', err));
-            });
-        });
-    });
-</script>

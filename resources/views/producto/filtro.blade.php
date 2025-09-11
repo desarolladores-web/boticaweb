@@ -288,6 +288,7 @@
     }
 </style>
 <!-- JS para cantidades y AJAX (vanilla JS) -->
+<!-- JS para cantidades (sin duplicar AJAX, eso lo maneja app.blade.php) -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Sincronizar cantidad visible con el input hidden del form dentro de cada tarjeta
@@ -299,7 +300,8 @@
             const hiddenInput = form ? form.querySelector('input[name="cantidad"]') : null;
 
             if (!visibleInput) return;
-            // init: if hidden exists, set to visible value
+
+            // init: si hidden existe, setear al valor visible
             if (hiddenInput) hiddenInput.value = visibleInput.value || 1;
 
             plusBtn?.addEventListener('click', function(e) {
@@ -323,52 +325,6 @@
                 if (isNaN(qty) || qty < 1) qty = 1;
                 this.value = qty;
                 if (hiddenInput) hiddenInput.value = qty;
-            });
-        });
-
-        // Interceptar formularios y enviar por AJAX, luego cambiar a "Ver carrito"
-        document.querySelectorAll('.agregar-carrito-form').forEach(function(form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                const action = this.action;
-                const token = this.querySelector('[name="_token"]').value;
-                const container = this.closest('[id^="carrito-container-"]');
-
-                fetch(action, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': token
-                        },
-                        body: formData
-                    })
-                    .then(res => {
-                        if (!res.ok) throw res;
-                        return res.text();
-                    })
-                    .then(() => {
-                        // Actualiza el área del botón por "Ver carrito"
-                        if (container) {
-                            container.innerHTML = `
-                        <a href="{{ route('carrito.ver') }}"
-                           class="btn btn-outline-success w-100 fw-semibold">
-                            Ver carrito
-                            <i class="bi bi-cart-check-fill ms-2"></i>
-                        </a>`;
-                        } else {
-                            this.outerHTML = `
-                        <a href="{{ route('carrito.ver') }}"
-                           class="btn btn-outline-success w-100 fw-semibold">
-                            Ver carrito
-                            <i class="bi bi-cart-check-fill ms-2"></i>
-                        </a>`;
-                        }
-                    })
-                    .catch(err => {
-                        console.error('Error al agregar al carrito:', err);
-                        // opcional: mostrar alerta al usuario
-                    });
             });
         });
     });

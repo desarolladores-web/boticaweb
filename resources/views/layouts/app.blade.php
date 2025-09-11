@@ -133,8 +133,8 @@
                                 data-bs-toggle="dropdown" style="color: inherit;">
                                 @auth
                                     @if (Auth::user()->imagen)
-                                        <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}" alt="Avatar"
-                                            class="rounded-circle shadow-sm"
+                                        <img src="data:image/jpeg;base64,{{ base64_encode(Auth::user()->imagen) }}"
+                                            alt="Avatar" class="rounded-circle shadow-sm"
                                             style="width: 32px; height: 32px; object-fit: cover;">
                                     @else
                                         <i class="bi bi-person" style="font-size: 1.5rem;"></i>
@@ -161,7 +161,8 @@
                                             <i class="bi bi-speedometer2 me-2"></i> Panel Admin
                                         </a>
                                     @else
-                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('account.edit') }}">
+                                        <a class="dropdown-item d-flex align-items-center"
+                                            href="{{ route('account.edit') }}">
                                             <i class="bi bi-person-lines-fill me-2"></i> Mi Cuenta
                                         </a>
                                     @endif
@@ -174,7 +175,8 @@
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
                                     </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
                                         @csrf
                                     </form>
                                 @endguest
@@ -319,7 +321,7 @@
         @yield('content')
     </main>
 
-   
+
     <footer class="mt-auto">
         @include('layouts.footer')
     </footer>
@@ -380,11 +382,12 @@
             <span class="iconify ms-2" data-icon="bi:cart-check-fill" style="font-size: 20px;"></span>
         </a>
     </div>
-     @include('layouts.whatsapp')   
+    @include('layouts.whatsapp')
 
     <!-- MODAL SOLO PARA INVITADOS -->
     @guest
-        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content p-3">
                     <div class="modal-header border-0">
@@ -476,62 +479,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        document.querySelectorAll('.agregar-carrito-form').forEach(form => {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault(); // evita que recargue la página
 
-                const url = this.action;
-                const formData = new FormData(this);
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': formData.get('_token'),
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        // ✅ Actualizar contador del carrito
-                        document.getElementById('contador-carrito').textContent = data.cantidadTotal;
-
-                        // ✅ Actualizar contenido del sidebar sin abrirlo automáticamente
-                        if (typeof actualizarSidebarCarrito === 'function') {
-                            actualizarSidebarCarrito();
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error al agregar al carrito:', error);
-                    });
-            });
-        });
-    </script>
-
-    <script>
-        function actualizarSidebarCarrito() {
-            fetch('{{ route('carrito.sidebar.ajax') }}')
-                .then(res => res.json())
-                .then(data => {
-                    // Actualizar los ítems del carrito
-                    const sidebarItems = document.getElementById('cart-items');
-                    if (sidebarItems) {
-                        sidebarItems.innerHTML = data.items_html;
-                    }
-
-                    // Actualizar el total
-                    const cartTotal = document.getElementById('cart-total');
-                    if (cartTotal) {
-                        cartTotal.textContent = 'S/. ' + data.total;
-                    }
-                })
-                .catch(error => console.error('Error actualizando sidebar:', error));
-        }
-    </script>
     <!-- Esto ponlo en tu layout principal, no en el partial -->
     <script>
-        document.addEventListener('submit', function (e) {
+        document.addEventListener('submit', function(e) {
             if (e.target.matches('.form-actualizar-cantidad, .eliminar-item-form, .agregar-carrito-form')) {
                 e.preventDefault();
 
@@ -540,13 +491,13 @@
                 const formData = new FormData(form);
 
                 fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': formData.get('_token'),
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: formData
-                })
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': formData.get('_token'),
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    })
                     .then(res => res.json())
                     .then(data => {
                         // 🔹 Actualizar contador global
@@ -574,14 +525,16 @@
                         if (data.eliminado && data.producto_id) {
                             const sidebar = document.getElementById('cart-items');
                             if (sidebar) {
-                                const productoSidebarElem = sidebar.querySelector(`[data-id="${data.producto_id}"]`);
+                                const productoSidebarElem = sidebar.querySelector(
+                                    `[data-id="${data.producto_id}"]`);
                                 if (productoSidebarElem) productoSidebarElem.remove();
                                 if (sidebar.children.length === 0) {
                                     sidebar.innerHTML = '<p class="text-muted">Tu carrito está vacío.</p>';
                                 }
                             }
 
-                            const tarjetaContainer = document.getElementById('carrito-container-' + data.producto_id);
+                            const tarjetaContainer = document.getElementById('carrito-container-' + data
+                                .producto_id);
                             const template = document.getElementById('form-agregar-' + data.producto_id);
                             if (tarjetaContainer && template) {
                                 tarjetaContainer.innerHTML = template.innerHTML;
@@ -616,7 +569,7 @@
 
                 // Botones ➕ y ➖
                 group.querySelectorAll('button[data-type="minus"], button[data-type="plus"]').forEach(btn => {
-                    btn.addEventListener('click', function () {
+                    btn.addEventListener('click', function() {
                         let value = parseInt(input.value) || 1;
                         if (this.dataset.type === 'minus' && value > 1) value--;
                         if (this.dataset.type === 'plus') value++;
@@ -626,7 +579,7 @@
                 });
 
                 // Escritura manual en el input
-                input.addEventListener('input', function () {
+                input.addEventListener('input', function() {
                     let value = parseInt(input.value) || 1;
                     if (value < 1) value = 1;
                     input.value = value;

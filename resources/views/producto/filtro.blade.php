@@ -295,7 +295,46 @@
 </style>
 <!-- JS para cantidades y AJAX (vanilla JS) -->
 <!-- JS para cantidades (sin duplicar AJAX, eso lo maneja app.blade.php) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sincronizar cantidad visible con el input hidden del form dentro de cada tarjeta
+        document.querySelectorAll('.product-card').forEach(function(card) {
+            const visibleInput = card.querySelector('.input-number');
+            const plusBtn = card.querySelector('.quantity-right-plus');
+            const minusBtn = card.querySelector('.quantity-left-minus');
+            const form = card.querySelector('.agregar-carrito-form');
+            const hiddenInput = form ? form.querySelector('input[name="cantidad"]') : null;
 
+            if (!visibleInput) return;
+
+            // init: si hidden existe, setear al valor visible
+            if (hiddenInput) hiddenInput.value = visibleInput.value || 1;
+
+            plusBtn?.addEventListener('click', function(e) {
+                e.preventDefault();
+                let qty = parseInt(visibleInput.value) || 1;
+                qty = qty + 1;
+                visibleInput.value = qty;
+                if (hiddenInput) hiddenInput.value = qty;
+            });
+
+            minusBtn?.addEventListener('click', function(e) {
+                e.preventDefault();
+                let qty = parseInt(visibleInput.value) || 1;
+                if (qty > 1) qty = qty - 1;
+                visibleInput.value = qty;
+                if (hiddenInput) hiddenInput.value = qty;
+            });
+
+            visibleInput.addEventListener('input', function() {
+                let qty = parseInt(this.value);
+                if (isNaN(qty) || qty < 1) qty = 1;
+                this.value = qty;
+                if (hiddenInput) hiddenInput.value = qty;
+            });
+        });
+    });
+</script>
 
 <!-- SweetAlert mensajes (si los usas en otras partes) -->
 @if (session('status'))

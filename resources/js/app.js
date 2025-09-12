@@ -1,6 +1,14 @@
 import "./bootstrap";
 
+/**
+ * app.js corregido (usar en Vite / resources/js/app.js)
+ * - No redefine actualizarSidebarCarrito (usa la función que ya tienes en app.blade).
+ * - Restaura el template del producto al eliminar.
+ * - Sincroniza input visible (.input-number) con input oculto name="cantidad".
+ */
+
 document.addEventListener("DOMContentLoaded", function () {
+    // Sidebar open/close
     const cartBtn = document.querySelector(".header-cart-icon");
     const cartSidebar = document.getElementById("cartSidebar");
     const closeCartBtn = document.getElementById("closeCartBtn");
@@ -24,14 +32,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ✅ Restaurar posición del scroll si fue guardada antes
+    // Restaurar scroll guardado
     const savedScroll = sessionStorage.getItem("scrollPosition");
     if (savedScroll) {
         window.scrollTo(0, parseInt(savedScroll));
         sessionStorage.removeItem("scrollPosition");
     }
 
-    // ✅ Guardar scroll antes de enviar el formulario de carrito
+    // Guardar scroll antes de enviar formularios (mantener UX)
     const forms = document.querySelectorAll("form.agregar-carrito-form");
     forms.forEach((form) => {
         form.addEventListener("submit", function () {
@@ -40,7 +48,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Eliminar producto del carrito desde el sidebar (mejorado y robusto)
+/* ===========================
+   Eliminar producto (delegación)
+   =========================== */
 document.body.addEventListener("click", function (e) {
     const btn = e.target.closest(".eliminar-producto-btn");
     if (!btn) return;
@@ -48,9 +58,7 @@ document.body.addEventListener("click", function (e) {
     const productoId = btn.dataset.id;
     if (!productoId) return;
 
-    // DEBUG temporal:
-    console.log("[carrito] eliminar producto id=", productoId);
-
+    // petición al backend
     fetch(`/carrito/eliminar/${productoId}`, {
         method: "POST",
         headers: {
@@ -58,99 +66,81 @@ document.body.addEventListener("click", function (e) {
                 .querySelector('meta[name="csrf-token"]')
                 .getAttribute("content"),
             "X-Requested-With": "XMLHttpRequest",
+            Accept: "application/json",
         },
     })
         .then((res) => {
-            if (!res.ok) throw new Error("Respuesta no OK: " + res.status);
-            // Ya fue eliminado en backend -> actualizar UI localmente:
-            const container = document.getElementById(
-                "carrito-container-" + productoId
-            );
-            const template = document.getElementById(
-                "form-agregar-" + productoId
-            );
+            // intentar leer JSON (la ruta en tu app devuelve JSON)
+            if (!res.ok) throw res;
+            return res.json();
+        })
+        .then((data) => {
+            // Si tu backend devuelve { eliminado: true, producto_id, cantidadTotal, ... }
+            const idResp = data.producto_id ?? productoId;
 
-            if (container) {
-                if (template) {
-                    // Restaurar el html original desde el <template> (recomendado)
-                    container.innerHTML = template.innerHTML;
-                    console.log(
-                        "[carrito] restaurado desde template para producto",
-                        productoId
-                    );
-                } else {
-                    // Fallback: insertar un form básico (si no existe template)
-                    container.innerHTML = `
-                    <div class="d-flex w-100 align-items-center">
-                        <div class="input-group product-qty" style="width: 50%;">
-                            <button type="button" class="quantity-left-minus btn-number">-</button>
-                            <input type="text" class="form-control input-number text-center" value="1" style="max-width:50px;">
-                            <button type="button" class="quantity-right-plus btn-number">+</button>
-                        </div>
-                        <form method="POST" action="/carrito/agregar/${productoId}" class="agregar-carrito-form ms-3 flex-grow-1">
-                            <input type="hidden" name="_token" value="${
-                                document.querySelector(
-                                    'meta[name="csrf-token"]'
-                                ).content
-                            }">
-                            <input type="hidden" name="cantidad" value="1">
-                            <button type="submit" class="w-100 fw-semibold btn-add-cart">Agregar <i class="bi bi-cart"></i></button>
-                        </form>
-                    </div>
-                `;
-                    console.log(
-                        "[carrito] restaurado con fallback para producto",
-                        productoId
-                    );
-                }
-            } else {
-                console.warn(
-                    "[carrito] no se encontró contenedor carrito-container-" +
-                        productoId
-                );
+            // Restaurar el template del producto (si existe en la vista)
+            const tarjetaContainer = document.getElementById(
+                "carrito-container-" + idResp
+            );
+            const template = document.getElementById("form-agregar-" + idResp);
+            if (tarjetaContainer && template) {
+                tarjetaContainer.innerHTML = template.innerHTML;
             }
 
-            // Llamar a la función global que refresca el sidebar (si existe)
-            if (typeof actualizarSidebarCarrito === "function") {
-                actualizarSidebarCarrito();
+            // Actualizar contador global si viene en la respuesta
+            if (typeof data.cantidadTotal !== "undefined") {
+                const contador = document.getElementById("contador-carrito");
+                if (contador) contador.textContent = data.cantidadTotal;
+            }
+
+            // Llamar a la función del layout (definida en app.blade) para refrescar items y total
+            if (typeof window.actualizarSidebarCarrito === "function") {
+                window.actualizarSidebarCarrito();
             } else {
+                // Si por alguna razón no existe, lo notificamos en consola
                 console.warn(
-                    "[carrito] actualizarSidebarCarrito() no está definida."
+                    "[app.js] window.actualizarSidebarCarrito() no definida"
                 );
             }
         })
         .catch((err) => {
+            // Mostrar errores de la petición o errores de CORS/419/500
             console.error("Error eliminando producto del carrito:", err);
+            // Si err es Response, puedes revisar err.status en consola
+            if (err && err.status) console.error("Status:", err.status);
         });
 });
 
-// Funcionalidad de botones + y - para cantidad
+/* ===========================
+   Botones + / - de cantidad (delegación, compatible con DOM dinámico)
+   =========================== */
 document.addEventListener("click", function (e) {
     const minusBtn = e.target.closest(".quantity-left-minus");
     const plusBtn = e.target.closest(".quantity-right-plus");
 
-    if (minusBtn || plusBtn) {
-        const container = e.target.closest(".product-qty");
-        if (!container) return;
+    if (!minusBtn && !plusBtn) return;
 
-        const inputVisible = container.querySelector("input[name='cantidad']");
-        let cantidad = parseInt(inputVisible.value);
+    // localizar el contenedor .product-qty donde están los botones e input visible
+    const btn = minusBtn || plusBtn;
+    const productQty = btn.closest(".product-qty");
+    if (!productQty) return;
 
-        if (plusBtn) {
-            cantidad += 1;
-        } else if (minusBtn && cantidad > 1) {
-            cantidad -= 1;
-        }
+    // input visible (el que el usuario ve)
+    const inputVisible =
+        productQty.querySelector("input.input-number") ||
+        productQty.querySelector("input[type='text']");
+    let cantidad = parseInt(inputVisible?.value) || 1;
 
-        inputVisible.value = cantidad;
+    if (plusBtn) cantidad += 1;
+    else if (minusBtn && cantidad > 1) cantidad -= 1;
 
-        // Actualizar el input oculto del formulario siguiente
-        const form = container.nextElementSibling; // formulario está justo después del div con los botones
-        if (form && form.classList.contains("agregar-carrito-form")) {
-            const inputOculto = form.querySelector("input[name='cantidad']");
-            if (inputOculto) {
-                inputOculto.value = cantidad;
-            }
-        }
+    // actualizar visible
+    if (inputVisible) inputVisible.value = cantidad;
+
+    // actualizar el input oculto del form siguiente (si existe)
+    const form = productQty.nextElementSibling;
+    if (form && form.classList.contains("agregar-carrito-form")) {
+        const inputOculto = form.querySelector("input[name='cantidad']");
+        if (inputOculto) inputOculto.value = cantidad;
     }
 });

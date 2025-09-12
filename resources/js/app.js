@@ -40,26 +40,88 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Eliminar producto del carrito desde el sidebar
+// Eliminar producto del carrito desde el sidebar (mejorado y robusto)
 document.body.addEventListener("click", function (e) {
-    if (e.target.classList.contains("eliminar-producto-btn")) {
-        const productoId = e.target.dataset.id;
+    const btn = e.target.closest(".eliminar-producto-btn");
+    if (!btn) return;
 
-        fetch(`/carrito/eliminar/${productoId}`, {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute("content"),
-            },
+    const productoId = btn.dataset.id;
+    if (!productoId) return;
+
+    // DEBUG temporal:
+    console.log("[carrito] eliminar producto id=", productoId);
+
+    fetch(`/carrito/eliminar/${productoId}`, {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+            "X-Requested-With": "XMLHttpRequest",
+        },
+    })
+        .then((res) => {
+            if (!res.ok) throw new Error("Respuesta no OK: " + res.status);
+            // Ya fue eliminado en backend -> actualizar UI localmente:
+            const container = document.getElementById(
+                "carrito-container-" + productoId
+            );
+            const template = document.getElementById(
+                "form-agregar-" + productoId
+            );
+
+            if (container) {
+                if (template) {
+                    // Restaurar el html original desde el <template> (recomendado)
+                    container.innerHTML = template.innerHTML;
+                    console.log(
+                        "[carrito] restaurado desde template para producto",
+                        productoId
+                    );
+                } else {
+                    // Fallback: insertar un form básico (si no existe template)
+                    container.innerHTML = `
+                    <div class="d-flex w-100 align-items-center">
+                        <div class="input-group product-qty" style="width: 50%;">
+                            <button type="button" class="quantity-left-minus btn-number">-</button>
+                            <input type="text" class="form-control input-number text-center" value="1" style="max-width:50px;">
+                            <button type="button" class="quantity-right-plus btn-number">+</button>
+                        </div>
+                        <form method="POST" action="/carrito/agregar/${productoId}" class="agregar-carrito-form ms-3 flex-grow-1">
+                            <input type="hidden" name="_token" value="${
+                                document.querySelector(
+                                    'meta[name="csrf-token"]'
+                                ).content
+                            }">
+                            <input type="hidden" name="cantidad" value="1">
+                            <button type="submit" class="w-100 fw-semibold btn-add-cart">Agregar <i class="bi bi-cart"></i></button>
+                        </form>
+                    </div>
+                `;
+                    console.log(
+                        "[carrito] restaurado con fallback para producto",
+                        productoId
+                    );
+                }
+            } else {
+                console.warn(
+                    "[carrito] no se encontró contenedor carrito-container-" +
+                        productoId
+                );
+            }
+
+            // Llamar a la función global que refresca el sidebar (si existe)
+            if (typeof actualizarSidebarCarrito === "function") {
+                actualizarSidebarCarrito();
+            } else {
+                console.warn(
+                    "[carrito] actualizarSidebarCarrito() no está definida."
+                );
+            }
         })
-            .then((res) =>
-                res.ok
-                    ? actualizarSidebarCarrito()
-                    : console.error("Error eliminando")
-            )
-            .catch((err) => console.error("Error:", err));
-    }
+        .catch((err) => {
+            console.error("Error eliminando producto del carrito:", err);
+        });
 });
 
 // Funcionalidad de botones + y - para cantidad

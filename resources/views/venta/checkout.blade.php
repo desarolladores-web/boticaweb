@@ -183,13 +183,21 @@
                                 <label class="form-label">Nro. de documento *</label>
                                 <input type="text" class="form-control" id="numero_documento" name="numero_documento"
                                     required placeholder="Ej: 12345678" value="{{ $cliente?->DNI ?? '' }}">
+                                <div class="invalid-feedback">
+                                    Número de documento inválido.
+                                </div>
                             </div>
+
                             <!-- Celular -->
                             <div class="col-md-6">
                                 <label class="form-label">Celular *</label>
                                 <input type="text" class="form-control" id="celular" name="celular" required
                                     placeholder="Ej: 999000000" maxlength="9" value="{{ $cliente?->telefono ?? '' }}">
+                                <div class="invalid-feedback">
+                                    El celular debe tener exactamente 9 dígitos.
+                                </div>
                             </div>
+
 
                         </div>
 
@@ -408,24 +416,8 @@
     <script>
         function validarFormulario() {
             const formulario = document.getElementById('formCheckout');
-            const celular = document.getElementById("celular").value.trim();
-            const numeroDoc = document.getElementById("numero_documento").value.trim();
-            const tipoDoc = document.getElementById("tipo_documento");
 
-            // Validar celular
-            if (celular.length !== 9) {
-                alert("El número de celular debe tener 9 dígitos.");
-                return;
-            }
-
-            // Validar documento según tipo
-            let selected = tipoDoc.options[tipoDoc.selectedIndex]?.text?.toLowerCase() || "";
-            if ((selected.includes("dni") || selected.includes("carnet")) && numeroDoc.length !== 8) {
-                alert("El número de documento debe tener 8 dígitos.");
-                return;
-            }
-
-            // Validación HTML5 normal
+            // Si no pasa validación HTML5, mostrar la burbuja amarilla
             if (!formulario.checkValidity()) {
                 formulario.reportValidity();
                 return;
@@ -458,17 +450,47 @@
                 });
         }
 
-        // Forzar solo números y máximo de dígitos
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("celular").addEventListener("input", function () {
-                this.value = this.value.replace(/\D/g, "").slice(0, 9); // solo números y máx 9 dígitos
+
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tipoDocumento = document.getElementById("tipo_documento");
+            const numeroDocumento = document.getElementById("numero_documento");
+            const celular = document.getElementById("celular"); 
+
+            // Validar solo números
+            [numeroDocumento, celular].forEach(input => {
+                input.addEventListener("input", () => {
+                    input.value = input.value.replace(/\D/g, ""); // solo números
+                });
             });
 
-            document.getElementById("numero_documento").addEventListener("input", function () {
-                this.value = this.value.replace(/\D/g, "").slice(0, 8); // solo números y máx 8 dígitos
+            // Cambiar validación según tipo de documento
+            tipoDocumento.addEventListener("change", () => {
+                const tipo = tipoDocumento.options[tipoDocumento.selectedIndex].text.toLowerCase();
+
+                if (tipo.includes("dni")) {
+                    numeroDocumento.setAttribute("pattern", "\\d{8}");
+                    numeroDocumento.setAttribute("maxlength", "8");
+                    numeroDocumento.setAttribute("title", "El DNI debe tener 8 dígitos");
+                } else if (tipo.includes("carnet")) {
+                    numeroDocumento.setAttribute("pattern", "\\d{20}");
+                    numeroDocumento.setAttribute("maxlength", "20");
+                    numeroDocumento.setAttribute("title", "El carnet de extranjería debe tener 20 dígitos");
+                } else {
+                    numeroDocumento.removeAttribute("pattern");
+                    numeroDocumento.removeAttribute("maxlength");
+                }
             });
+
+            // Validación de celular: 9 dígitos
+            celular.setAttribute("pattern", "\\d{9}");
+            celular.setAttribute("title", "El celular debe tener 9 dígitos");
+
         });
     </script>
+
 
 
     <!-- Bootstrap 5 JS (necesario para que funcionen los modales, dropdowns, tooltips, etc.) -->

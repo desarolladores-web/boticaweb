@@ -88,6 +88,7 @@
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
                         @php $carrito = session('carrito', []); @endphp
                         @forelse($productos as $producto)
+                        @if ($producto->stock > 0)
                             <div class="col">
                                 <div class="card h-100 shadow-sm border-0 product-card">
                                     <a href="{{ route('productos.especificaciones', $producto->id) }}" class="p-3 pb-0">
@@ -158,6 +159,7 @@
                                     </div>
                                 </div>
                             </div>
+                        @endif
                         @empty
                             <div class="col-12">
                                 <div class="alert alert-warning text-center">No hay productos disponibles.</div>

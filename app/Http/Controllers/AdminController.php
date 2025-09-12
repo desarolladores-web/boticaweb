@@ -11,10 +11,12 @@ class AdminController extends Controller
     public function index()
     {
         // Ventas hoy
-        $ventasHoy = DB::table('detalle_ventas as dv')
-            ->join('ventas as v', 'dv.venta_id', '=', 'v.id')
-            ->whereDate('v.created_at', Carbon::today())
-            ->sum(DB::raw('dv.cantidad * dv.precio_venta'));
+        $ventasHoy = DB::table('ventas')
+            ->whereDate('created_at', today())
+            ->sum('total');
+
+        // Total de ventas acumuladas
+        $totalVentas = DB::table('ventas')->sum('total');
 
         // Clientes nuevos hoy
         $clientesNuevos = DB::table('clientes')
@@ -30,13 +32,7 @@ class AdminController extends Controller
         $productosCriticos = DB::table('productos')
             ->whereColumn('stock', '<=', 'stock_min')
             ->count();
-
-        // Ventas de hoy (depende de tus tablas: ventas/detalle_ventas)
-        $ventasHoy = DB::table('detalle_ventas as dv')
-            ->join('ventas as v', 'dv.venta_id', '=', 'v.id')
-            ->whereDate('v.created_at', Carbon::today())
-            ->sum('dv.cantidad');
-
+            
 
         // Ventas por mes (últimos 6 meses)
         $ventasMes = DB::table('ventas')

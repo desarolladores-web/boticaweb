@@ -60,8 +60,8 @@
                         <form action="{{ route('productos.buscar') }}" method="get" class="flex-grow-1"
                             style="max-width: 500px;">
                             <div class="input-group shadow-sm">
-                                <input type="text" class="form-control bg-white border-secondary text-black"
-                                    name="keyword" placeholder="Buscar productos..." value="{{ request('keyword') }}">
+                                <input type="text" class="form-control bg-white border-secondary text-black" name="keyword"
+                                    placeholder="Buscar productos..." value="{{ request('keyword') }}">
                                 <button class="btn btn-success" type="submit">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -88,82 +88,72 @@
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
                         @php $carrito = session('carrito', []); @endphp
                         @forelse($productos as $producto)
-                            @if ($producto->stock > 0)
-                                <div class="col">
-                                    <div class="card h-100 shadow-sm border-0 product-card">
-                                        <a href="{{ route('productos.especificaciones', $producto->id) }}"
-                                            class="p-3 pb-0">
-                                            @if ($producto->imagen)
-                                                <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}"
-                                                    class="card-img-top tab-image" alt="{{ $producto->nombre }}">
-                                            @else
-                                                <img src="https://via.placeholder.com/300x200?text=Sin+Imagen"
-                                                    class="card-img-top tab-image" alt="Sin Imagen">
-                                            @endif
-                                        </a>
-                                        <div class="card-body d-flex flex-column">
-                                            <h5 class="card-title fw-semibold mb-1">{{ $producto->nombre }}</h5>
-                                            <small
-                                                class="text-muted mb-2">{{ $producto->presentacion?->tipo_presentacion ?? 'Sin presentación' }}</small>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span class="price fw-bold fs-5">S/.
-                                                    {{ number_format($producto->pvp1, 2) }}</span>
-                                            </div>
-                                            <div class="mt-auto">
-                                                <div class="d-flex align-items-center justify-content-between mb-2"
-                                                    id="carrito-container-{{ $producto->id }}">
-                                                    @if (isset($carrito[$producto->id]))
-                                                        <a href="{{ route('carrito.ver') }}"
-                                                            class="btn btn-outline-success w-100 fw-semibold">
-                                                            Ver carrito
-                                                            <i class="bi bi-cart-check-fill ms-2"></i>
-                                                        </a>
-                                                    @else
-                                                        <div class="d-flex w-100 align-items-center">
-                                                            <div class="input-group product-qty " style="width: 50%;">
-                                                                <button type="button"
-                                                                    class="quantity-left-minus btn-number">
-                                                                    <svg width="13" height="13" viewBox="0 0 24 24"
-                                                                        fill="none">
-                                                                        <use xlink:href="#minus"></use>
-                                                                    </svg>
-                                                                </button>
 
-                                                                <input type="text"
-                                                                    class="form-control input-number text-center"
-                                                                    value="1" style="max-width: 50px;">
+                            <div class="col">
+                                <div class="card h-100 shadow-sm border-0 product-card">
+                                    <a href="{{ route('productos.especificaciones', $producto->id) }}" class="p-3 pb-0">
+                                        @if ($producto->imagen)
+                                            <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}"
+                                                class="card-img-top tab-image" alt="{{ $producto->nombre }}">
+                                        @else
+                                            <img src="https://via.placeholder.com/300x200?text=Sin+Imagen"
+                                                class="card-img-top tab-image" alt="Sin Imagen">
+                                        @endif
+                                    </a>
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title fw-semibold mb-1">{{ $producto->nombre }}</h5>
+                                        <small
+                                            class="text-muted mb-2">{{ $producto->presentacion?->tipo_presentacion ?? 'Sin presentación' }}</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="price fw-bold fs-5">S/.
+                                                {{ number_format($producto->pvp1, 2) }}</span>
+                                        </div>
+                                        <div class="mt-auto">
+                                            <div class="d-flex align-items-center justify-content-between mb-2"
+                                                id="carrito-container-{{ $producto->id }}">
+                                                @if (isset($carrito[$producto->id]))
+                                                    <a href="{{ route('carrito.ver') }}"
+                                                        class="btn btn-outline-success w-100 fw-semibold">
+                                                        Ver carrito
+                                                        <i class="bi bi-cart-check-fill ms-2"></i>
+                                                    </a>
+                                                @else
+                                                    <div class="d-flex w-100 align-items-center">
+                                                        <div class="input-group product-qty " style="width: 50%;">
+                                                            <button type="button" class="quantity-left-minus btn-number">
+                                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                                                                    <use xlink:href="#minus"></use>
+                                                                </svg>
+                                                            </button>
 
-                                                                <button type="button"
-                                                                    class="quantity-right-plus btn-number">
-                                                                    <svg width="16" height="16" viewBox="0 0 24 24"
-                                                                        fill="none">
-                                                                        <use xlink:href="#plus"></use>
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
+                                                            <input type="text" class="form-control input-number text-center"
+                                                                value="1" style="max-width: 50px;">
 
-                                                            <form method="POST"
-                                                                action="{{ route('carrito.agregar', $producto->id) }}"
-                                                                class="agregar-carrito-form ms-3 flex-grow-1">
-                                                                @csrf
-                                                                <input type="hidden" name="cantidad" value="1">
-                                                                <button type="submit"
-                                                                    class="w-100 fw-semibold btn-add-cart">
-                                                                    Agregar
-                                                                    <i class="bi bi-cart"></i>
-                                                                </button>
-
-                                                            </form>
+                                                            <button type="button" class="quantity-right-plus btn-number">
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                                    <use xlink:href="#plus"></use>
+                                                                </svg>
+                                                            </button>
                                                         </div>
-                                                    @endif
-                                                </div>
 
+                                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                                            class="agregar-carrito-form ms-3 flex-grow-1">
+                                                            @csrf
+                                                            <input type="hidden" name="cantidad" value="1">
+                                                            <button type="submit" class="w-100 fw-semibold btn-add-cart">
+                                                                Agregar
+                                                                <i class="bi bi-cart"></i>
+                                                            </button>
 
+                                                        </form>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            </div>
+
                         @empty
                             <div class="col-12">
                                 <div class="alert alert-warning text-center">No hay productos disponibles.</div>
@@ -296,9 +286,9 @@
 <!-- JS para cantidades y AJAX (vanilla JS) -->
 <!-- JS para cantidades (sin duplicar AJAX, eso lo maneja app.blade.php) -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Sincronizar cantidad visible con el input hidden del form dentro de cada tarjeta
-        document.querySelectorAll('.product-card').forEach(function(card) {
+        document.querySelectorAll('.product-card').forEach(function (card) {
             const visibleInput = card.querySelector('.input-number');
             const plusBtn = card.querySelector('.quantity-right-plus');
             const minusBtn = card.querySelector('.quantity-left-minus');
@@ -310,7 +300,7 @@
             // init: si hidden existe, setear al valor visible
             if (hiddenInput) hiddenInput.value = visibleInput.value || 1;
 
-            plusBtn?.addEventListener('click', function(e) {
+            plusBtn?.addEventListener('click', function (e) {
                 e.preventDefault();
                 let qty = parseInt(visibleInput.value) || 1;
                 qty = qty + 1;
@@ -318,7 +308,7 @@
                 if (hiddenInput) hiddenInput.value = qty;
             });
 
-            minusBtn?.addEventListener('click', function(e) {
+            minusBtn?.addEventListener('click', function (e) {
                 e.preventDefault();
                 let qty = parseInt(visibleInput.value) || 1;
                 if (qty > 1) qty = qty - 1;
@@ -326,7 +316,7 @@
                 if (hiddenInput) hiddenInput.value = qty;
             });
 
-            visibleInput.addEventListener('input', function() {
+            visibleInput.addEventListener('input', function () {
                 let qty = parseInt(this.value);
                 if (isNaN(qty) || qty < 1) qty = 1;
                 this.value = qty;
@@ -339,7 +329,7 @@
 <!-- SweetAlert mensajes (si los usas en otras partes) -->
 @if (session('status'))
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let mensaje = '';
             let tipo = '';
             switch ("{{ session('status') }}") {

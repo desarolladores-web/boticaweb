@@ -55,7 +55,10 @@ class ProductoController extends Controller
                 ->orWhere('descripcion', 'like', '%' . $request->keyword . '%');
         }
 
-        $productos = $query->paginate(20)->appends($request->query());
+        $productos = $query->where('stock', '>', 0) // 👈 Filtrar productos con stock disponible
+            ->paginate(20)
+            ->appends($request->query());
+
         $categorias = Categoria::all();
 
         return view('producto.filtro', compact('productos', 'categorias'));
@@ -243,7 +246,9 @@ class ProductoController extends Controller
             }
         }
 
-        $productos = $query->paginate(20);
+        $productos = $query->where('stock', '>', 0) // 👈 Filtrar productos con stock disponible
+            ->paginate(20);
+
         $categorias = Categoria::all();
 
         return view('producto.filtro', compact('productos', 'categorias'));

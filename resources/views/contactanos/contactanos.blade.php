@@ -151,12 +151,14 @@
     @extends('layouts.app')
     <title>Contactanos</title>
     @section('content')
-        <section class="contact spad">
+        <section class="contact spad mt-5">
             <div class="container">
-                <div class="contact-section">
-                    <div class="col-lg-6">
+                <div class="row g-4"><!-- g-4 da espacio entre columnas -->
+
+                    <!-- Columna izquierda -->
+                    <div class="col-12 col-lg-6">
                         <div class="contact__content">
-                            <!-- Borde y la imagen como icono encima de la sección de información de contacto -->
+
                             <div class="contact__header">
                                 <img src="{{ asset('imagenes/botica2.png') }}" alt="Icono de Contacto"
                                     class="contact__icon" />
@@ -168,8 +170,7 @@
                                     <li>
                                         <h6><i class="fa fa-map-marker-alt"></i> Direcciones</h6>
                                         <p style="margin-bottom: 2px;">Botica 1: CALLE. CARACAS N° 498 MZ° 36 LT° 01
-                                            TINGUIÑA
-                                        </p>
+                                            TINGUIÑA</p>
                                         <p style="margin-top: 0;">Botica 2: CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA
                                             TINGUIÑA</p>
                                     </li>
@@ -201,7 +202,8 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6">
+                    <!-- Columna derecha -->
+                    <div class="col-12 col-lg-6">
                         <div class="contact__map" style="display:flex; flex-direction: column; gap: 30px;">
                             <div
                                 style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
@@ -222,10 +224,13 @@
                                     loading="lazy"></iframe>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
             </div>
         </section>
+
     @endsection
 
 </body>

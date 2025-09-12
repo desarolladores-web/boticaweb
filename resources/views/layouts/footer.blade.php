@@ -233,3 +233,55 @@
         padding: 10px 0 !important;
     }
 </style>
+<style>
+    /* Por defecto oculto en mobile */
+    .footer-item-content {
+        display: none;
+    }
+
+    .footer-link-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    /* En pantallas grandes (computadora) se muestra siempre */
+    @media (min-width: 992px) {
+        .footer-item-content {
+            display: block !important;
+        }
+        .footer-link-icon {
+            display: none; /* Oculto el icono + en PC */
+        }
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.footer-link-title').forEach(title => {
+        title.addEventListener('click', () => {
+            if (window.innerWidth < 992) { // Solo aplica en móvil/tablet
+                let content = title.nextElementSibling;
+
+                // Si el siguiente no es directamente la lista, busca dentro (para Productos)
+                if (content && !content.classList.contains('footer-item-content')) {
+                    content = content.querySelector('.footer-item-content');
+                }
+
+                const icon = title.querySelector('i');
+
+                if (content) {
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                        icon.classList.remove("bi-dash-lg");
+                        icon.classList.add("bi-plus-lg");
+                    } else {
+                        content.style.display = "block";
+                        icon.classList.remove("bi-plus-lg");
+                        icon.classList.add("bi-dash-lg");
+                    }
+                }
+            }
+        });
+    });
+</script>

@@ -130,7 +130,7 @@
                                 <div
                                     class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
                                     @forelse($productos as $producto)
-                                    @if ($producto->stock > 0)
+
                                         <div class="col mb-4">
                                             <div class="product-item product-card">
                                                 <figure>
@@ -174,8 +174,7 @@
                                                         {{-- Inyectamos el bloque inicial --}}
                                                         <div class="input-group product-qty">
                                                             <span class="input-group-btn">
-                                                                <button type="button"
-                                                                    class="quantity-left-minus btn  btn-number"
+                                                                <button type="button" class="quantity-left-minus btn  btn-number"
                                                                     data-type="minus">
                                                                     <svg width="13" height="13">
                                                                         <use xlink:href="#minus"></use>
@@ -185,8 +184,7 @@
                                                             <input type="text" id="quantity" name="quantity"
                                                                 class="form-control input-number" value="1">
                                                             <span class="input-group-btn">
-                                                                <button type="button"
-                                                                    class="quantity-right-plus btn  btn-number"
+                                                                <button type="button" class="quantity-right-plus btn  btn-number"
                                                                     data-type="plus">
                                                                     <svg width="16" height="16">
                                                                         <use xlink:href="#plus"></use>
@@ -194,8 +192,7 @@
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                        <form method="POST"
-                                                            action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
                                                             class="agregar-carrito-form">
                                                             @csrf
                                                             <input type="hidden" name="cantidad" value="1">
@@ -207,25 +204,23 @@
                                                         </form>
                                                     @endif
                                                 </div>
-                                                @endif  
+
 
                                                 {{-- 🔹 Template oculto para restaurar después de eliminar --}}
                                                 <template id="form-agregar-{{ $producto->id }}">
                                                     <div class="input-group product-qty">
                                                         <span class="input-group-btn">
-                                                            <button type="button"
-                                                                class="quantity-left-minus btn btn-danger btn-number"
+                                                            <button type="button" class="quantity-left-minus btn  btn-number"
                                                                 data-type="minus">
                                                                 <svg width="13" height="13">
                                                                     <use xlink:href="#minus"></use>
                                                                 </svg>
                                                             </button>
                                                         </span>
-                                                        <input type="text" name="cantidad"
+                                                        <input type="text" id="quantity" name="quantity"
                                                             class="form-control input-number" value="1">
                                                         <span class="input-group-btn">
-                                                            <button type="button"
-                                                                class="quantity-right-plus btn btn-success btn-number"
+                                                            <button type="button" class="quantity-right-plus btn  btn-number"
                                                                 data-type="plus">
                                                                 <svg width="16" height="16">
                                                                     <use xlink:href="#plus"></use>
@@ -234,8 +229,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <form method="POST"
-                                                        action="{{ route('carrito.agregar', $producto->id) }}"
+                                                    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
                                                         class="agregar-carrito-form">
                                                         @csrf
                                                         <input type="hidden" name="cantidad" value="1">
@@ -260,14 +254,14 @@
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
         </section>
 
 
         <!-- ALERTAS -->
         @if (session('status'))
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
+                document.addEventListener('DOMContentLoaded', function () {
                     let mensaje = '';
                     let tipo = '';
                     switch ("{{ session('status') }}") {
@@ -296,29 +290,29 @@
 
         <!-- SCRIPT DE CANTIDAD -->
         <script>
-            $(document).ready(function() {
-                $('.product-card').each(function() {
+            $(document).ready(function () {
+                $('.product-card').each(function () {
                     const $card = $(this);
                     const $qtyInput = $card.find('.input-number');
                     const $btnPlus = $card.find('.quantity-right-plus');
                     const $btnMinus = $card.find('.quantity-left-minus');
                     const $hiddenInput = $card.find('input[name="cantidad"]');
 
-                    $btnPlus.on('click', function(e) {
+                    $btnPlus.on('click', function (e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 0;
                         $qtyInput.val(++currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $btnMinus.on('click', function(e) {
+                    $btnMinus.on('click', function (e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 1;
                         if (currentQty > 1) $qtyInput.val(--currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $qtyInput.on('input', function() {
+                    $qtyInput.on('input', function () {
                         let currentQty = parseInt($(this).val()) || 1;
                         if (currentQty < 1) currentQty = 1;
                         $(this).val(currentQty);

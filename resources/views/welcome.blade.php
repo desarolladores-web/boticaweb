@@ -130,6 +130,7 @@
                                 <div
                                     class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
                                     @forelse($productos as $producto)
+                                    @if ($producto->stock > 0)
                                         <div class="col mb-4">
                                             <div class="product-item product-card">
                                                 <figure>
@@ -206,6 +207,7 @@
                                                         </form>
                                                     @endif
                                                 </div>
+                                                @endif  
 
                                                 {{-- 🔹 Template oculto para restaurar después de eliminar --}}
                                                 <template id="form-agregar-{{ $producto->id }}">
@@ -258,7 +260,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
         </section>
 
 

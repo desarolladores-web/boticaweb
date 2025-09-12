@@ -11,9 +11,10 @@ class AdminController extends Controller
     public function index()
     {
         // Ventas hoy
-        $ventasHoy = DB::table('ventas')
-            ->whereDate('created_at', today())
-            ->sum('total');
+        $ventasHoy = DB::table('detalle_ventas as dv')
+            ->join('ventas as v', 'dv.venta_id', '=', 'v.id')
+            ->whereDate('v.created_at', Carbon::today())
+            ->sum(DB::raw('dv.cantidad * dv.precio_venta'));
 
         // Clientes nuevos hoy
         $clientesNuevos = DB::table('clientes')
@@ -64,30 +65,30 @@ class AdminController extends Controller
             'topProductos'
         ));
     }
-   public function productosAgotados(Request $request)
-{
-    $estado = $request->get('estado');
+    public function productosAgotados(Request $request)
+    {
+        $estado = $request->get('estado');
 
-    $query = DB::table('productos')
-        ->select('id', 'codigo', 'nombre', 'stock', 'stock_min')
-        ->orderByRaw("CASE 
+        $query = DB::table('productos')
+            ->select('id', 'codigo', 'nombre', 'stock', 'stock_min')
+            ->orderByRaw("CASE 
             WHEN stock <= 0 THEN 1 
             WHEN stock <= stock_min THEN 2 
             ELSE 3 END");
 
-    if ($estado == 'agotado') {
-        $query->where('stock', '<=', 0);
-    } elseif ($estado == 'bajo') {
-        $query->whereColumn('stock', '<=', 'stock_min')
-              ->where('stock', '>', 0);
-    } elseif ($estado == 'suficiente') {
-        $query->whereColumn('stock', '>', 'stock_min');
+        if ($estado == 'agotado') {
+            $query->where('stock', '<=', 0);
+        } elseif ($estado == 'bajo') {
+            $query->whereColumn('stock', '<=', 'stock_min')
+                ->where('stock', '>', 0);
+        } elseif ($estado == 'suficiente') {
+            $query->whereColumn('stock', '>', 'stock_min');
+        }
+
+        $productos = $query->paginate(20)->appends(['estado' => $estado]);
+
+        return view('admin.productos_agotados', compact('productos', 'estado'));
     }
-
-    $productos = $query->paginate(20)->appends(['estado' => $estado]);
-
-    return view('admin.productos_agotados', compact('productos', 'estado'));
-}
 
     public function updateStock(Request $request)
     {

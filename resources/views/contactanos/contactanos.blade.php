@@ -4,6 +4,91 @@
     rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+
+
+@extends('layouts.app')
+<title>Contactanos</title>
+@section('content')
+    <section class="contact spad mt-5">
+        <div class="container">
+            <div class="row g-4"><!-- g-4 da espacio entre columnas -->
+
+                <!-- Columna izquierda -->
+                <div class="col-12 col-lg-6">
+                    <div class="contact__content">
+
+                        <div class="contact__header">
+                            <img src="{{ asset('imagenes/botica2.png') }}" alt="Icono de Contacto" class="contact__icon" />
+                        </div>
+
+                        <div class="contact__address">
+                            <h5>Contacto info</h5>
+                            <ul>
+                                <li>
+                                    <h6><i class="fa fa-map-marker-alt"></i> Direcciones</h6>
+                                    <p style="margin-bottom: 2px;">Botica 1: CALLE. CARACAS N° 498 MZ° 36 LT° 01
+                                        TINGUIÑA</p>
+                                    <p style="margin-top: 0;">Botica 2: CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA
+                                        TINGUIÑA</p>
+                                </li>
+                                <li>
+                                    <h6><i class="fa fa-phone-alt"></i> Teléfono</h6>
+                                    <p>+51 914819120</p>
+                                </li>
+                                <li>
+                                    <h6><i class="bi bi-envelope-fill"></i> Correo</h6>
+                                    <p>boticamyryan203@gmail.com</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="contact__form">
+                            <h5>Enviar mensaje</h5>
+                            <form action="#">
+                                <input type="text" placeholder="Nombre">
+                                <input type="email" placeholder="Email">
+                                <textarea placeholder="Mensaje"></textarea>
+                                <button type="submit" class="site-btn">Enviar mensaje</button>
+                            </form>
+                        </div>
+
+                        <div class="footer__social">
+                            <a href="https://www.facebook.com/share/1C77FGP1bi/" target="_blank"><i
+                                    class="fab fa-facebook-f"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha -->
+                <div class="col-12 col-lg-6">
+                    <div class="contact__map" style="display:flex; flex-direction: column; gap: 30px;">
+                        <div
+                            style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
+                            <h5 style="margin-bottom: 15px;">Botica 1: CALLE. CARACAS N° 498 MZ° 36 LT° 01 TINGUIÑA</h5>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5044.068751925154!2d-75.7056514938535!3d-14.036814810441033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9111033b8b9d0279%3A0xceb84290babbfbda!2sBOTICA%20MYRYAN!5e0!3m2!1ses-419!2spe!4v1749044707979!5m2!1ses-419!2spe"
+                                height="380" style="border:0; width: 100%; border-radius: 10px;" allowfullscreen=""
+                                loading="lazy"></iframe>
+                        </div>
+
+                        <div
+                            style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
+                            <h5 style="margin-bottom: 15px;">Botica 2: CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA TINGUIÑA
+                            </h5>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d967.6791622753105!2d-75.70682693037172!3d-14.034802898078123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x911102aeeea34125%3A0xb08e4c3f4e5825ef!2sMexico%20251%2C%20Ica%2011003!5e0!3m2!1ses!2spe!4v1755013338732!5m2!1ses!2spe"
+                                height="380" style="border:0; width: 100%; border-radius: 10px;" allowfullscreen=""
+                                loading="lazy"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+@endsection
+
 <style>
     body {
         font-family: 'Montserrat', sans-serif;
@@ -144,95 +229,3 @@
         object-fit: contain;
     }
 </style>
-</head>
-
-<body>
-
-    @extends('layouts.app')
-    <title>Contactanos</title>
-    @section('content')
-        <section class="contact spad mt-5">
-            <div class="container">
-                <div class="row g-4"><!-- g-4 da espacio entre columnas -->
-
-                    <!-- Columna izquierda -->
-                    <div class="col-12 col-lg-6">
-                        <div class="contact__content">
-
-                            <div class="contact__header">
-                                <img src="{{ asset('imagenes/botica2.png') }}" alt="Icono de Contacto"
-                                    class="contact__icon" />
-                            </div>
-
-                            <div class="contact__address">
-                                <h5>Contacto info</h5>
-                                <ul>
-                                    <li>
-                                        <h6><i class="fa fa-map-marker-alt"></i> Direcciones</h6>
-                                        <p style="margin-bottom: 2px;">Botica 1: CALLE. CARACAS N° 498 MZ° 36 LT° 01
-                                            TINGUIÑA</p>
-                                        <p style="margin-top: 0;">Botica 2: CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA
-                                            TINGUIÑA</p>
-                                    </li>
-                                    <li>
-                                        <h6><i class="fa fa-phone-alt"></i> Teléfono</h6>
-                                        <p>+51 954187305</p>
-                                    </li>
-                                    <li>
-                                        <h6><i class="bi bi-envelope-fill"></i> Correo</h6>
-                                        <p>boticamyryan@gmail.com</p>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="contact__form">
-                                <h5>Enviar mensaje</h5>
-                                <form action="#">
-                                    <input type="text" placeholder="Nombre">
-                                    <input type="email" placeholder="Email">
-                                    <textarea placeholder="Mensaje"></textarea>
-                                    <button type="submit" class="site-btn">Enviar mensaje</button>
-                                </form>
-                            </div>
-
-                            <div class="footer__social">
-                                <a href="https://www.facebook.com/share/1C77FGP1bi/" target="_blank"><i
-                                        class="fab fa-facebook-f"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Columna derecha -->
-                    <div class="col-12 col-lg-6">
-                        <div class="contact__map" style="display:flex; flex-direction: column; gap: 30px;">
-                            <div
-                                style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
-                                <h5 style="margin-bottom: 15px;">Botica 1: CALLE. CARACAS N° 498 MZ° 36 LT° 01 TINGUIÑA</h5>
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5044.068751925154!2d-75.7056514938535!3d-14.036814810441033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9111033b8b9d0279%3A0xceb84290babbfbda!2sBOTICA%20MYRYAN!5e0!3m2!1ses-419!2spe!4v1749044707979!5m2!1ses-419!2spe"
-                                    height="380" style="border:0; width: 100%; border-radius: 10px;" allowfullscreen=""
-                                    loading="lazy"></iframe>
-                            </div>
-
-                            <div
-                                style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1);">
-                                <h5 style="margin-bottom: 15px;">Botica 2: CALLE. PARIS N° 825 MZ.26A LT. 09 C.P LA TINGUIÑA
-                                </h5>
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d967.6791622753105!2d-75.70682693037172!3d-14.034802898078123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x911102aeeea34125%3A0xb08e4c3f4e5825ef!2sMexico%20251%2C%20Ica%2011003!5e0!3m2!1ses!2spe!4v1755013338732!5m2!1ses!2spe"
-                                    height="380" style="border:0; width: 100%; border-radius: 10px;" allowfullscreen=""
-                                    loading="lazy"></iframe>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-    @endsection
-
-</body>
-
-</html>

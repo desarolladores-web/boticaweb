@@ -50,12 +50,12 @@
 
                         <!-- Información de contacto -->
                         <div class="col-12 col-md d-flex flex-wrap justify-content-center justify-content-md-end gap-3">
-                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=boticamyryan@gmail.com"
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=boticamyryan203@gmail.com"
                                 target="_blank" class="text-white d-flex align-items-center">
-                                <i class="bi bi-envelope-fill me-1"></i> boticamyryan@gmail.com
+                                <i class="bi bi-envelope-fill me-1"></i> boticamyryan203@gmail.com
                             </a>
                             <span class="d-flex align-items-center">
-                                <i class="bi bi-telephone-outbound-fill me-1"></i> +51 954187305
+                                <i class="bi bi-telephone-outbound-fill me-1"></i> +51 914819120
                             </span>
                         </div>
                     </div>

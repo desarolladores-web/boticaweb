@@ -1,6 +1,7 @@
 <!-- WhatsApp Button -->
-<a href="https://wa.me/1234567890" class="whatsapp-float" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1022px-WhatsApp.svg.png" alt="WhatsApp">
+<a href="https://wa.me/914819120" class="whatsapp-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1022px-WhatsApp.svg.png"
+        alt="WhatsApp">
 </a>
 
 <style>
@@ -23,5 +24,4 @@
     .whatsapp-float:hover {
         transform: scale(1.1);
     }
-    
 </style>

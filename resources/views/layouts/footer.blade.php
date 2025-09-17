@@ -81,14 +81,14 @@
                             </div>
                             <ul class="footer-item-content">
                                 <li>
-                                    <a href="https://wa.me/51954187305" target="_blank">
-                                        <i class="bi bi-whatsapp me-1"></i> 954187305
+                                    <a href="https://wa.me/51914819120" target="_blank">
+                                        <i class="bi bi-whatsapp me-1"></i> +51 914819120
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=boticamyryan@gmail.com"
+                                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=boticamyryan203@gmail.com"
                                         target="_blank">
-                                        <i class="bi bi-envelope-fill me-1"></i> boticamyryan@gmail.com
+                                        <i class="bi bi-envelope-fill me-1"></i> boticamyryan203@gmail.com
                                     </a>
                                 </li>
                             </ul>
@@ -251,8 +251,10 @@
         .footer-item-content {
             display: block !important;
         }
+
         .footer-link-icon {
-            display: none; /* Oculto el icono + en PC */
+            display: none;
+            /* Oculto el icono + en PC */
         }
     }
 </style>

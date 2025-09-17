@@ -12,8 +12,8 @@
         <div class="row mb-5">
             <div class="col-md-4 text-center ">
                 <p>
-                    La Botica Myryan, registrada ante SUNAT como HUILLCAHUAMAN POMA MIRIAN CATALINA (RUC: 10434953397),
-                    inició operaciones el 1 de abril de 2019 en el distrito de La Tinguiña. Se dedica a la venta de
+                    La Botica Myryan inició operaciones el 1 de abril de 2019 en el distrito de La Tinguiña. Se dedica a la
+                    venta de
                     medicamentos,
                     productos médicos, cosméticos y artículos de tocador, cubriendo necesidades de salud y bienestar de la
                     comunidad.
@@ -47,7 +47,7 @@
 
         <div class="row text-center mt-5">
             <div class="col-md-4 mb-4">
-                <h5 class="fw-semibold mb-1">Mirian Catalina Huillcahuaman Poma</h5>
+                <h5 class="fw-semibold mb-1">Mirian Catalina </h5>
                 <p class="text-muted mb-0">Propietaria / Administradora</p>
             </div>
             <div class="col-md-4 mb-4">

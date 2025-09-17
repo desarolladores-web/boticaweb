@@ -15,8 +15,16 @@
 
 
             <div class="row gx-5">
-                <!-- FILTRO LATERAL -->
-                <div class="col-12 col-md-4 col-lg-3 mb-4">
+                <!-- BOTÓN FILTRO SOLO EN CELULAR -->
+                <div class="col-12 d-md-none mb-3">
+                    <button class="btn btn-success w-100" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasFiltro" aria-controls="offcanvasFiltro">
+                        <i class="bi bi-funnel-fill"></i> Filtros
+                    </button>
+                </div>
+
+                <!-- FILTRO LATERAL EN PANTALLAS GRANDES -->
+                <div class="col-12 col-md-4 col-lg-3 mb-4 d-none d-md-block">
                     <div class="product-categories-widget widget-item card shadow-sm h-100">
                         <div class="card-body">
                             <h2 class="widget-title mb-3">🛍️ Categorías de Productos</h2>
@@ -53,6 +61,47 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- OFFCANVAS FILTRO SOLO EN CELULAR -->
+                <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="offcanvasFiltro"
+                    aria-labelledby="offcanvasFiltroLabel">
+                    <div class="offcanvas-header">
+                        <h5 id="offcanvasFiltroLabel">🛍️ Categorías de Productos</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="category-tree list-unstyled mb-0" style="max-height: 700px; ">
+                            {{-- Todos los productos --}}
+                            <li class="category-item mb-2">
+                                <div class="category-header">
+                                    <a href="{{ route('productos.filtro') }}"
+                                        class="category-link {{ request('categorias') ? '' : 'fw-bold text-dark' }}">
+                                        Todos
+                                    </a>
+                                </div>
+                            </li>
+
+                            {{-- Lista de categorías --}}
+                            @foreach ($categorias as $categoria)
+                                @php
+                                    $activa =
+                                        is_array(request('categorias')) &&
+                                        in_array($categoria->id, request('categorias'));
+                                @endphp
+                                <li class="category-item mb-2">
+                                    <div class="category-header">
+                                        <a href="{{ route('productos.filtro', array_merge(request()->except('page', 'categorias'), ['categorias[]' => $categoria->id])) }}"
+                                            class="category-link {{ $activa ? 'fw-bold text-danger' : 'text-dark' }}">
+                                            {{ $categoria->nombre }}
+                                        </a>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+
 
                 <!-- PRODUCTOS -->
                 <div class="col-12 col-md-8 col-lg-9">

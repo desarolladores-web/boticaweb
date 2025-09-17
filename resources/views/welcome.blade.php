@@ -326,13 +326,8 @@
 
     <!-- ESTILOS PERSONALIZADOS -->
     <style>
-        .tab-image {
-            width: 100% !important;
-            height: 250px !important;
-            object-fit: cover !important;
-            border-radius: 10px;
-        }
 
+            
         @media (max-width: 576px) {
             .tab-image {
                 height: 180px !important;
@@ -362,15 +357,37 @@
         .input-group .btn {
             border-radius: 0.375rem !important;
             /* 🔹 Mantiene esquinas redondeadas */
-            border: 1px solid #dee2e6 !important;
+            border: 1px solid #ffffffff !important;
             /* 🔹 Restaura los bordes */
         }
 
         .input-group .form-control {
             text-align: center;
             max-width: 60px;
-            border: 1px solid #dee2e6 !important;
+            border: 1px solid #ffffffff !important;
             /* 🔹 Borde igual que los botones */
+        }
+
+        .product-card figure {
+            width: 100%;
+            height: 220px;
+            /* 🔹 Ajusta la altura según necesites */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* evita que sobresalga */
+            border-radius: 8px;
+            /* opcional */
+            background: #ffffffff;
+            /* fondo por si hay transparencia */
+        }
+
+        .product-card figure img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* mantiene proporción sin recortar */
         }
     </style>
 @endsection

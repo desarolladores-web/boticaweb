@@ -40,6 +40,8 @@
 
     .register-left img {
         width: 250px;
+        max-width: 100%;
+        height: auto;
         margin-bottom: 30px;
     }
 
@@ -89,6 +91,53 @@
 
     .invalid-feedback {
         font-size: 0.9rem;
+    }
+
+    /* 🔹 Responsividad */
+    @media (max-width: 992px) {
+        .register-container {
+            flex-direction: column;
+        }
+
+        .register-left,
+        .register-right {
+            flex: unset;
+            width: 100%;
+        }
+
+        .register-right {
+            padding: 40px 20px;
+        }
+
+        .register-left {
+            padding: 40px 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .register-left h2 {
+            font-size: 1.6rem;
+        }
+
+        .register-left p {
+            font-size: 1rem;
+        }
+
+        .card-header {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+        }
+
+        .form-control,
+        .form-select {
+            font-size: 0.95rem;
+            height: 45px;
+        }
+
+        .btn-primary {
+            font-size: 1rem;
+            padding: 12px 25px;
+        }
     }
 </style>
 

@@ -109,8 +109,8 @@
                         <form action="{{ route('productos.buscar') }}" method="get" class="flex-grow-1"
                             style="max-width: 500px;">
                             <div class="input-group shadow-sm">
-                                <input type="text" class="form-control bg-white border-secondary text-black" name="keyword"
-                                    placeholder="Buscar productos..." value="{{ request('keyword') }}">
+                                <input type="text" class="form-control bg-white border-secondary text-black"
+                                    name="keyword" placeholder="Buscar productos..." value="{{ request('keyword') }}">
                                 <button class="btn btn-success" type="submit">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -137,7 +137,6 @@
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
                         @php $carrito = session('carrito', []); @endphp
                         @forelse($productos as $producto)
-
                             <div class="col">
                                 <div class="card h-100 shadow-sm border-0 product-card">
                                     <a href="{{ route('productos.especificaciones', $producto->id) }}" class="p-3 pb-0">
@@ -170,22 +169,26 @@
                                                     <div class="d-flex w-100 align-items-center">
                                                         <div class="input-group product-qty " style="width: 50%;">
                                                             <button type="button" class="quantity-left-minus btn-number">
-                                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                                                                <svg width="13" height="13" viewBox="0 0 24 24"
+                                                                    fill="none">
                                                                     <use xlink:href="#minus"></use>
                                                                 </svg>
                                                             </button>
 
-                                                            <input type="text" class="form-control input-number text-center"
+                                                            <input type="text"
+                                                                class="form-control input-number text-center"
                                                                 value="1" style="max-width: 50px;">
 
                                                             <button type="button" class="quantity-right-plus btn-number">
-                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                                <svg width="16" height="16" viewBox="0 0 24 24"
+                                                                    fill="none">
                                                                     <use xlink:href="#plus"></use>
                                                                 </svg>
                                                             </button>
                                                         </div>
 
-                                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        <form method="POST"
+                                                            action="{{ route('carrito.agregar', $producto->id) }}"
                                                             class="agregar-carrito-form ms-3 flex-grow-1">
                                                             @csrf
                                                             <input type="hidden" name="cantidad" value="1">
@@ -198,6 +201,43 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            <!-- Template para restaurar el botón Agregar al carrito -->
+                                            <template id="form-agregar-{{ $producto->id }}">
+                                                <div class="d-flex w-100 align-items-center">
+                                                    <div class="input-group product-qty" style="width: 50%;">
+                                                        <button type="button" class="quantity-left-minus btn-number">
+                                                            <svg width="13" height="13" viewBox="0 0 24 24"
+                                                                fill="none">
+                                                                <use xlink:href="#minus"></use>
+                                                            </svg>
+                                                        </button>
+
+                                                        <input type="text"
+                                                            class="form-control input-number text-center" value="1"
+                                                            style="max-width: 50px;">
+
+                                                        <button type="button" class="quantity-right-plus btn-number">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24"
+                                                                fill="none">
+                                                                <use xlink:href="#plus"></use>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+
+                                                    <form method="POST"
+                                                        action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        class="agregar-carrito-form ms-3 flex-grow-1">
+                                                        @csrf
+                                                        <input type="hidden" name="cantidad" value="1">
+                                                        <button type="submit" class="w-100 fw-semibold btn-add-cart">
+                                                            Agregar
+                                                            <i class="bi bi-cart"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </template>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -216,6 +256,7 @@
                 </div>
             </div>
         </div>
+
     </section>
 @endsection
 
@@ -335,9 +376,9 @@
 <!-- JS para cantidades y AJAX (vanilla JS) -->
 <!-- JS para cantidades (sin duplicar AJAX, eso lo maneja app.blade.php) -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // Sincronizar cantidad visible con el input hidden del form dentro de cada tarjeta
-        document.querySelectorAll('.product-card').forEach(function (card) {
+        document.querySelectorAll('.product-card').forEach(function(card) {
             const visibleInput = card.querySelector('.input-number');
             const plusBtn = card.querySelector('.quantity-right-plus');
             const minusBtn = card.querySelector('.quantity-left-minus');
@@ -349,7 +390,7 @@
             // init: si hidden existe, setear al valor visible
             if (hiddenInput) hiddenInput.value = visibleInput.value || 1;
 
-            plusBtn?.addEventListener('click', function (e) {
+            plusBtn?.addEventListener('click', function(e) {
                 e.preventDefault();
                 let qty = parseInt(visibleInput.value) || 1;
                 qty = qty + 1;
@@ -357,7 +398,7 @@
                 if (hiddenInput) hiddenInput.value = qty;
             });
 
-            minusBtn?.addEventListener('click', function (e) {
+            minusBtn?.addEventListener('click', function(e) {
                 e.preventDefault();
                 let qty = parseInt(visibleInput.value) || 1;
                 if (qty > 1) qty = qty - 1;
@@ -365,7 +406,7 @@
                 if (hiddenInput) hiddenInput.value = qty;
             });
 
-            visibleInput.addEventListener('input', function () {
+            visibleInput.addEventListener('input', function() {
                 let qty = parseInt(this.value);
                 if (isNaN(qty) || qty < 1) qty = 1;
                 this.value = qty;
@@ -378,7 +419,7 @@
 <!-- SweetAlert mensajes (si los usas en otras partes) -->
 @if (session('status'))
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             let mensaje = '';
             let tipo = '';
             switch ("{{ session('status') }}") {

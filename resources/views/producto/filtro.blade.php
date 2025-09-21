@@ -201,43 +201,6 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <!-- Template para restaurar el botón Agregar al carrito -->
-                                            <template id="form-agregar-{{ $producto->id }}">
-                                                <div class="d-flex w-100 align-items-center">
-                                                    <div class="input-group product-qty" style="width: 50%;">
-                                                        <button type="button" class="quantity-left-minus btn-number">
-                                                            <svg width="13" height="13" viewBox="0 0 24 24"
-                                                                fill="none">
-                                                                <use xlink:href="#minus"></use>
-                                                            </svg>
-                                                        </button>
-
-                                                        <input type="text"
-                                                            class="form-control input-number text-center" value="1"
-                                                            style="max-width: 50px;">
-
-                                                        <button type="button" class="quantity-right-plus btn-number">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24"
-                                                                fill="none">
-                                                                <use xlink:href="#plus"></use>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <form method="POST"
-                                                        action="{{ route('carrito.agregar', $producto->id) }}"
-                                                        class="agregar-carrito-form ms-3 flex-grow-1">
-                                                        @csrf
-                                                        <input type="hidden" name="cantidad" value="1">
-                                                        <button type="submit" class="w-100 fw-semibold btn-add-cart">
-                                                            Agregar
-                                                            <i class="bi bi-cart"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </template>
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -256,7 +219,6 @@
                 </div>
             </div>
         </div>
-
     </section>
 @endsection
 

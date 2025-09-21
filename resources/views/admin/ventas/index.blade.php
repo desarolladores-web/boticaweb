@@ -13,31 +13,33 @@
 
         {{-- Encabezado tipo productos (imagen 1 adaptada) --}}
         <div class="card mb-4">
-            <div class="card-body d-flex flex-wrap align-items-center gap-2">
-                <select class="form-select" style="max-width: 250px;">
-                    <option selected>Seleccione una opción</option>
-                    <option value="1">Por cliente</option>
-                    <option value="2">Por documento</option>
-                    <option value="3">Por fecha</option>
-                </select>
+            <div class="card-body d-flex flex-wrap align-items-center justify-content-between">
 
-                <input type="text" class="form-control" placeholder="Buscar" style="max-width: 250px;">
+                {{-- 🔍 Buscador --}}
+                <form action="{{ route('admin.ventas.pendientes') }}" method="GET" class="d-flex align-items-center gap-2">
+                    <input type="text" name="buscar" value="{{ request('buscar') }}" class="form-control"
+                        placeholder="Buscar por DNI o nombre" style="max-width: 250px;">
 
-                <button class="btn btn-danger">
-                    <i class="bi bi-search"></i>
-                </button>
+                    <button type="submit" class="btn btn-danger d-flex align-items-center gap-1">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
 
-                <button type="submit">
-                    <i class="bi bi-x-circle"></i> Limpiar
-                </button>
+                    <a href="{{ route('admin.ventas.pendientes') }}"
+                        class="btn btn-secondary d-flex align-items-center gap-1">
+                        <i class="bi bi-x-circle"></i> Limpiar
+                    </a>
+                </form>
 
-                <form action="{{ route('admin.ventas.entregadas') }}" method="GET" class="ms-auto">
-                    <button type="submit" <i class="bi bi-truck"></i> Ver ventas entregadas
+                {{-- 🚚 Ver ventas entregadas --}}
+                <form action="{{ route('admin.ventas.entregadas') }}" method="GET">
+                    <button type="submit" class="btn btn-primary d-flex align-items-center gap-1">
+                        <i class="bi bi-truck"></i> Ver ventas entregadas
                     </button>
                 </form>
 
             </div>
         </div>
+
 
 
 
@@ -129,6 +131,23 @@
             });
         });
     </script>
+
+
+
+
+    {{-- Mostrar mensaje de éxito después de redirección --}}
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Listo!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#28a745'
+            });
+        </script>
+    @endif
+
+
 
     {{-- Estilos adicionales --}}
     <style>

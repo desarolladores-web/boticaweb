@@ -194,23 +194,54 @@ class ProductoController extends Controller
     {
         $datos = $request->validated();
 
+        // 1. Procesar Categoría
+        $categoria = null;
+        if ($request->filled('categoria_nombre')) {
+            $categoria = Categoria::firstOrCreate(
+                ['nombre' => $request->input('categoria_nombre')],
+                ['descripcion' => null]
+            );
+            $datos['categoria_id'] = $categoria->id;
+        }
+
+        // 2. Procesar Laboratorio
+        $laboratorio = null;
+        if ($request->filled('laboratorio_nombre')) {
+            $laboratorio = Laboratorio::firstOrCreate(
+                ['nombre_laboratorio' => $request->input('laboratorio_nombre')]
+            );
+            $datos['laboratorio_id'] = $laboratorio->id;
+        }
+
+        // 3. Procesar Presentación
+        $presentacion = null;
+        if ($request->filled('presentacion_tipo')) {
+            $presentacion = Presentacion::firstOrCreate(
+                ['tipo_presentacion' => $request->input('presentacion_tipo')]
+            );
+            $datos['presentacion_id'] = $presentacion->id;
+        }
+
+        // 4. Procesar imagen
         if ($request->hasFile('imagen')) {
             $archivo = $request->file('imagen');
 
             if ($archivo->isValid()) {
-                $datos['imagen'] = file_get_contents($archivo); // sin usar getRealPath()
+                $datos['imagen'] = file_get_contents($archivo);
             } else {
                 return back()->with('error', 'La imagen no es válida.');
             }
         } else {
-            unset($datos['imagen']); // no actualizar si no se envió imagen
+            unset($datos['imagen']); // no sobreescribir si no se manda
         }
 
+        // 5. Actualizar producto
         $producto->update($datos);
 
         return Redirect::route('productos.index')
             ->with('success', 'Producto actualizado correctamente.');
     }
+
 
 
     public function vistaConFiltro(Request $request)

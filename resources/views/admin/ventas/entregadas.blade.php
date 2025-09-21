@@ -12,29 +12,30 @@
 
         {{-- Encabezado tipo productos (barra de búsqueda y botón) --}}
         <div class="card mb-4">
-            <div class="card-body d-flex flex-wrap align-items-center gap-2">
-                <select class="form-select" style="max-width: 250px;">
-                    <option selected>Seleccione una opción</option>
-                    <option value="1">Por cliente</option>
-                    <option value="2">Por documento</option>
-                    <option value="3">Por fecha</option>
-                </select>
+            <div class="card-body d-flex flex-wrap align-items-center justify-content-between">
 
-                <input type="text" class="form-control" placeholder="Buscar" style="max-width: 250px;">
+                {{-- 🔍 Buscador --}}
+                <form action="{{ route('admin.ventas.entregadas') }}" method="GET" class="d-flex align-items-center gap-2">
+                    <input type="text" name="buscar" value="{{ request('buscar') }}" class="form-control"
+                        placeholder="Buscar por DNI o nombre" style="max-width: 250px;">
 
-                <button class="btn btn-success">
-                    <i class="bi bi-search"></i>
-                </button>
+                    <button type="submit" class="btn btn-success d-flex align-items-center gap-1">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
 
-                <button class="btn btn-secondary">
-                    <i class="bi bi-x-circle"></i> Limpiar
-                </button>
+                    <a href="{{ route('admin.ventas.entregadas') }}"
+                        class="btn btn-secondary d-flex align-items-center gap-1">
+                        <i class="bi bi-x-circle"></i> Limpiar
+                    </a>
+                </form>
 
+                {{-- ⏳ Ver pendientes --}}
                 <a href="{{ route('admin.ventas.pendientes') }}" class="btn btn-outline-secondary ms-auto">
                     <i class="bi bi-clock"></i> Ver ventas pendientes
                 </a>
             </div>
         </div>
+
 
         {{-- Lista de ventas entregadas --}}
         @if ($ventas->count() > 0)

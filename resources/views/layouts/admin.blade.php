@@ -22,6 +22,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
     @vite(['resources/css/admin.css'])
 </head>
 
@@ -243,7 +247,7 @@
                                 <span class="navlink_icon">
                                     <i class="bx bx-layer"></i>
                                 </span>
-                                <span class="navlink">Productos Agotado</span>
+                                <span class="navlink">Stocks</span>
                             </a>
                         </li>
                     </ul>
@@ -329,7 +333,7 @@
                     icon: 'success',
                     title: '¡Éxito!',
                     text: '{{ session('
-                                                                                                                                                        success ') }}',
+                                                                                                                                                                                                                    success ') }}',
                     confirmButtonColor: '#198754', // verde Bootstrap
                     background: '#f0f8ff', // color de fondo suave (opcional)
                     color: '#000', // texto en negro

@@ -201,8 +201,52 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            {{-- ⚡ TEMPLATE PARA RESTAURAR DESPUÉS DE ELIMINAR --}}
+                                            <template id="form-agregar-{{ $producto->id }}">
+                                                <div class="d-flex w-100 align-items-center">
+                                                    <div class="input-group product-qty" style="width: 50%;">
+                                                        <span class="input-group-btn">
+                                                            <button type="button"
+                                                                class="quantity-left-minus btn btn-number"
+                                                                data-type="minus" aria-label="restar">
+                                                                <svg width="13" height="13">
+                                                                    <use xlink:href="#minus"></use>
+                                                                </svg>
+                                                            </button>
+                                                        </span>
+
+                                                        <input type="text"
+                                                            class="form-control input-number text-center" value="1"
+                                                            aria-label="cantidad">
+
+                                                        <span class="input-group-btn">
+                                                            <button type="button"
+                                                                class="quantity-right-plus btn btn-number"
+                                                                data-type="plus" aria-label="sumar">
+                                                                <svg width="16" height="16">
+                                                                    <use xlink:href="#plus"></use>
+                                                                </svg>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+
+                                                    <form method="POST"
+                                                        action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        class="agregar-carrito-form ms-3 flex-grow-1">
+                                                        @csrf
+                                                        <input type="hidden" name="cantidad" value="1">
+                                                        <button type="submit"
+                                                            class="w-100 fw-semibold btn-add-cart btn btn-primary d-flex flex-column align-items-center">
+                                                            <span>Agregar</span>
+                                                            <i class="bi bi-cart mt-1"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </template>
+
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -378,36 +422,7 @@
     });
 </script>
 
-<!-- SweetAlert mensajes (si los usas en otras partes) -->
-@if (session('status'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let mensaje = '';
-            let tipo = '';
-            switch ("{{ session('status') }}") {
-                case 'compra_exitosa':
-                    mensaje = '¡Compra realizada con éxito!';
-                    tipo = 'success';
-                    break;
-                case 'compra_pendiente':
-                    mensaje = 'Tu pago está pendiente. Te notificaremos cuando se confirme.';
-                    tipo = 'warning';
-                    break;
-                case 'compra_fallida':
-                    mensaje = 'El pago no se completó. Inténtalo nuevamente.';
-                    tipo = 'error';
-                    break;
-            }
 
-            Swal.fire({
-                icon: tipo,
-                title: mensaje,
-                confirmButtonText: 'Aceptar',
-                timer: 5000
-            });
-        });
-    </script>
-@endif
 
 <style>
     .tab-image {

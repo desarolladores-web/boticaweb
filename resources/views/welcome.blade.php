@@ -115,7 +115,7 @@
 
         <!-- TÍTULO DE PRODUCTOS -->
         <div class="container text-center mt-4">
-            <h1 class="text-danger fw-bold display-4">Productos</h1>
+            <h1 class="text-danger fw-bold display-4">Productos mas vendidos</h1>
         </div>
 
         <!-- PRODUCTOS -->
@@ -130,7 +130,6 @@
                                 <div
                                     class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
                                     @forelse($productos as $producto)
-
                                         <div class="col mb-4">
                                             <div class="product-item product-card">
                                                 <figure>
@@ -174,7 +173,8 @@
                                                         {{-- Inyectamos el bloque inicial --}}
                                                         <div class="input-group product-qty">
                                                             <span class="input-group-btn">
-                                                                <button type="button" class="quantity-left-minus btn  btn-number"
+                                                                <button type="button"
+                                                                    class="quantity-left-minus btn  btn-number"
                                                                     data-type="minus">
                                                                     <svg width="13" height="13">
                                                                         <use xlink:href="#minus"></use>
@@ -184,7 +184,8 @@
                                                             <input type="text" id="quantity" name="quantity"
                                                                 class="form-control input-number" value="1">
                                                             <span class="input-group-btn">
-                                                                <button type="button" class="quantity-right-plus btn  btn-number"
+                                                                <button type="button"
+                                                                    class="quantity-right-plus btn  btn-number"
                                                                     data-type="plus">
                                                                     <svg width="16" height="16">
                                                                         <use xlink:href="#plus"></use>
@@ -192,7 +193,8 @@
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        <form method="POST"
+                                                            action="{{ route('carrito.agregar', $producto->id) }}"
                                                             class="agregar-carrito-form">
                                                             @csrf
                                                             <input type="hidden" name="cantidad" value="1">
@@ -210,7 +212,8 @@
                                                 <template id="form-agregar-{{ $producto->id }}">
                                                     <div class="input-group product-qty">
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="quantity-left-minus btn  btn-number"
+                                                            <button type="button"
+                                                                class="quantity-left-minus btn  btn-number"
                                                                 data-type="minus">
                                                                 <svg width="13" height="13">
                                                                     <use xlink:href="#minus"></use>
@@ -220,7 +223,8 @@
                                                         <input type="text" id="quantity" name="quantity"
                                                             class="form-control input-number" value="1">
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="quantity-right-plus btn  btn-number"
+                                                            <button type="button"
+                                                                class="quantity-right-plus btn  btn-number"
                                                                 data-type="plus">
                                                                 <svg width="16" height="16">
                                                                     <use xlink:href="#plus"></use>
@@ -229,7 +233,8 @@
                                                         </span>
                                                     </div>
 
-                                                    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
+                                                    <form method="POST"
+                                                        action="{{ route('carrito.agregar', $producto->id) }}"
                                                         class="agregar-carrito-form">
                                                         @csrf
                                                         <input type="hidden" name="cantidad" value="1">
@@ -261,7 +266,7 @@
         <!-- ALERTAS -->
         @if (session('status'))
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
+                document.addEventListener('DOMContentLoaded', function() {
                     let mensaje = '';
                     let tipo = '';
                     switch ("{{ session('status') }}") {
@@ -290,29 +295,29 @@
 
         <!-- SCRIPT DE CANTIDAD -->
         <script>
-            $(document).ready(function () {
-                $('.product-card').each(function () {
+            $(document).ready(function() {
+                $('.product-card').each(function() {
                     const $card = $(this);
                     const $qtyInput = $card.find('.input-number');
                     const $btnPlus = $card.find('.quantity-right-plus');
                     const $btnMinus = $card.find('.quantity-left-minus');
                     const $hiddenInput = $card.find('input[name="cantidad"]');
 
-                    $btnPlus.on('click', function (e) {
+                    $btnPlus.on('click', function(e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 0;
                         $qtyInput.val(++currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $btnMinus.on('click', function (e) {
+                    $btnMinus.on('click', function(e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 1;
                         if (currentQty > 1) $qtyInput.val(--currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $qtyInput.on('input', function () {
+                    $qtyInput.on('input', function() {
                         let currentQty = parseInt($(this).val()) || 1;
                         if (currentQty < 1) currentQty = 1;
                         $(this).val(currentQty);
@@ -326,8 +331,6 @@
 
     <!-- ESTILOS PERSONALIZADOS -->
     <style>
-
-            
         @media (max-width: 576px) {
             .tab-image {
                 height: 180px !important;

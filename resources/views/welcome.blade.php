@@ -173,8 +173,7 @@
                                                         {{-- Inyectamos el bloque inicial --}}
                                                         <div class="input-group product-qty">
                                                             <span class="input-group-btn">
-                                                                <button type="button"
-                                                                    class="quantity-left-minus btn  btn-number"
+                                                                <button type="button" class="quantity-left-minus btn  btn-number"
                                                                     data-type="minus">
                                                                     <svg width="13" height="13">
                                                                         <use xlink:href="#minus"></use>
@@ -184,8 +183,7 @@
                                                             <input type="text" id="quantity" name="quantity"
                                                                 class="form-control input-number" value="1">
                                                             <span class="input-group-btn">
-                                                                <button type="button"
-                                                                    class="quantity-right-plus btn  btn-number"
+                                                                <button type="button" class="quantity-right-plus btn  btn-number"
                                                                     data-type="plus">
                                                                     <svg width="16" height="16">
                                                                         <use xlink:href="#plus"></use>
@@ -193,8 +191,7 @@
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                        <form method="POST"
-                                                            action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
                                                             class="agregar-carrito-form">
                                                             @csrf
                                                             <input type="hidden" name="cantidad" value="1">
@@ -212,8 +209,7 @@
                                                 <template id="form-agregar-{{ $producto->id }}">
                                                     <div class="input-group product-qty">
                                                         <span class="input-group-btn">
-                                                            <button type="button"
-                                                                class="quantity-left-minus btn  btn-number"
+                                                            <button type="button" class="quantity-left-minus btn  btn-number"
                                                                 data-type="minus">
                                                                 <svg width="13" height="13">
                                                                     <use xlink:href="#minus"></use>
@@ -223,8 +219,7 @@
                                                         <input type="text" id="quantity" name="quantity"
                                                             class="form-control input-number" value="1">
                                                         <span class="input-group-btn">
-                                                            <button type="button"
-                                                                class="quantity-right-plus btn  btn-number"
+                                                            <button type="button" class="quantity-right-plus btn  btn-number"
                                                                 data-type="plus">
                                                                 <svg width="16" height="16">
                                                                     <use xlink:href="#plus"></use>
@@ -233,8 +228,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <form method="POST"
-                                                        action="{{ route('carrito.agregar', $producto->id) }}"
+                                                    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
                                                         class="agregar-carrito-form">
                                                         @csrf
                                                         <input type="hidden" name="cantidad" value="1">
@@ -266,7 +260,7 @@
         <!-- ALERTAS -->
         @if (session('status'))
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
+                document.addEventListener('DOMContentLoaded', function () {
                     let mensaje = '';
                     let tipo = '';
                     switch ("{{ session('status') }}") {
@@ -295,29 +289,29 @@
 
         <!-- SCRIPT DE CANTIDAD -->
         <script>
-            $(document).ready(function() {
-                $('.product-card').each(function() {
+            $(document).ready(function () {
+                $('.product-card').each(function () {
                     const $card = $(this);
                     const $qtyInput = $card.find('.input-number');
                     const $btnPlus = $card.find('.quantity-right-plus');
                     const $btnMinus = $card.find('.quantity-left-minus');
                     const $hiddenInput = $card.find('input[name="cantidad"]');
 
-                    $btnPlus.on('click', function(e) {
+                    $btnPlus.on('click', function (e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 0;
                         $qtyInput.val(++currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $btnMinus.on('click', function(e) {
+                    $btnMinus.on('click', function (e) {
                         e.preventDefault();
                         let currentQty = parseInt($qtyInput.val()) || 1;
                         if (currentQty > 1) $qtyInput.val(--currentQty);
                         $hiddenInput.val(currentQty);
                     });
 
-                    $qtyInput.on('input', function() {
+                    $qtyInput.on('input', function () {
                         let currentQty = parseInt($(this).val()) || 1;
                         if (currentQty < 1) currentQty = 1;
                         $(this).val(currentQty);
@@ -391,6 +385,54 @@
             height: 100%;
             object-fit: contain;
             /* mantiene proporción sin recortar */
+        }
+
+        /* Card completa */
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            gap: 0.3rem;
+            /* 👈 espacio uniforme entre todos los hijos */
+        }
+
+        /* Imagen */
+        .product-card figure {
+            margin: 0;
+            /* elimina espacio raro por defecto */
+        }
+
+        /* Nombre */
+        .product-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+            /* controlado solo por el gap */
+        }
+
+        /* Presentación */
+        .product-card .qty {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 20px 0 0 0;
+        }
+
+        /* Precio */
+        .product-card .price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #111;
+        }
+
+        /* Sección de cantidad + botón */
+        .product-card .d-flex {
+            margin-top: auto;
+            /* empuja esta sección hacia abajo */
+            gap: 0.5rem;
+            /* separa el input de cantidad y el botón */
         }
     </style>
 @endsection

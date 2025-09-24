@@ -109,8 +109,8 @@
                         <form action="{{ route('productos.buscar') }}" method="get" class="flex-grow-1"
                             style="max-width: 500px;">
                             <div class="input-group shadow-sm">
-                                <input type="text" class="form-control bg-white border-secondary text-black"
-                                    name="keyword" placeholder="Buscar productos..." value="{{ request('keyword') }}">
+                                <input type="text" class="form-control bg-white border-secondary text-black" name="keyword"
+                                    placeholder="Buscar productos..." value="{{ request('keyword') }}">
                                 <button class="btn btn-success" type="submit">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -134,7 +134,8 @@
                     </div>
 
                     <!-- Grid -->
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-2">
+
                         @php $carrito = session('carrito', []); @endphp
                         @forelse($productos as $producto)
                             <div class="col">
@@ -169,26 +170,22 @@
                                                     <div class="d-flex w-100 align-items-center">
                                                         <div class="input-group product-qty " style="width: 50%;">
                                                             <button type="button" class="quantity-left-minus btn-number">
-                                                                <svg width="13" height="13" viewBox="0 0 24 24"
-                                                                    fill="none">
+                                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                                                                     <use xlink:href="#minus"></use>
                                                                 </svg>
                                                             </button>
 
-                                                            <input type="text"
-                                                                class="form-control input-number text-center"
+                                                            <input type="text" class="form-control input-number text-center"
                                                                 value="1" style="max-width: 50px;">
 
                                                             <button type="button" class="quantity-right-plus btn-number">
-                                                                <svg width="16" height="16" viewBox="0 0 24 24"
-                                                                    fill="none">
+                                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                                                                     <use xlink:href="#plus"></use>
                                                                 </svg>
                                                             </button>
                                                         </div>
 
-                                                        <form method="POST"
-                                                            action="{{ route('carrito.agregar', $producto->id) }}"
+                                                        <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
                                                             class="agregar-carrito-form ms-3 flex-grow-1">
                                                             @csrf
                                                             <input type="hidden" name="cantidad" value="1">
@@ -206,8 +203,7 @@
                                                 <div class="d-flex w-100 align-items-center">
                                                     <div class="input-group product-qty" style="width: 50%;">
                                                         <span class="input-group-btn">
-                                                            <button type="button"
-                                                                class="quantity-left-minus btn btn-number"
+                                                            <button type="button" class="quantity-left-minus btn btn-number"
                                                                 data-type="minus" aria-label="restar">
                                                                 <svg width="13" height="13">
                                                                     <use xlink:href="#minus"></use>
@@ -215,13 +211,11 @@
                                                             </button>
                                                         </span>
 
-                                                        <input type="text"
-                                                            class="form-control input-number text-center" value="1"
-                                                            aria-label="cantidad">
+                                                        <input type="text" class="form-control input-number text-center"
+                                                            value="1" aria-label="cantidad">
 
                                                         <span class="input-group-btn">
-                                                            <button type="button"
-                                                                class="quantity-right-plus btn btn-number"
+                                                            <button type="button" class="quantity-right-plus btn btn-number"
                                                                 data-type="plus" aria-label="sumar">
                                                                 <svg width="16" height="16">
                                                                     <use xlink:href="#plus"></use>
@@ -230,8 +224,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <form method="POST"
-                                                        action="{{ route('carrito.agregar', $producto->id) }}"
+                                                    <form method="POST" action="{{ route('carrito.agregar', $producto->id) }}"
                                                         class="agregar-carrito-form ms-3 flex-grow-1">
                                                         @csrf
                                                         <input type="hidden" name="cantidad" value="1">
@@ -280,15 +273,6 @@
 </svg>
 
 <style>
-    .product-qty {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        /* pequeño espacio entre botones e input */
-        width: 50%;
-        /* mantén si quieres */
-    }
-
     .product-qty .btn-number {
         background: transparent !important;
         border: none !important;
@@ -382,9 +366,9 @@
 <!-- JS para cantidades y AJAX (vanilla JS) -->
 <!-- JS para cantidades (sin duplicar AJAX, eso lo maneja app.blade.php) -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Sincronizar cantidad visible con el input hidden del form dentro de cada tarjeta
-        document.querySelectorAll('.product-card').forEach(function(card) {
+        document.querySelectorAll('.product-card').forEach(function (card) {
             const visibleInput = card.querySelector('.input-number');
             const plusBtn = card.querySelector('.quantity-right-plus');
             const minusBtn = card.querySelector('.quantity-left-minus');
@@ -396,7 +380,7 @@
             // init: si hidden existe, setear al valor visible
             if (hiddenInput) hiddenInput.value = visibleInput.value || 1;
 
-            plusBtn?.addEventListener('click', function(e) {
+            plusBtn?.addEventListener('click', function (e) {
                 e.preventDefault();
                 let qty = parseInt(visibleInput.value) || 1;
                 qty = qty + 1;
@@ -404,7 +388,7 @@
                 if (hiddenInput) hiddenInput.value = qty;
             });
 
-            minusBtn?.addEventListener('click', function(e) {
+            minusBtn?.addEventListener('click', function (e) {
                 e.preventDefault();
                 let qty = parseInt(visibleInput.value) || 1;
                 if (qty > 1) qty = qty - 1;
@@ -412,7 +396,7 @@
                 if (hiddenInput) hiddenInput.value = qty;
             });
 
-            visibleInput.addEventListener('input', function() {
+            visibleInput.addEventListener('input', function () {
                 let qty = parseInt(this.value);
                 if (isNaN(qty) || qty < 1) qty = 1;
                 this.value = qty;
@@ -425,28 +409,138 @@
 
 
 <style>
-    .tab-image {
-        width: 100%;
-        height: 230px;
-        object-fit: cover;
-        border-radius: 10px;
+    /* ---------------------------
+       ESTILO COMPACTO TIPO INKAFARMA
+    ---------------------------- */
+
+    /* Fuerza a todas las cards a tener la misma altura */
+    .product-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
+
+    /* Imagen con altura fija y alineada */
+    .product-card .tab-image {
+        width: 100%;
+        height: 200px;
+        /* 👈 todas las imágenes misma altura */
+        object-fit: contain;
+        /* mantiene proporción sin deformar */
+        background-color: #fff;
+        padding: 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Cuerpo de la card siempre distribuido */
+    .product-card .card-body {
+        flex: 1;
+        /* ocupa todo el espacio disponible */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+        /* empuja el botón al fondo */
+    }
+
+
+    .product-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .product-card .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.3;
+        margin-bottom: 0;
+    }
+
+    .product-card .text-muted {
+        font-size: 0.85rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .product-card .price {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+        color: #111;
+    }
+
+
 
     @media (max-width: 576px) {
         .tab-image {
-            height: 160px;
+            height: 140px;
         }
     }
 
-    .product-card {
-        transition: transform 0.2s ease-in-out;
+    .product-qty {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        width: 100%;
     }
 
-    .product-card:hover {
-        transform: translateY(-3px);
+    .product-qty .btn-number {
+        background: #f8f9fa;
+        border: 1px solid #ced4da;
+        color: #333;
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+        border-radius: 4px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .product-qty .btn {
-        padding: 0.35rem 0.5rem;
+    .product-qty .btn-number:hover {
+        background-color: #e0e0e0;
+    }
+
+    .product-qty .input-number {
+        max-width: 50px;
+        height: 28px;
+        text-align: center;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.95rem;
+        padding: 0;
+    }
+
+    .btn-add-cart {
+        background-color: #f8f9fa;
+        color: #000;
+        font-size: 0.9rem;
+        padding: 0.4rem 0.6rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        width: 100%;
+        transition: all 0.2s ease;
+    }
+
+    .btn-add-cart:hover {
+        background-color: #dc3545;
+        color: white;
+        border-color: #dc3545;
+    }
+
+    .btn-outline-success {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .card.h-100.shadow-sm.border-0.product-card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .row.row-cols-1.row-cols-sm-2.row-cols-md-3.row-cols-xl-4 {
+        --bs-gutter-x: 0.75rem;
+        --bs-gutter-y: 0.75rem;
     }
 </style>

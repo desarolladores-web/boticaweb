@@ -1,9 +1,7 @@
 @extends('layouts.admin')
-
 @section('template_title')
     Productos
 @endsection
-
 @section('content')
 
 
@@ -59,10 +57,6 @@
                                         </button>
                                     </form>
                                 </div>
-
-
-
-
                                 <a href="{{ route('productos.index') }}" class="btn btn-sm btn-secondary">
                                     <i class="bi bi-x-circle me-1"></i> Limpiar
                                 </a>
@@ -92,30 +86,20 @@
         <p class="mt-1">Importando productos, por favor espera...</p>
     </div>
 </div> --}}
-
                             {{-- Formulario de creación --}}
                             <form action="{{ route('productos.create') }}" method="GET" class="d-flex mt-3">
                                 <button type="submit" class="btn btn-success btn-sm">
                                     <i class="bi bi-plus-circle me-1"></i> Agregar Producto
                                 </button>
                             </form>
-
-
-
                         </div>
                     </div>
-
-
-
 
 
 
                     {{-- Estilos personalizados --}}
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
                         rel="stylesheet">
-
-                    <link rel="stylesheet"
-                        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
                     <style>
                         .table-red-lines {
                             border-collapse: collapse;
@@ -212,26 +196,22 @@
                             /* rojo al pasar */
                         }
                     </style>
-
-
-
-
                     <div class="table-responsive">
                         <table class="table table-red-lines text-center w-100">
                             <thead>
                                 <tr>
                                     <th>Código</th>
                                     <th>Nombre</th>
-                                    <th>Principio Activo</th>
                                     <th>PVP1</th>
-                                    <th>Precio Costo</th>
+                                    <th>Precio Caja</th>
+                                    <th>Precio Blister</th>
                                     <th>Stock</th>
                                     <th>Stock Min</th>
                                     <th>Vencimiento</th>
                                     <th>Imagen</th>
                                     <th>Categoría</th>
                                     <th>Laboratorio</th>
-                                    <th>Presentacion</th>
+                                    <th>Presentación</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -240,9 +220,9 @@
                                     <tr>
                                         <td>{{ $producto->codigo }}</td>
                                         <td class="fw-bold">{{ $producto->nombre }}</td>
-                                        <td>{{ $producto->principio_activo }}</td>
                                         <td>S/ {{ number_format($producto->pvp1, 2) }}</td>
-                                        <td>S/ {{ number_format($producto->precio_costo_unitario, 2) }}</td>
+                                        <td>S/ {{ number_format($producto->precio_caja, 2) }}</td>
+                                        <td>S/ {{ number_format($producto->precio_blister, 2) }}</td>
                                         <td>{{ $producto->stock }}</td>
                                         <td>{{ $producto->stock_min }}</td>
                                         <td>{{ $producto->fecha_vencimiento }}</td>
@@ -256,7 +236,7 @@
                                         </td>
                                         <td>{{ $producto->categoria->nombre ?? 'Sin categoría' }}</td>
                                         <td>{{ $producto->laboratorio->nombre_laboratorio ?? 'Sin laboratorio' }}</td>
-                                        <td>{{ $producto->presentacion->tipo_presentacion ?? 'Sin presentacion' }}</td>
+                                        <td>{{ $producto->presentacion->tipo_presentacion ?? 'Sin presentación' }}</td>
                                         <td class="table-actions">
                                             <form action="{{ route('productos.destroy', $producto->id) }}" method="POST"
                                                 class="d-inline-flex align-items-center gap-2">
@@ -282,9 +262,6 @@
                         </table>
                     </div>
 
-
-
-
                     {{-- Paginación --}}
                     <div class="card-footer d-flex justify-content-center">
                         <nav>
@@ -296,7 +273,6 @@
                                         <i class="bi bi-skip-backward-fill"></i>
                                     </a>
                                 </li>
-
                                 {{-- Botón "Anterior" --}}
                                 <li>
                                     <a href="{{ $productos->previousPageUrl() }}"
@@ -304,26 +280,20 @@
                                         <i class="bi bi-chevron-left"></i>
                                     </a>
                                 </li>
-
                                 @php
                                     $totalPages = $productos->lastPage();
                                     $currentPage = $productos->currentPage();
-
                                     // Rango que se mostrará
                                     $start = max(1, $currentPage - 2);
                                     $end = min($totalPages, $currentPage + 2);
-
                                     // Ajustar si estamos cerca del inicio o del final
                                     if ($currentPage <= 3) {
                                         $end = min(5, $totalPages);
                                     }
-
                                     if ($currentPage >= $totalPages - 2) {
                                         $start = max(1, $totalPages - 4);
                                     }
                                 @endphp
-
-
                                 {{-- Mostrar rango de páginas --}}
                                 @for ($i = $start; $i <= $end; $i++)
                                     @if ($i == $currentPage)
@@ -344,9 +314,6 @@
                                     @endif
                                 @endfor
 
-
-
-
                                 {{-- Botón "Siguiente" --}}
                                 <li>
                                     <a href="{{ $productos->nextPageUrl() }}"
@@ -365,56 +332,7 @@
                             </ul>
                         </nav>
                     </div>
-
-
                     <script src="https://cdn.tailwindcss.com"></script>
-                    {{-- <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('importForm');
-    const loadingContainer = document.getElementById('loadingContainer');
-    const progressBar = document.getElementById('progressBar');
-
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const formData = new FormData(form);
-        const xhr = new XMLHttpRequest();
-
-        loadingContainer.style.display = 'block';
-
-        xhr.upload.addEventListener('progress', function (e) {
-            if (e.lengthComputable) {
-                const percent = Math.round((e.loaded / e.total) * 100);
-                progressBar.style.width = percent + '%';
-                progressBar.textContent = percent + '%';
-            }
-        });
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                // Oculta el indicador de carga después de un pequeño delay
-                setTimeout(() => {
-                    loadingContainer.style.display = 'none';
-                    progressBar.style.width = '0%';
-                    progressBar.textContent = '0%';
-                    form.reset();
-
-                    if (xhr.status === 200) {
-                        alert('Productos importados correctamente.');
-                        window.location.reload(); // Opcional si deseas refrescar la tabla/listado
-                    } else {
-                        alert('Error al importar: ' + xhr.responseText);
-                    }
-                }, 1000);
-            }
-        };
-
-        xhr.open('POST', form.getAttribute('action'), true);
-        xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('input[name="_token"]').value);
-        xhr.send(formData);
-    });
-});
-</script> --}}
 
                 </div>
             </div>

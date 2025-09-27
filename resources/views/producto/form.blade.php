@@ -119,12 +119,20 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="text" name="precio_costo_unitario"
-                            class="form-control styled-input @error('precio_costo_unitario') is-invalid @enderror"
-                            value="{{ old('precio_costo_unitario', $producto?->precio_costo_unitario) }}"
-                            placeholder="Precio Costo Unitario">
-                        {!! $errors->first('precio_costo_unitario', '<div class="invalid-feedback">:message</div>') !!}
-                        <label for="precio_costo_unitario">Precio Costo Unitario</label>
+                        <input type="text" name="precio_caja"
+                            class="form-control styled-input @error('precio_caja') is-invalid @enderror"
+                            value="{{ old('precio_caja', $producto?->precio_caja) }}" placeholder="Precio por Caja">
+                        {!! $errors->first('precio_caja', '<div class="invalid-feedback">:message</div>') !!}
+                        <label for="precio_caja">Precio Caja</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="text" name="precio_blister"
+                            class="form-control styled-input @error('precio_blister') is-invalid @enderror"
+                            value="{{ old('precio_blister', $producto?->precio_blister) }}"
+                            placeholder="Precio Blister">
+                        {!! $errors->first('precio_blister', '<div class="invalid-feedback">:message</div>') !!}
+                        <label for="precio_blister">Precio Blister</label>
                     </div>
 
                     <div class="form-floating mb-3">

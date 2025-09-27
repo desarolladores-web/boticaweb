@@ -24,6 +24,13 @@ return new class extends Migration
 
             $table->decimal('pvp1', 10, 2)->nullable()->comment('Precio de venta principal'); // PVP1 = precio_venta
 
+            // 👇 Nuevos campos
+            $table->decimal('precio_caja', 10, 2)->nullable()->comment('Precio por caja');
+            $table->decimal('pvp2', 10, 2)->nullable()->comment('Segundo precio de venta');
+            $table->decimal('precio_blister', 10, 2)->nullable()->comment('Precio por blister');
+            $table->string('lote', 100)->nullable()->comment('Número de lote del producto');
+
+
             $table->decimal('precio_costo_unitario', 10, 2)->nullable(); // Costo por unidad
 
 

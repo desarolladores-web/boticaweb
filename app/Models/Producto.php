@@ -48,7 +48,11 @@ class Producto extends Model
         'descripcion',
         'principio_activo',
         'pvp1',
+        'pvp2', // 👈 nuevo
+        'precio_caja', // 👈 nuevo
+        'precio_blister', // 👈 nuevo
         'precio_costo_unitario',
+        'lote', // 👈 nuevo
         'stock',
         'stock_min',
         'fecha_vencimiento',

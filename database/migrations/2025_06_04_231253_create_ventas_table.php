@@ -22,6 +22,9 @@ return new class extends Migration
             $table->unsignedBigInteger('metodo_pago_id')->nullable();
             $table->unsignedBigInteger('estado_venta_id')->nullable();
 
+            // Nuevo campo para comprobante de pago (ej. Yape)
+            $table->string('imagen_comprobante')->nullable();
+
             // Campos MercadoPago
             $table->string('mp_payment_id')->nullable(); // ID del pago en MP
             $table->string('mp_status')->nullable(); // Estado del pago en MP

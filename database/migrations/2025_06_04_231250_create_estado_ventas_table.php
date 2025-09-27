@@ -27,6 +27,11 @@ return new class extends Migration
                 'created_at' => now(),
                 'updated_at' => now()
             ],
+            [
+                'estado' => 'venta cancelada',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
         ]);
     }
 

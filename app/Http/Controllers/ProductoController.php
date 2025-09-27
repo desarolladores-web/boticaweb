@@ -146,7 +146,11 @@ class ProductoController extends Controller
             'descripcion' => $request->input('descripcion'),
             'principio_activo' => $request->input('principio_activo'),
             'pvp1' => $request->input('pvp1'),
+            'pvp2' => $request->input('pvp2'), // 👈 nuevo
+            'precio_caja' => $request->input('precio_caja'), // 👈 nuevo
+            'precio_blister' => $request->input('precio_blister'), // 👈 nuevo
             'precio_costo_unitario' => $request->input('precio_costo_unitario'),
+            'lote' => $request->input('lote'), // 👈 nuevo
             'stock' => $request->input('stock'),
             'stock_min' => $request->input('stock_min'),
             'fecha_vencimiento' => $request->input('fecha_vencimiento'),

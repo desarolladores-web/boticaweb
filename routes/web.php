@@ -152,3 +152,7 @@ Route::get('/carrito/sidebar/dinamico', function () {
     return view('components.cart-items');
 })->name('carrito.sidebar.dinamico');
 Route::get('/carrito/sidebar/ajax', [CartController::class, 'obtenerSidebarAjax'])->name('carrito.sidebar.ajax');
+
+
+
+Route::post('/carrito/actualizar-presentacion/{id}', [CartController::class, 'actualizarPresentacion'])->name('carrito.actualizarPresentacion');

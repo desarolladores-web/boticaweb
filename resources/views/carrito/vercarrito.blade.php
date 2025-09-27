@@ -109,10 +109,21 @@
                         <strong id="total-general" class="text-success">S/ {{ number_format($total, 2) }}</strong>
                     </div>
 
-                    <button type="button" class="btn btn-danger rounded-pill mt-3 w-100" data-bs-toggle="modal"
-                        data-bs-target="#checkoutModal">
-                        Comprar ahora
-                    </button>
+                    {{-- Si el usuario NO está logueado, mostrar el modal --}}
+                    @guest
+                        <button type="button" class="btn btn-danger rounded-pill mt-3 w-100" data-bs-toggle="modal"
+                            data-bs-target="#checkoutModal">
+                            Comprar ahora
+                        </button>
+                    @endguest
+
+                    {{-- Si el usuario SÍ está logueado, mandarlo directo al checkout --}}
+                    @auth
+                        <a href="{{ route('checkout.formulario') }}" class="btn btn-danger rounded-pill mt-3 w-100">
+                            Comprar ahora
+                        </a>
+                    @endauth
+
 
                     <!-- MODAL -->
                     <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel"

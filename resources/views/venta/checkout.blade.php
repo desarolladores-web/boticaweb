@@ -127,7 +127,8 @@
                 <div class="form-section">
                     <h4 class="mb-3 fw-bold">¡Ya falta poco para finalizar tu compra!</h4>
                     <p class="text-muted mb-4">
-                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a href="#">iniciar
+                        Estos datos no se guardarán para una próxima compra. Puedes continuar o <a
+                            href="#">iniciar
                             sesión</a>.
                     </p>
 
@@ -145,7 +146,8 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nombres *</label>
-                                <input type="text" class="form-control" name="nombres" required placeholder="Ej: Renato"
+                                <input type="text" class="form-control" name="nombres" required
+                                    placeholder="Ej: Renato"
                                     value="{{ $cliente?->nombre ?? (auth()->user()->name ?? '') }}">
                             </div>
                             <div class="col-md-6">
@@ -172,7 +174,8 @@
                                         Seleccione tipo de documento
                                     </option>
                                     @foreach ($tiposDocumento as $tipo)
-                                        <option value="{{ $tipo->id }}" @if (($cliente?->tipo_documento_id ?? optional(auth()->user())->tipo_documento_id) == $tipo->id) selected @endif>
+                                        <option value="{{ $tipo->id }}"
+                                            @if (($cliente?->tipo_documento_id ?? optional(auth()->user())->tipo_documento_id) == $tipo->id) selected @endif>
                                             {{ $tipo->nombre_documento }}
                                         </option>
                                     @endforeach
@@ -240,7 +243,8 @@
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#terminosModal">Términos y
                                     Condiciones</a>
                                 y la
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#privacidadModal">Política de
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#privacidadModal">Política
+                                    de
                                     Privacidad</a>.
                             </label>
                         </div>
@@ -271,7 +275,10 @@
                                 style="width: 60px; height: 60px; object-fit: contain;">
                             <div>
                                 <strong class="d-block">{{ $item['nombre'] }}</strong>
-                                <small class="text-muted">{{ $item['presentacion'] ?? '' }}</small><br>
+                                <small class="text-muted">
+                                    Presentación:
+                                    {{ $item['tipo_compra'] ?? ($item['descripcion_presentacion'] ?? '—') }}
+                                </small><br>
                                 <small class="text-muted">Cantidad: {{ $item['cantidad'] }}</small>
                                 <div class="text-danger fw-semibold">S/ {{ number_format($subtotal, 2) }}</div>
                             </div>
@@ -386,7 +393,8 @@
     </div>
 
     <!-- Modal Política de Privacidad -->
-    <div class="modal fade" id="privacidadModal" tabindex="-1" aria-labelledby="privacidadLabel" aria-hidden="true">
+    <div class="modal fade" id="privacidadModal" tabindex="-1" aria-labelledby="privacidadLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content rounded-4 shadow">
                 <div class="modal-header bg-success text-white">
@@ -427,13 +435,13 @@
             const formData = new FormData(formulario);
 
             fetch("{{ route('checkout.guardar-datos') }}", {
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                body: formData,
-                credentials: 'same-origin'
-            })
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: formData,
+                    credentials: 'same-origin'
+                })
                 .then(response => response.json())
                 .then(data => {
                     if (data.init_point) {
@@ -449,15 +457,13 @@
                     alert("Error al enviar los datos. Revisa la consola.");
                 });
         }
-
-
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const tipoDocumento = document.getElementById("tipo_documento");
             const numeroDocumento = document.getElementById("numero_documento");
-            const celular = document.getElementById("celular"); 
+            const celular = document.getElementById("celular");
 
             // Validar solo números
             [numeroDocumento, celular].forEach(input => {

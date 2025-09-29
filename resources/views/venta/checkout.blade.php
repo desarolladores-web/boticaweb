@@ -327,12 +327,71 @@
                         <span class="text-danger fw-bold">S/ {{ number_format($totalConComision, 2) }}</span>
                     </div>
 
-                    <div class="mt-4">
-                        <button type="button" id="btnComprar" class="btn btn-danger w-100"
-                            onclick="validarFormulario();">
-                            Comprar ahora
-                        </button>
-                    </div>
+                   <div class="mt-4">
+    <button type="button" id="btnComprar" class="btn btn-danger w-100" data-bs-toggle="modal"
+        data-bs-target="#comisionModal">
+        Comprar ahora
+    </button>
+</div>
+
+                     <div class="mt-4">
+    <button type="button" class="btn w-100"
+        style="background-color: #6f42c1; color: white; border: none;"
+        data-bs-toggle="modal" data-bs-target="#yapeModal">
+        Comprar con Yape
+    </button>
+</div>
+
+
+                    <!-- Modal Confirmación Comisión -->
+<div class="modal fade" id="comisionModal" tabindex="-1" aria-labelledby="comisionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="comisionLabel">Aviso de Comisión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Tu compra tiene un subtotal de: <strong>S/ {{ number_format($total, 2) }}</strong>.<br>
+                    Se aplicará una <span class="text-danger fw-bold">comisión de S/ {{ number_format($comision, 2) }}</span> 
+                    por pago en efectivo.
+                </p>
+                <p class="fw-semibold">Total a pagar: <span class="text-danger">S/ {{ number_format($totalConComision, 2) }}</span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmarCompra">Aceptar y continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="yapeModal" tabindex="-1" aria-labelledby="yapeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header" style="background-color: #6f42c1; color: white;">
+                <h5 class="modal-title" id="yapeLabel">Pago con Yape</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">
+                    Si eliges <strong>pagar con Yape</strong>, 
+                    <span class="text-success fw-bold">no se aplicará ninguna comisión adicional</span>.
+                </p>
+                <p class="fw-semibold">
+                    Total a pagar: <span class="text-danger">S/ {{ number_format($total, 2) }}</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="confirmarYape">Aceptar y continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
                 </div>
             </div>
@@ -421,81 +480,64 @@
     </div>
 
     </div>
-    <script>
-        function validarFormulario() {
-            const formulario = document.getElementById('formCheckout');
 
-            // Si no pasa validación HTML5, mostrar la burbuja amarilla
-            if (!formulario.checkValidity()) {
-                formulario.reportValidity();
-                return;
-            }
 
-            // Si todo está OK -> enviar
-            const formData = new FormData(formulario);
+<script>
+    // Función genérica para enviar formulario
+    function enviarFormulario(rutaRedireccion = null) {
+        const formulario = document.getElementById('formCheckout');
 
-            fetch("{{ route('checkout.guardar-datos') }}", {
-                    method: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    body: formData,
-                    credentials: 'same-origin'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.init_point) {
-                        window.location.href = data.init_point; // Redirige a Mercado Pago
-                    } else if (data.mensaje) {
-                        alert(data.mensaje);
-                    } else if (data.error) {
-                        alert("Error: " + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al enviar los datos:', error);
-                    alert("Error al enviar los datos. Revisa la consola.");
-                });
+        if (!formulario.checkValidity()) {
+            formulario.reportValidity();
+            return;
         }
-    </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const tipoDocumento = document.getElementById("tipo_documento");
-            const numeroDocumento = document.getElementById("numero_documento");
-            const celular = document.getElementById("celular");
+        const formData = new FormData(formulario);
 
-            // Validar solo números
-            [numeroDocumento, celular].forEach(input => {
-                input.addEventListener("input", () => {
-                    input.value = input.value.replace(/\D/g, ""); // solo números
-                });
-            });
-
-            // Cambiar validación según tipo de documento
-            tipoDocumento.addEventListener("change", () => {
-                const tipo = tipoDocumento.options[tipoDocumento.selectedIndex].text.toLowerCase();
-
-                if (tipo.includes("dni")) {
-                    numeroDocumento.setAttribute("pattern", "\\d{8}");
-                    numeroDocumento.setAttribute("maxlength", "8");
-                    numeroDocumento.setAttribute("title", "El DNI debe tener 8 dígitos");
-                } else if (tipo.includes("carnet")) {
-                    numeroDocumento.setAttribute("pattern", "\\d{20}");
-                    numeroDocumento.setAttribute("maxlength", "20");
-                    numeroDocumento.setAttribute("title", "El carnet de extranjería debe tener 20 dígitos");
-                } else {
-                    numeroDocumento.removeAttribute("pattern");
-                    numeroDocumento.removeAttribute("maxlength");
-                }
-            });
-
-            // Validación de celular: 9 dígitos
-            celular.setAttribute("pattern", "\\d{9}");
-            celular.setAttribute("title", "El celular debe tener 9 dígitos");
-
+        fetch("{{ route('checkout.guardar-datos') }}", {
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            body: formData,
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (rutaRedireccion) {
+                // Redirige al flujo de Yape
+                window.location.href = rutaRedireccion;
+            } else if (data.init_point) {
+                // Flujo MercadoPago
+                window.location.href = data.init_point;
+            } else if (data.mensaje) {
+                alert(data.mensaje);
+            } else if (data.error) {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error al enviar los datos:', error);
+            alert("Error al enviar los datos. Revisa la consola.");
         });
-    </script>
+    }
+
+    // Botón de confirmar compra con comisión (MercadoPago)
+    document.getElementById("confirmarCompra").addEventListener("click", function () {
+        enviarFormulario(); 
+        const modal = bootstrap.Modal.getInstance(document.getElementById('comisionModal'));
+        modal.hide();
+    });
+
+    // Botón de confirmar compra con Yape
+    document.getElementById("confirmarYape").addEventListener("click", function () {
+        enviarFormulario("{{ route('checkout.yape') }}");
+        const modal = bootstrap.Modal.getInstance(document.getElementById('yapeModal'));
+        modal.hide();
+    });
+</script>
+
+
 
 
 

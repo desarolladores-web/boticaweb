@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VoucherConfirmadoMailable;
+use App\Models\Venta;
 use Carbon\Carbon;
 
 class AdminController extends Controller
@@ -104,4 +107,27 @@ class AdminController extends Controller
             ->route('admin.productos.agotados')
             ->with('success', '✅ Stock actualizado correctamente.');
     }
+public function confirmarVoucher($id)
+{
+    $venta = Venta::with('cliente')->findOrFail($id);
+
+    if ($venta->cliente && $venta->cliente->email) {
+        // Enviamos correo con el comprobante adjunto
+        Mail::to($venta->cliente->email)->send(
+            new VoucherConfirmadoMailable($venta, $venta->imagen_comprobante)
+        );
+
+        // Marcamos en sesión que se confirmó esta venta
+        session()->flash("venta_confirmada_$id", true);
+
+        return redirect()->back()->with('success', '✅ Voucher confirmado y correo enviado.');
+    }
+
+    return redirect()->back()->with('error', '❌ No se encontró el correo del cliente.');
+}
+
+
+
+
+    
 }

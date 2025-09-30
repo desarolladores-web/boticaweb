@@ -81,8 +81,15 @@
 
                         <div class="bg-white p-3 rounded border mb-3">
                             <strong>Método de Pago:</strong> Yape
+                            <ul class="mb-0">
+                                @foreach ($venta->detalleVentas as $detalle)
+                                    <li>{{ $detalle->producto->nombre ?? 'Producto eliminado' }} - Cantidad:
+                                        {{ $detalle->cantidad }}
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
-
+                        
                         @if ($venta->imagen_comprobante)
     <div class="bg-white p-3 rounded border text-center">
         <strong>Voucher:</strong><br>

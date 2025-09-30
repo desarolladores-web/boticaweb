@@ -258,25 +258,23 @@
 
 
         <!-- ALERTAS -->
-        @if (session('status'))
+        @if (session('success') || session('error') || session('warning'))
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     let mensaje = '';
                     let tipo = '';
-                    switch ("{{ session('status') }}") {
-                        case 'compra_exitosa':
-                            mensaje = '¡Compra realizada con éxito!';
-                            tipo = 'success';
-                            break;
-                        case 'compra_pendiente':
-                            mensaje = 'Tu pago está pendiente.';
-                            tipo = 'warning';
-                            break;
-                        case 'compra_fallida':
-                            mensaje = 'El pago no se completó.';
-                            tipo = 'error';
-                            break;
-                    }
+
+                    @if (session('success'))
+                        mensaje = "{{ session('success') }}";
+                        tipo = 'success';
+                    @elseif (session('error'))
+                        mensaje = "{{ session('error') }}";
+                        tipo = 'error';
+                    @elseif (session('warning'))
+                        mensaje = "{{ session('warning') }}";
+                        tipo = 'warning';
+                    @endif
+
                     Swal.fire({
                         icon: tipo,
                         title: mensaje,

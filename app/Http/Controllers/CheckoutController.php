@@ -299,7 +299,8 @@ class CheckoutController extends Controller
     session()->forget(['checkout_cliente', 'checkout_carrito', 'carrito']);
 
     
-    return redirect()->route('welcome')->with('success', '¡Compra realizada con éxito con Yape!');
+    return redirect()->route('welcome')->with('success', '¡Tu compra ha sido realizada con éxito! 📦 Por favor, espera el mensaje de confirmación en tu correo para poder recoger tu pedido.');
+
 }
 
 

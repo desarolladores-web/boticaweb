@@ -9,7 +9,9 @@ use App\Models\Venta;
 use App\Models\DetalleVenta;
 use App\Models\TipoDocumento;
 use App\Models\Sucursal;
+use App\Models\MetodoPago;
 use Illuminate\Validation\ValidationException;
+
 
 use MercadoPago\SDK;
 use MercadoPago\Preference;
@@ -212,4 +214,97 @@ class CheckoutController extends Controller
     {
         return redirect()->route('welcome')->with('warning', 'El pago está pendiente de confirmación.');
     }
+
+
+    public function pagarConYape()
+    {
+        $carrito = session('carrito', []);
+        $total = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
+
+        // Pasamos carrito y total para mostrar en la vista Yape
+        return view('venta.pagoyape', compact('carrito', 'total'));
+    }
+
+
+    public function uploadYapeVoucher(Request $request)
+{
+    $request->validate([
+        'voucher' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    // ✅ Guardar imagen directamente en public/comprobantes
+    $filename = time() . '_' . $request->file('voucher')->getClientOriginalName();
+    $request->file('voucher')->move(public_path('comprobantes'), $filename);
+
+    $path = 'comprobantes/' . $filename;
+
+    // Datos del cliente desde sesión o auth
+    $clienteData = session('checkout_cliente', []);
+    $carrito = session('carrito', []);
+
+    // Buscar o crear cliente
+    $cliente = Cliente::firstOrCreate(
+        ['DNI' => $clienteData['numero_documento'] ?? null],
+        [
+            'nombre' => $clienteData['nombres'] ?? '',
+            'apellido_paterno' => $clienteData['apellido_paterno'] ?? '',
+            'apellido_materno' => $clienteData['apellido_materno'] ?? '',
+            'email' => $clienteData['correo'] ?? '',
+            'tipo_documento_id' => $clienteData['tipo_documento_id'] ?? null,
+            'telefono' => $clienteData['celular'] ?? '',
+        ]
+    );
+
+    $cliente_id = $cliente->id;
+
+    // Totales
+    $subtotal = collect($carrito)->sum(fn($item) => $item['precio'] * $item['cantidad']);
+    $total = $subtotal;
+
+    // Crear método de pago si no existe
+    $metodoPago = MetodoPago::firstOrCreate(['nombre' => 'Yape']);
+
+    // Crear la venta
+    $venta = Venta::create([
+        'cliente_id' => $cliente_id,
+        'fecha' => now(),
+        'igv' => 0,
+        'subtotal' => $subtotal,
+        'total' => $total,
+        'metodo_pago_id' => $metodoPago->id,
+        'estado_venta_id' => 1, // Pendiente
+        'imagen_comprobante' => $path, // ✅ Guardamos la ruta relativa
+    ]);
+
+    // Guardar detalles
+    foreach ($carrito as $item) {
+        DetalleVenta::create([
+            'venta_id' => $venta->id,
+            'producto_id' => $item['id'],
+            'cantidad' => $item['cantidad'],
+            'precio_venta' => $item['precio'],
+            'sucursal_id' => $clienteData['sucursal_id'] ?? null,
+            'user_id' => auth()->check() ? auth()->id() : null,
+        ]);
+
+        // Actualizar stock
+        $producto = \App\Models\Producto::find($item['id']);
+        if ($producto) {
+            $producto->stock = max(0, $producto->stock - $item['cantidad']);
+            $producto->save();
+        }
+    }
+
+    // Limpiar sesión
+    session()->forget(['checkout_cliente', 'checkout_carrito', 'carrito']);
+
+    
+    return redirect()->route('welcome')->with('success', '¡Compra realizada con éxito con Yape!');
+}
+
+
+
+
+
+
 }

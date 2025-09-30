@@ -140,9 +140,9 @@ Route::post('/checkout/guardar-datos', [CheckoutController::class, 'guardarDatos
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/failure', [CheckoutController::class, 'failure'])->name('checkout.failure');
 Route::get('/checkout/pending', [CheckoutController::class, 'pending'])->name('checkout.pending');
-
-
-
+// Yape
+Route::get('/checkout/yape', [CheckoutController::class, 'pagarConYape'])->name('checkout.yape');
+Route::post('/checkout/yape/voucher', [CheckoutController::class, 'uploadYapeVoucher'])->name('checkout.yape.upload');
 
 
 
@@ -156,3 +156,7 @@ Route::get('/carrito/sidebar/ajax', [CartController::class, 'obtenerSidebarAjax'
 
 
 Route::post('/carrito/actualizar-presentacion/{id}', [CartController::class, 'actualizarPresentacion'])->name('carrito.actualizarPresentacion');
+
+
+Route::post('/admin/ventas/{id}/confirmar-voucher', [AdminController::class, 'confirmarVoucher'])
+    ->name('admin.ventas.confirmarVoucher');

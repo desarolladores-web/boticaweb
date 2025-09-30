@@ -84,12 +84,14 @@
                         </div>
 
                         @if ($venta->imagen_comprobante)
-                            <div class="bg-white p-3 rounded border text-center">
-                                <strong>Voucher:</strong><br>
-                                <img src="{{ asset('storage/' . $venta->imagen_comprobante) }}" alt="Voucher de Yape"
-                                    class="img-fluid rounded shadow mt-2" style="max-height: 250px;">
-                            </div>
-                        @endif
+    <div class="bg-white p-3 rounded border text-center">
+        <strong>Voucher:</strong><br>
+        <img src="{{ asset($venta->imagen_comprobante) }}" 
+             alt="Voucher de Yape"
+             class="img-fluid rounded shadow mt-2" 
+             style="max-height: 250px;">
+    </div>
+@endif
 
                         {{-- Botón Confirmar Voucher --}}
                         <div class="mt-3">

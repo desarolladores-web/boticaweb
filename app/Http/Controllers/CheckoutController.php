@@ -226,22 +226,23 @@ class CheckoutController extends Controller
     }
 
 
-  
-// 👉 Flujo Yape: guardar comprobante
-public function uploadYapeVoucher(Request $request)
+    public function uploadYapeVoucher(Request $request)
 {
     $request->validate([
         'voucher' => 'required|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    // Guardar imagen
-    $path = $request->file('voucher')->store('comprobantes', 'public');
+    // ✅ Guardar imagen directamente en public/comprobantes
+    $filename = time() . '_' . $request->file('voucher')->getClientOriginalName();
+    $request->file('voucher')->move(public_path('comprobantes'), $filename);
+
+    $path = 'comprobantes/' . $filename;
 
     // Datos del cliente desde sesión o auth
     $clienteData = session('checkout_cliente', []);
     $carrito = session('carrito', []);
 
-    // Buscar o crear cliente (ajustado a tus columnas reales: DNI y telefono)
+    // Buscar o crear cliente
     $cliente = Cliente::firstOrCreate(
         ['DNI' => $clienteData['numero_documento'] ?? null],
         [
@@ -272,7 +273,7 @@ public function uploadYapeVoucher(Request $request)
         'total' => $total,
         'metodo_pago_id' => $metodoPago->id,
         'estado_venta_id' => 1, // Pendiente
-        'imagen_comprobante' => $path,
+        'imagen_comprobante' => $path, // ✅ Guardamos la ruta relativa
     ]);
 
     // Guardar detalles
@@ -297,9 +298,10 @@ public function uploadYapeVoucher(Request $request)
     // Limpiar sesión
     session()->forget(['checkout_cliente', 'checkout_carrito', 'carrito']);
 
-    // Redirigir al home con notificación
+    
     return redirect()->route('welcome')->with('success', '¡Compra realizada con éxito con Yape!');
 }
+
 
 
 

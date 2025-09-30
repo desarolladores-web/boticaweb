@@ -149,22 +149,26 @@
                                 <input type="text" class="form-control" name="nombres" required
                                     placeholder="Ej: Renato"
                                     value="{{ $cliente?->nombre ?? (auth()->user()->name ?? '') }}">
+                                <div class="invalid-feedback">Por favor ingresa tu nombre.</div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Apellido paterno *</label>
                                 <input type="text" class="form-control" name="apellido_paterno" required
                                     placeholder="Ej: Salas" value="{{ $cliente?->apellido_paterno ?? '' }}">
+                                <div class="invalid-feedback">Por favor ingresa apellido paterno.</div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Apellido materno *</label>
                                 <input type="text" class="form-control" name="apellido_materno" required
                                     placeholder="Ej: Torres" value="{{ $cliente?->apellido_materno ?? '' }}">
+                                <div class="invalid-feedback">Por favor ingresa apellido materno.</div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Correo electrónico *</label>
                                 <input type="email" class="form-control" name="correo" required
                                     placeholder="Ej: correo@dominio.com"
                                     value="{{ $cliente?->email ?? (auth()->user()->email ?? '') }}">
+                                <div class="invalid-feedback">Por favor ingresa email.</div>
                             </div>
                             <!-- Campo tipo documento -->
                             <div class="col-md-6">
@@ -180,6 +184,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <div class="invalid-feedback">Por favor ingresa Tipo de documento.</div>
                             </div>
                             <!-- Nro documento -->
                             <div class="col-md-6">
@@ -189,6 +194,7 @@
                                 <div class="invalid-feedback">
                                     Número de documento inválido.
                                 </div>
+                                <div class="invalid-feedback">Por favor ingresa Nro. de documento.</div>
                             </div>
 
                             <!-- Celular -->
@@ -199,6 +205,7 @@
                                 <div class="invalid-feedback">
                                     El celular debe tener exactamente 9 dígitos.
                                 </div>
+                                <div class="invalid-feedback">Por favor ingresa Nro. de Celular.</div>
                             </div>
 
 
@@ -212,6 +219,7 @@
                                     tratamiento de mis datos personales
                                 </a>.
                             </label>
+                            <div class="invalid-feedback">Por favor selecione .</div>
                         </div>
 
                         <hr class="my-4">
@@ -226,6 +234,7 @@
                                     <option value="{{ $sucursal->id }}">{{ $sucursal->direccion }}</option>
                                 @endforeach
                             </select>
+                            <div class="invalid-feedback">Por favor selecione la direcion.</div>
                         </div>
 
 
@@ -247,6 +256,7 @@
                                     de
                                     Privacidad</a>.
                             </label>
+                            <div class="invalid-feedback">Por favor selecione.</div>
                         </div>
 
 
@@ -327,20 +337,21 @@
                         <span class="text-danger fw-bold">S/ {{ number_format($totalConComision, 2) }}</span>
                     </div>
 
-                   <div class="mt-4">
-    <button type="button" id="btnComprar" class="btn btn-danger w-100" data-bs-toggle="modal"
-        data-bs-target="#comisionModal">
+                  <!-- Botón comprar con comisión -->
+<div class="mt-4">
+    <button type="button" id="btnComprar" class="btn btn-danger w-100">
         Comprar ahora
     </button>
 </div>
 
-                     <div class="mt-4">
-    <button type="button" class="btn w-100"
-        style="background-color: #6f42c1; color: white; border: none;"
-        data-bs-toggle="modal" data-bs-target="#yapeModal">
+<!-- Botón comprar con Yape -->
+<div class="mt-4">
+    <button type="button" id="btnComprarYape" class="btn w-100"
+        style="background-color: #6f42c1; color: white; border: none;">
         Comprar con Yape
     </button>
 </div>
+
 
 
                     <!-- Modal Confirmación Comisión -->
@@ -483,12 +494,12 @@
 
 
 <script>
-    // Función genérica para enviar formulario
+    // --- Función genérica para enviar formulario ---
     function enviarFormulario(rutaRedireccion = null) {
         const formulario = document.getElementById('formCheckout');
 
         if (!formulario.checkValidity()) {
-            formulario.reportValidity();
+            formulario.classList.add('was-validated');
             return;
         }
 
@@ -496,20 +507,16 @@
 
         fetch("{{ route('checkout.guardar-datos') }}", {
             method: "POST",
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            },
+            headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" },
             body: formData,
             credentials: 'same-origin'
         })
         .then(response => response.json())
         .then(data => {
             if (rutaRedireccion) {
-                // Redirige al flujo de Yape
-                window.location.href = rutaRedireccion;
+                window.location.href = rutaRedireccion; // Yape
             } else if (data.init_point) {
-                // Flujo MercadoPago
-                window.location.href = data.init_point;
+                window.location.href = data.init_point; // MercadoPago
             } else if (data.mensaje) {
                 alert(data.mensaje);
             } else if (data.error) {
@@ -522,20 +529,47 @@
         });
     }
 
-    // Botón de confirmar compra con comisión (MercadoPago)
-    document.getElementById("confirmarCompra").addEventListener("click", function () {
-        enviarFormulario(); 
-        const modal = bootstrap.Modal.getInstance(document.getElementById('comisionModal'));
-        modal.hide();
-    });
+    (function () {
+        'use strict';
+        const form = document.getElementById('formCheckout');
 
-    // Botón de confirmar compra con Yape
-    document.getElementById("confirmarYape").addEventListener("click", function () {
-        enviarFormulario("{{ route('checkout.yape') }}");
-        const modal = bootstrap.Modal.getInstance(document.getElementById('yapeModal'));
-        modal.hide();
-    });
+        // --- Abrir modal de comisión si el form es válido ---
+        document.getElementById("btnComprar").addEventListener("click", function () {
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+            const modal = new bootstrap.Modal(document.getElementById('comisionModal'));
+            modal.show();
+        });
+
+        // --- Abrir modal de Yape si el form es válido ---
+        document.getElementById("btnComprarYape").addEventListener("click", function () {
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+            const modal = new bootstrap.Modal(document.getElementById('yapeModal'));
+            modal.show();
+        });
+
+        // --- Confirmar compra (MercadoPago) ---
+        document.getElementById("confirmarCompra").addEventListener("click", function () {
+            enviarFormulario();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('comisionModal'));
+            modal.hide();
+        });
+
+        // --- Confirmar compra con Yape ---
+        document.getElementById("confirmarYape").addEventListener("click", function () {
+            enviarFormulario("{{ route('checkout.yape') }}");
+            const modal = bootstrap.Modal.getInstance(document.getElementById('yapeModal'));
+            modal.hide();
+        });
+    })();
 </script>
+
+
 
 
 

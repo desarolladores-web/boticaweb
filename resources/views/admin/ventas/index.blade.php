@@ -42,7 +42,9 @@
 
 
         @php
+        
             $ventasConVoucher = $ventas->filter(fn($v) => $v->imagen_comprobante);
+
         @endphp
 
         @if ($ventasConVoucher->count() > 0)
@@ -80,7 +82,9 @@
                         </p>
 
                         <div class="bg-white p-3 rounded border mb-3">
-                            <strong>Método de Pago:</strong> Yape
+                            <strong>Método de Pago:</strong> Yape 
+                            <br>
+                            <strong>Productos:</strong>
                             <ul class="mb-0">
                                 @foreach ($venta->detalleVentas as $detalle)
                                     <li>{{ $detalle->producto->nombre ?? 'Producto eliminado' }} - Cantidad:
@@ -89,7 +93,7 @@
                                 @endforeach
                             </ul>
                         </div>
-                        
+
                         @if ($venta->imagen_comprobante)
     <div class="bg-white p-3 rounded border text-center">
         <strong>Voucher:</strong><br>

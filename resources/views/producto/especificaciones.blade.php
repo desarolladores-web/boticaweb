@@ -27,10 +27,10 @@
             <div class="row g-5">
                 <!-- Miniaturas laterales -->
                 <!-- <div class="col-md-1 d-none d-md-flex flex-column gap-3">
-                                                                                            @for ($i = 0; $i < 4; $i++)
+                                                                                                @for ($i = 0; $i < 4; $i++)
     <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" class="img-fluid rounded border" style="cursor:pointer;">
     @endfor
-                                                                                        </div> -->
+                                                                                            </div> -->
 
                 <!-- Imagen principal -->
 
@@ -131,7 +131,7 @@
                                         <div>
                                             <input class="form-check-input me-2 opcion-precio" type="radio"
                                                 name="tipo_compra" value="unidad" data-precio="{{ $producto->pvp1 }}"
-                                                {{ !$enCarrito || strtolower($presentacionSeleccionada) === 'unidad' ? 'checked' : '' }}>
+                                                checked>
                                             Unidad
                                         </div>
                                         <span class="fw-bold text-danger">S/ {{ number_format($producto->pvp1, 2) }}</span>

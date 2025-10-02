@@ -15,7 +15,8 @@ class DetalleVenta extends Model
         'cantidad',
         'precio_venta',
         'sucursal_id',
-        'user_id'
+        'user_id',
+        'tipo_compra'
     ];
 
 

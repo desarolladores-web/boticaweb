@@ -329,77 +329,86 @@
                         <span>S/ {{ number_format($total, 2) }}</span>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <span>Comisión</span>
-                        <span>S/ {{ number_format($comision, 2) }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
                         <strong>Total</strong>
-                        <span class="text-danger fw-bold">S/ {{ number_format($totalConComision, 2) }}</span>
+                        <span class="text-danger fw-bold">S/ {{ number_format($total, 2) }}</span>
                     </div>
 
-                  <!-- Botón comprar con comisión -->
-<div class="mt-4">
-    <button type="button" id="btnComprar" class="btn btn-danger w-100">
-        Comprar ahora
-    </button>
-</div>
+                    <!-- Botón comprar con comisión -->
+                    <div class="mt-4">
+                        <button type="button" id="btnComprar" class="btn btn-danger w-100">
+                            Comprar ahora
+                        </button>
+                    </div>
 
-<!-- Botón comprar con Yape -->
-<div class="mt-4">
-    <button type="button" id="btnComprarYape" class="btn w-100"
-        style="background-color: #6f42c1; color: white; border: none;">
-        Comprar con Yape
-    </button>
-</div>
+                    <!-- Botón comprar con Yape -->
+                    <div class="mt-4">
+                        <button type="button" id="btnComprarYape" class="btn w-100"
+                            style="background-color: #6f42c1; color: white; border: none;">
+                            Comprar con Yape
+                        </button>
+                    </div>
 
 
 
                     <!-- Modal Confirmación Comisión -->
-<div class="modal fade" id="comisionModal" tabindex="-1" aria-labelledby="comisionLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 shadow">
-            <div class="modal-header bg-warning text-dark">
-                <h5 class="modal-title" id="comisionLabel">Aviso de Comisión</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>
-                    Tu compra tiene un subtotal de: <strong>S/ {{ number_format($total, 2) }}</strong>.<br>
-                    Se aplicará una <span class="text-danger fw-bold">comisión de S/ {{ number_format($comision, 2) }}</span> 
-                    por pago en efectivo.
-                </p>
-                <p class="fw-semibold">Total a pagar: <span class="text-danger">S/ {{ number_format($totalConComision, 2) }}</span></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmarCompra">Aceptar y continuar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="yapeModal" tabindex="-1" aria-labelledby="yapeLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 shadow">
-            <div class="modal-header" style="background-color: #6f42c1; color: white;">
-                <h5 class="modal-title" id="yapeLabel">Pago con Yape</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-3">
-                    Si eliges <strong>pagar con Yape</strong>, 
-                    <span class="text-success fw-bold">no se aplicará ninguna comisión adicional</span>.
-                </p>
-                <p class="fw-semibold">
-                    Total a pagar: <span class="text-danger">S/ {{ number_format($total, 2) }}</span>
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="confirmarYape">Aceptar y continuar</button>
-            </div>
-        </div>
-    </div>
-</div>
+                    <div class="modal fade" id="comisionModal" tabindex="-1" aria-labelledby="comisionLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content rounded-4 shadow">
+                                <div class="modal-header bg-warning text-dark">
+                                    <h5 class="modal-title" id="comisionLabel">Aviso de Comisión</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>
+                                        Tu compra tiene un subtotal de: <strong>S/
+                                            {{ number_format($total, 2) }}</strong>.<br>
+                                        Se aplicará una <span class="text-danger fw-bold">comisión de S/
+                                            {{ number_format($comision, 2) }}</span>
+                                        por pago con tarjeta.
+                                    </p>
+                                    <p class="fw-semibold">Total a pagar: <span class="text-danger">S/
+                                            {{ number_format($totalConComision, 2) }}</span></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-danger" id="confirmarCompra">Aceptar y
+                                        continuar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="yapeModal" tabindex="-1" aria-labelledby="yapeLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content rounded-4 shadow">
+                                <div class="modal-header" style="background-color: #6f42c1; color: white;">
+                                    <h5 class="modal-title" id="yapeLabel">Pago con Yape</h5>
+                                    <button type="button" class="btn-close btn-close-white"
+                                        data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="mb-3">
+                                        Si eliges <strong>pagar con Yape</strong>,
+                                        <span class="text-success fw-bold">no se aplicará ninguna comisión
+                                            adicional </span> pero tendras que esperar la confirmacion de la compra por
+                                        medio detu correo y WhatsApp.
+                                    </p>
+                                    <p class="fw-semibold">
+                                        Total a pagar: <span class="text-danger">S/
+                                            {{ number_format($total, 2) }}</span>
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-success" id="confirmarYape">Aceptar y
+                                        continuar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 
@@ -493,81 +502,83 @@
     </div>
 
 
-<script>
-    // --- Función genérica para enviar formulario ---
-    function enviarFormulario(rutaRedireccion = null) {
-        const formulario = document.getElementById('formCheckout');
+    <script>
+        // --- Función genérica para enviar formulario ---
+        function enviarFormulario(rutaRedireccion = null) {
+            const formulario = document.getElementById('formCheckout');
 
-        if (!formulario.checkValidity()) {
-            formulario.classList.add('was-validated');
-            return;
+            if (!formulario.checkValidity()) {
+                formulario.classList.add('was-validated');
+                return;
+            }
+
+            const formData = new FormData(formulario);
+
+            fetch("{{ route('checkout.guardar-datos') }}", {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: formData,
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (rutaRedireccion) {
+                        window.location.href = rutaRedireccion; // Yape
+                    } else if (data.init_point) {
+                        window.location.href = data.init_point; // MercadoPago
+                    } else if (data.mensaje) {
+                        alert(data.mensaje);
+                    } else if (data.error) {
+                        alert("Error: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al enviar los datos:', error);
+                    alert("Error al enviar los datos. Revisa la consola.");
+                });
         }
 
-        const formData = new FormData(formulario);
+        (function() {
+            'use strict';
+            const form = document.getElementById('formCheckout');
 
-        fetch("{{ route('checkout.guardar-datos') }}", {
-            method: "POST",
-            headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" },
-            body: formData,
-            credentials: 'same-origin'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (rutaRedireccion) {
-                window.location.href = rutaRedireccion; // Yape
-            } else if (data.init_point) {
-                window.location.href = data.init_point; // MercadoPago
-            } else if (data.mensaje) {
-                alert(data.mensaje);
-            } else if (data.error) {
-                alert("Error: " + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error al enviar los datos:', error);
-            alert("Error al enviar los datos. Revisa la consola.");
-        });
-    }
+            // --- Abrir modal de comisión si el form es válido ---
+            document.getElementById("btnComprar").addEventListener("click", function() {
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    return;
+                }
+                const modal = new bootstrap.Modal(document.getElementById('comisionModal'));
+                modal.show();
+            });
 
-    (function () {
-        'use strict';
-        const form = document.getElementById('formCheckout');
+            // --- Abrir modal de Yape si el form es válido ---
+            document.getElementById("btnComprarYape").addEventListener("click", function() {
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    return;
+                }
+                const modal = new bootstrap.Modal(document.getElementById('yapeModal'));
+                modal.show();
+            });
 
-        // --- Abrir modal de comisión si el form es válido ---
-        document.getElementById("btnComprar").addEventListener("click", function () {
-            if (!form.checkValidity()) {
-                form.classList.add('was-validated');
-                return;
-            }
-            const modal = new bootstrap.Modal(document.getElementById('comisionModal'));
-            modal.show();
-        });
+            // --- Confirmar compra (MercadoPago) ---
+            document.getElementById("confirmarCompra").addEventListener("click", function() {
+                enviarFormulario();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('comisionModal'));
+                modal.hide();
+            });
 
-        // --- Abrir modal de Yape si el form es válido ---
-        document.getElementById("btnComprarYape").addEventListener("click", function () {
-            if (!form.checkValidity()) {
-                form.classList.add('was-validated');
-                return;
-            }
-            const modal = new bootstrap.Modal(document.getElementById('yapeModal'));
-            modal.show();
-        });
-
-        // --- Confirmar compra (MercadoPago) ---
-        document.getElementById("confirmarCompra").addEventListener("click", function () {
-            enviarFormulario();
-            const modal = bootstrap.Modal.getInstance(document.getElementById('comisionModal'));
-            modal.hide();
-        });
-
-        // --- Confirmar compra con Yape ---
-        document.getElementById("confirmarYape").addEventListener("click", function () {
-            enviarFormulario("{{ route('checkout.yape') }}");
-            const modal = bootstrap.Modal.getInstance(document.getElementById('yapeModal'));
-            modal.hide();
-        });
-    })();
-</script>
+            // --- Confirmar compra con Yape ---
+            document.getElementById("confirmarYape").addEventListener("click", function() {
+                enviarFormulario("{{ route('checkout.yape') }}");
+                const modal = bootstrap.Modal.getInstance(document.getElementById('yapeModal'));
+                modal.hide();
+            });
+        })();
+    </script>
 
 
 

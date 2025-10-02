@@ -42,7 +42,7 @@
 
 
         @php
-        
+
             $ventasConVoucher = $ventas->filter(fn($v) => $v->imagen_comprobante);
 
         @endphp
@@ -74,35 +74,47 @@
                         <p class="mb-1"><strong>Total:</strong> S/ {{ number_format($venta->total, 2) }}</p>
                         <p class="mb-1"><strong>Fecha:</strong>
                             {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y H:i') }}</p>
-                        <p class="mb-3">
+                        <p class="mb-1">
                             <strong>Estado:</strong>
                             <span class="badge bg-purple text-white">
                                 {{ $venta->estadoVenta->estado ?? 'Sin estado' }}
                             </span>
+
+                        </p>
+                        <p class="mb-1">
+                            <strong>Dirección/Sucursal:</strong>
+                            {{ optional($venta->detalleVentas->first()->sucursal)->direccion ?? 'No se seleccionó sucursal' }}
                         </p>
 
+                        <p class="mb-1"><strong>Método de Pago:</strong> Yape</p>
+
+
                         <div class="bg-white p-3 rounded border mb-3">
-                            <strong>Método de Pago:</strong> Yape 
                             <br>
                             <strong>Productos:</strong>
-                            <ul class="mb-0">
+                            <ul class="mb-1">
                                 @foreach ($venta->detalleVentas as $detalle)
-                                    <li>{{ $detalle->producto->nombre ?? 'Producto eliminado' }} - Cantidad:
-                                        {{ $detalle->cantidad }}
+                                    <li>
+                                        {{ $detalle->producto->nombre ?? 'Producto eliminado' }}
+
+                                        {{-- Presentación elegida (desde la tabla detalle_ventas) --}}
+                                        @if (!empty($detalle->tipo_compra))
+                                            - Presentación: {{ ucfirst($detalle->tipo_compra) }}
+                                        @endif
+
+                                        - Cantidad: {{ $detalle->cantidad }}
                                     </li>
                                 @endforeach
                             </ul>
                         </div>
 
                         @if ($venta->imagen_comprobante)
-    <div class="bg-white p-3 rounded border text-center">
-        <strong>Voucher:</strong><br>
-        <img src="{{ asset($venta->imagen_comprobante) }}" 
-             alt="Voucher de Yape"
-             class="img-fluid rounded shadow mt-2" 
-             style="max-height: 250px;">
-    </div>
-@endif
+                            <div class="bg-white p-3 rounded border text-center">
+                                <strong>Voucher:</strong><br>
+                                <img src="{{ asset($venta->imagen_comprobante) }}" alt="Voucher de Yape"
+                                    class="img-fluid rounded shadow mt-2" style="max-height: 250px;">
+                            </div>
+                        @endif
 
                         {{-- Botón Confirmar Voucher --}}
                         <div class="mt-3">
@@ -179,7 +191,7 @@
 
                         {{-- Método de pago --}}
                         <div class="bg-white p-3 rounded border mt-3">
-                            <strong>Método de Pago:</strong> Pago en efectivo
+                            <strong>Método de Pago:</strong> Pago con tarjeta
                         </div>
                     </div>
                 </div>
@@ -198,15 +210,15 @@
     {{-- Script de confirmación --}}
     <script>
         document.querySelectorAll('.btn-confirmar-entrega').forEach(boton => {
-            boton.addEventListener('mouseover', function () {
+            boton.addEventListener('mouseover', function() {
                 this.classList.add('btn-hover-green');
             });
 
-            boton.addEventListener('mouseout', function () {
+            boton.addEventListener('mouseout', function() {
                 this.classList.remove('btn-hover-green');
             });
 
-            boton.addEventListener('click', function () {
+            boton.addEventListener('click', function() {
                 const form = this.closest('form');
                 Swal.fire({
                     title: '¿Estás seguro?',

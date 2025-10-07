@@ -63,13 +63,16 @@ class ProductoImportController extends Controller
                 'categoria_id' => $categoria->id,
                 'laboratorio_id' => $laboratorio->id,
                 'nombre' => $fila[3],
+                'precio_caja' => floatval($fila[4]), // 👈 nuevo
                 'pvp1' => floatval($fila[5]),
                 'precio_costo_unitario' => floatval($fila[7]),
+                'precio_blister' => floatval($fila[8]), // 👈 nuevo
                 'stock' => intval($fila[9]),
                 'stock_min' => intval($fila[10]),
                 'fecha_vencimiento' => $fecha,
                 'principio_activo' => $fila[13],
             ]);
+
         }
 
         return redirect()->back()->with('success', '✅ Productos importados correctamente.');

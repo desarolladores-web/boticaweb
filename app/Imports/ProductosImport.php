@@ -27,14 +27,21 @@ class ProductosImport implements ToModel, WithHeadingRow
             'descripcion' => $row['descripcion'] ?? null,
             'principio_activo' => $row['prin_a'] ?? null,
             'pvp1' => $row['pvp1'] ?? 0,
+            'pvp2' => $row['pvp2'] ?? 0,
+            'precio_caja' => $row['precio_caja'] ?? 0,
+            'precio_blister' => $row['precio_blister'] ?? 0,
             'precio_costo_unitario' => $row['precio_costo_unitario'] ?? 0,
+            'lote' => $row['lote'] ?? null,
             'stock' => $row['stock'] ?? 0,
             'stock_min' => $row['stock_min'] ?? 0,
-            'fecha_vencimiento' => isset($row['f_vencimiento']) ? 
-                Date::excelToDateTimeObject($row['f_vencimiento'])->format('Y-m-d') : null,
+            'fecha_vencimiento' => isset($row['f_vencimiento'])
+                ? Date::excelToDateTimeObject($row['f_vencimiento'])->format('Y-m-d')
+                : null,
             'categoria_id' => $categoria->id,
             'laboratorio_id' => $laboratorio->id,
             'presentacion_id' => null,
         ]);
+
+
     }
 }

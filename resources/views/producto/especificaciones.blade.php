@@ -27,10 +27,10 @@
             <div class="row g-5">
                 <!-- Miniaturas laterales -->
                 <!-- <div class="col-md-1 d-none d-md-flex flex-column gap-3">
-                                                                                                                        @for ($i = 0; $i < 4; $i++)
+                                                                                                                                @for ($i = 0; $i < 4; $i++)
     <img src="data:image/jpeg;base64,{{ base64_encode($producto->imagen) }}" class="img-fluid rounded border" style="cursor:pointer;">
     @endfor
-                                                                                                                    </div> -->
+                                                                                                                            </div> -->
 
                 <!-- Imagen principal -->
 
@@ -118,8 +118,8 @@
 
 
 
-                                    <!-- Blister -->
-                                    @if ($producto->precio_blister)
+                                    <!-- Blister (solo si tiene precio) -->
+                                    @if (!empty($producto->precio_blister) && $producto->precio_blister > 0)
                                         <label
                                             class="form-check-label d-flex justify-content-between align-items-center border p-2 rounded">
                                             <div>
@@ -134,8 +134,8 @@
                                         </label>
                                     @endif
 
-                                    <!-- Caja -->
-                                    @if ($producto->precio_caja)
+                                    <!-- Caja (solo si tiene precio) -->
+                                    @if (!empty($producto->precio_caja) && $producto->precio_caja > 0)
                                         <label
                                             class="form-check-label d-flex justify-content-between align-items-center border p-2 rounded">
                                             <div>

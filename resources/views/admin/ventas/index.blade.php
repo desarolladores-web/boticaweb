@@ -41,80 +41,65 @@
         </div>
 
 
-        @php
+        @foreach ($ventas as $venta)
+            <div class="card mb-4 shadow-sm border 
+                {{ $venta->imagen_comprobante ? 'border-purple' : 'border-warning' }}">
 
-            $ventasConVoucher = $ventas->filter(fn($v) => $v->imagen_comprobante);
+                <div class="card-header 
+                    {{ $venta->imagen_comprobante ? 'bg-purple-subtle' : 'bg-warning-subtle' }} 
+                    d-flex justify-content-between align-items-center">
 
-        @endphp
-
-        @if ($ventasConVoucher->count() > 0)
-            @foreach ($ventasConVoucher as $venta)
-                <div class="card mb-4 shadow-sm border border-purple">
-                    <div class="card-header bg-purple-subtle d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Venta #{{ $venta->id }}</strong> |
-                            Cliente: {{ $venta->cliente->nombre }} {{ $venta->cliente->apellido_paterno }} |
-                            Documento: {{ $venta->cliente->tipoDocumento->nombre_documento ?? 'Sin documento' }} -
-                            {{ $venta->cliente->DNI }}
-                        </div>
-                        <div>
-                            <form id="form-entregar-{{ $venta->id }}"
-                                action="{{ route('admin.ventas.marcarEntregada', $venta->id) }}" method="POST"
-                                style="display:inline-block;">
-                                @csrf
-                                @method('PUT')
-                                <button type="button" class="btn btn-success btn-sm btn-confirmar-entrega">
-                                    <i class="bi bi-check-circle"></i> Marcar como entregada
-                                </button>
-                            </form>
-                        </div>
+                    <div>
+                        <strong>Venta #{{ $venta->id }}</strong> |
+                        Cliente: {{ $venta->cliente->nombre }} {{ $venta->cliente->apellido_paterno }} |
+                        Documento: {{ $venta->cliente->tipoDocumento->nombre_documento ?? 'Sin documento' }} -
+                        {{ $venta->cliente->DNI }}
                     </div>
 
-                    <div class="card-body bg-light">
-                        <p class="mb-1"><strong>Total:</strong> S/ {{ number_format($venta->total, 2) }}</p>
-                        <p class="mb-1"><strong>Fecha:</strong>
-                            {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y H:i') }}</p>
-                        <p class="mb-1">
-                            <strong>Estado:</strong>
-                            <span class="badge bg-purple text-white">
-                                {{ $venta->estadoVenta->estado ?? 'Sin estado' }}
-                            </span>
+                    <div>
+                        <form id="form-entregar-{{ $venta->id }}"
+                            action="{{ route('admin.ventas.marcarEntregada', $venta->id) }}" method="POST"
+                            style="display:inline-block;">
+                            @csrf
+                            @method('PUT')
+                            <button type="button" class="btn btn-success btn-sm btn-confirmar-entrega">
+                                <i class="bi bi-check-circle"></i> Marcar como entregada
+                            </button>
+                        </form>
+                    </div>
+                </div>
 
-                        </p>
-                        <p class="mb-1">
-                            <strong>Dirección/Sucursal:</strong>
-                            {{ optional($venta->detalleVentas->first()->sucursal)->direccion ?? 'No se seleccionó sucursal' }}
-                        </p>
+                <div class="card-body bg-light">
+                    <p class="mb-1"><strong>Total:</strong> S/ {{ number_format($venta->total, 2) }}</p>
+                    <p class="mb-1"><strong>Fecha:</strong>
+                        {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y H:i') }}</p>
+                    <p class="mb-3">
+                        <strong>Estado:</strong>
+                        <span class="badge {{ $venta->imagen_comprobante ? 'bg-purple text-white' : 'bg-warning text-dark' }}">
+                            {{ $venta->estadoVenta->estado ?? 'Sin estado' }}
+                        </span>
+                    </p>
 
-                        <p class="mb-1"><strong>Método de Pago:</strong> Yape</p>
+                    <div class="bg-white p-3 rounded border mb-3">
+                        <strong>Método de Pago:</strong>
+                        {{ $venta->imagen_comprobante ? 'Yape' : 'Pago en efectivo' }}
+                        <br>
+                        <strong>Productos:</strong>
+                        <ul class="mb-0">
+                            @foreach ($venta->detalleVentas as $detalle)
+                                <li>{{ $detalle->producto->nombre ?? 'Producto eliminado' }} - Cantidad: {{ $detalle->cantidad }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
 
-
-                        <div class="bg-white p-3 rounded border mb-3">
-                            <br>
-                            <strong>Productos:</strong>
-                            <ul class="mb-1">
-                                @foreach ($venta->detalleVentas as $detalle)
-                                    <li>
-                                        {{ $detalle->producto->nombre ?? 'Producto eliminado' }}
-
-                                        {{-- Presentación elegida (desde la tabla detalle_ventas) --}}
-                                        @if (!empty($detalle->tipo_compra))
-                                            - Presentación: {{ ucfirst($detalle->tipo_compra) }}
-                                        @endif
-
-                                        - Cantidad: {{ $detalle->cantidad }}
-                                    </li>
-                                @endforeach
-                            </ul>
+                    {{-- Solo mostrar voucher si existe --}}
+                    @if ($venta->imagen_comprobante)
+                        <div class="bg-white p-3 rounded border text-center">
+                            <strong>Voucher:</strong><br>
+                            <img src="{{ asset($venta->imagen_comprobante) }}" alt="Voucher de Yape"
+                                class="img-fluid rounded shadow mt-2" style="max-height: 250px;">
                         </div>
-
-                        @if ($venta->imagen_comprobante)
-                            <div class="bg-white p-3 rounded border text-center">
-                                <strong>Voucher:</strong><br>
-                                <img src="{{ asset($venta->imagen_comprobante) }}" alt="Voucher de Yape"
-                                    class="img-fluid rounded shadow mt-2" style="max-height: 250px;">
-                            </div>
-                        @endif
 
                         {{-- Botón Confirmar Voucher --}}
                         <div class="mt-3">
@@ -128,77 +113,10 @@
                                 </button>
                             </form>
                         </div>
-
-
-
-
-                    </div>
+                    @endif
                 </div>
-            @endforeach
-        @else
-            <div class="alert alert-info">No hay ventas con Yape.</div>
-        @endif
-
-
-        @php
-            $ventasSinVoucher = $ventas->filter(fn($v) => !$v->imagen_comprobante);
-        @endphp
-
-        @if ($ventasSinVoucher->count() > 0)
-            @foreach ($ventasSinVoucher as $venta)
-                <div class="card mb-4 shadow-sm border border-warning">
-                    <div class="card-header bg-warning-subtle d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Venta #{{ $venta->id }}</strong> |
-                            Cliente: {{ $venta->cliente->nombre }} {{ $venta->cliente->apellido_paterno }} |
-                            Documento: {{ $venta->cliente->tipoDocumento->nombre_documento ?? 'Sin documento' }} -
-                            {{ $venta->cliente->DNI }}
-                        </div>
-                        <div>
-                            <form id="form-entregar-{{ $venta->id }}"
-                                action="{{ route('admin.ventas.marcarEntregada', $venta->id) }}" method="POST"
-                                style="display:inline-block;">
-                                @csrf
-                                @method('PUT')
-                                <button type="button" class="btn btn-success btn-sm btn-confirmar-entrega">
-                                    <i class="bi bi-check-circle"></i> Marcar como entregada
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="card-body bg-light">
-                        <p class="mb-1"><strong>Total:</strong> S/ {{ number_format($venta->total, 2) }}</p>
-                        <p class="mb-1"><strong>Fecha:</strong>
-                            {{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y H:i') }}</p>
-                        <p class="mb-3">
-                            <strong>Estado:</strong>
-                            <span class="badge bg-warning text-dark">
-                                {{ $venta->estadoVenta->estado ?? 'Sin estado' }}
-                            </span>
-                        </p>
-
-                        <div class="bg-white p-3 rounded border">
-                            <strong>Productos:</strong>
-                            <ul class="mb-0">
-                                @foreach ($venta->detalleVentas as $detalle)
-                                    <li>{{ $detalle->producto->nombre ?? 'Producto eliminado' }} - Cantidad:
-                                        {{ $detalle->cantidad }}
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-
-                        {{-- Método de pago --}}
-                        <div class="bg-white p-3 rounded border mt-3">
-                            <strong>Método de Pago:</strong> Pago con tarjeta
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        @else
-            <div class="alert alert-info">No hay ventas en efectivo.</div>
-        @endif
+            </div>
+        @endforeach
 
         {{-- Paginación (imagen 2) --}}
         <div class="d-flex justify-content-center mt-4">
@@ -210,15 +128,15 @@
     {{-- Script de confirmación --}}
     <script>
         document.querySelectorAll('.btn-confirmar-entrega').forEach(boton => {
-            boton.addEventListener('mouseover', function() {
+            boton.addEventListener('mouseover', function () {
                 this.classList.add('btn-hover-green');
             });
 
-            boton.addEventListener('mouseout', function() {
+            boton.addEventListener('mouseout', function () {
                 this.classList.remove('btn-hover-green');
             });
 
-            boton.addEventListener('click', function() {
+            boton.addEventListener('click', function () {
                 const form = this.closest('form');
                 Swal.fire({
                     title: '¿Estás seguro?',

@@ -50,15 +50,19 @@
                         </li>
                         </li>
                         <li class="mb-3">
-                            <a href="#" class="sidebar-link">
-                                <i class="bi bi-box-arrow-right" style="margin-right: 10px;"></i> <span>Cerrar sesión</span>
+                            <a href="{{ route('logout') }}" class="sidebar-link text-danger"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="bi bi-box-arrow-right" style="margin-right: 10px;"></i>
+                                <span>Cerrar sesión</span>
                             </a>
+
+                            <!-- Formulario oculto para cerrar sesión -->
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </li>
 
-                        <a class="dropdown-item d-flex align-items-center text-danger" href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
-                        </a>
+
 
 
                     </ul>
@@ -72,8 +76,8 @@
 
                     <!--@if (session('success'))
     <div class="alert alert-success mt-4">
-                              {{ session('success') }}
-                            </div>
+                                      {{ session('success') }}
+                                    </div>
     @endif-->
                     @if (session('error'))
                         <div class="alert alert-danger mt-4">

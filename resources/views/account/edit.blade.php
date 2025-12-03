@@ -40,7 +40,7 @@
                         </li>
                         <li class="mb-3">
                             <a href="{{ route('account.password.edit', ['section' => 'profile']) }}" class="sidebar-link">
-                                <i class="bi bi-shield-lock" style="margin-right: 10px;"></i> <span>Contraseña</span>
+                                <i class="bi bi-shield-lock" style="margin-right: 10px;"></i> <span>Editar Contraseña</span>
                             </a>
                         </li>
                         <li class="mb-3">
@@ -76,8 +76,8 @@
 
                     <!--@if (session('success'))
     <div class="alert alert-success mt-4">
-                                      {{ session('success') }}
-                                    </div>
+                                              {{ session('success') }}
+                                            </div>
     @endif-->
                     @if (session('error'))
                         <div class="alert alert-danger mt-4">
@@ -85,9 +85,6 @@
                         </div>
                     @endif
 
-                    <div class="account-card-title d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">{{ __('Editar') }} </span>
-                    </div>
 
                     <!-- Mostrar contenido dinámico -->
                     @if ($section == 'profile')

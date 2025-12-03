@@ -166,7 +166,8 @@
                                             <i class="bi bi-person-lines-fill me-2"></i> Mi Cuenta
                                         </a>
                                     @endif
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="{{ route('account', 'pedidos') }}">
                                         <i class="bi bi-bag-check me-2"></i> Pedidos
                                     </a>
                                     <div class="dropdown-divider"></div>

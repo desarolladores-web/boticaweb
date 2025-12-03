@@ -151,7 +151,7 @@
             </div>
 
             <!-- Derecha -->
-            <div class="col-md-6">
+            <div class="register-right">
                 <div class="card-header">Formulario de Registro</div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
